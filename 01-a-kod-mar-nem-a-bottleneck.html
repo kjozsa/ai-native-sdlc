@@ -292,8 +292,10 @@
   .abra2 h3 { font-family: var(--keret); font-weight: 600; font-size: 1.15rem; letter-spacing: 0.02em; margin: 0 0 0.5rem; }
   .abra2 p { font-size: 0.95rem; color: var(--halvany); margin: 0.6rem 0 0; }
   .abra2 p.felett { font-family: var(--keret); font-weight: 500; font-size: 0.95rem; letter-spacing: 0.02em; color: var(--halvany); margin: 0 0 0.25rem; text-align: center; }
-  .abra2 .st { font-family: var(--keret); font-weight: 600; font-size: 13px; letter-spacing: 0.02em; fill: var(--tinta); }
+  .abra2 .st { font-family: var(--keret); font-weight: 600; font-size: 16px; letter-spacing: 0.02em; fill: var(--tinta); }
   .abra2 .st.halv { fill: var(--halvany); font-weight: 500; }
+  sup.lj { font-family: var(--keret); font-weight: 600; font-size: 0.7em; line-height: 0; vertical-align: super; margin-left: 0.08em; }
+  .allomaslista-mobil { display: none; position: static; }
 
   /* Artifact-lánc mint vonal */
   .cikk .lanc { list-style: none; margin: 1.5rem 0; padding: 0; display: grid; grid-template-columns: repeat(6, 1fr); position: relative; max-width: none; }
@@ -363,30 +365,29 @@
     :root { --margo: 5.5rem; --oldal: 12.5rem; --hezag: 2rem; }
   }
   @media (max-width: 900px) {
-    .lap { grid-template-columns: minmax(0, var(--oszlop)); row-gap: 1.5rem; }
-    .lap > .cikk { grid-column: 1; grid-row: 2; }
-    .lap > .allomaslista { grid-column: 1; grid-row: 1; position: static; }
+    .lap { grid-template-columns: minmax(0, var(--oszlop)); }
+    .lap > .cikk { grid-column: 1; }
+    .lap > aside.allomaslista { display: none; }
+    .allomaslista-mobil { display: block; border-top: 3px solid var(--tinta); border-bottom: 1px solid var(--tinta); padding: 0.6rem 0 0.7rem; margin-top: 1.5rem; }
     .allomaslista summary { cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
     .allomaslista summary::after { content: "Megnyit"; font-weight: 500; font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--halvany); }
     .allomaslista[open] summary::after { content: "Becsuk"; }
     .allomaslista .cim { margin: 0; }
     .allomaslista ol { margin-top: 0.6rem; }
-    .cikk h2 .perc { position: static; display: block; width: auto; margin: 0 0 0.25rem; text-align: left; }
+    .cikk h2 .perc { position: static; float: right; width: auto; margin: 0 0 0 0.75rem; text-align: right; line-height: 1.6; }
     .cikk h2 .perc::after { display: none; }
   }
   @media (max-width: 720px) {
     body { font-size: 1.0625rem; }
     .lead { font-size: 1.15rem; }
     .mast-row { grid-template-columns: 1fr; row-gap: 0.75rem; }
-    .vonal ol { grid-template-columns: 1fr; row-gap: 0.1rem; }
-    .vonal ol::before { left: 0.4rem; right: auto; top: 0.6rem; bottom: 0.6rem; width: 3px; height: auto; transform-origin: center top; }
-    .vonal li { text-align: left; padding: 0; }
-    .vonal a, .vonal .megallo { display: grid; grid-template-columns: 1.1rem auto 1fr; column-gap: 0.75rem; align-items: baseline; padding: 0.25rem 0; }
-    .vonal .pont { margin: 0; }
-    .vonal .nev { text-transform: none; letter-spacing: 0.01em; font-size: 1.05rem; }
-    @media (prefers-reduced-motion: no-preference) {
-      @keyframes huz { from { transform: scaleY(0.04); } to { transform: scaleY(1); } }
-    }
+    .vonal { padding: 1.3rem 0 1.2rem; }
+    .vonal ol { padding-bottom: 1.6rem; }
+    .vonal .nev { display: none; }
+    .vonal [aria-current="page"] .nev { display: block; position: absolute; left: 0; right: 0; top: calc(100% - 1.3rem); text-align: left; font-size: 1.05rem; }
+    .vonal li { padding: 0; position: static; }
+    .vonal li .pont { position: relative; }
+    .vonal .sorsz { font-size: 0.9rem; }
     .abra2 { grid-template-columns: 1fr; }
     .cikk .lanc { grid-template-columns: 1fr; row-gap: 0.4rem; }
     .lanc::before { left: 0.4rem; right: auto; top: 0.5rem; bottom: 0.5rem; width: 2px; height: auto; }
@@ -403,7 +404,7 @@
   }
   @media print {
     .masthead, .lablec { background: none; }
-    .allomaslista { display: none; }
+    .allomaslista { display: none !important; }
     .lap { grid-template-columns: var(--margo) minmax(0, var(--oszlop)); }
   }
 </style>
@@ -433,8 +434,8 @@
 </header>
 
 <div class="lap">
-  <details class="allomaslista" open>
-    <summary><p class="cim">Állomáslista</p></summary>
+  <aside class="allomaslista">
+    <p class="cim">Állomáslista</p>
     <nav aria-label="Fejezetek">
       <ol>
         <li class="aktiv"><span class="perc">0′</span><span class="pont" aria-hidden="true"></span><a href="#top">Bevezető</a></li>
@@ -447,7 +448,7 @@
         <li><span class="perc">7′</span><span class="pont" aria-hidden="true"></span><a href="#kovetkezik">Mi következik</a></li>
       </ol>
     </nav>
-  </details>
+  </aside>
 
   <article class="cikk">
     <h1>A kód már nem a bottleneck: mi az AI-native SDLC?</h1>
@@ -456,6 +457,22 @@
     <p class="lead">Egy év alatt megtörtént, ami korábban elképzelhetetlen volt: a szervezetek AI-jal írnak kódot, olyan sebességgel, amire egy évvel ezelőtt senki nem számított. A kód körüli folyamatok viszont nem változtak ugyanebben a tempóban. A legtöbb engineering csapatnál ma is ugyanazok az approval gate-ek, review-k, handoffok és policy-k élnek, mint az agentic coding előtt – és pontosan ezek nyelik el azt a productivity gaint, amit egy Claude Code-hoz hasonló eszköz hozna.</p>
 
     <p>Ez a sorozat arról szól, hogyan néz ki egy olyan software development lifecycle, amelyet újraterveztek arra, amit egy agent ma már meg tud csinálni – úgy, hogy az ember végig a loopban marad. Az első rész a diagnózis és a modell: miért törik el a hagyományos SDLC, és mi lép a helyébe.</p>
+
+    <details class="allomaslista allomaslista-mobil">
+      <summary><p class="cim">Állomáslista</p></summary>
+      <nav aria-label="Fejezetek">
+        <ol>
+          <li class="aktiv"><span class="perc">0′</span><span class="pont" aria-hidden="true"></span><a href="#top">Bevezető</a></li>
+          <li><span class="perc">1′</span><span class="pont" aria-hidden="true"></span><a href="#hagyomanyos">A hagyományos SDLC és amire optimalizálták</a></li>
+          <li><span class="perc">2′</span><span class="pont" aria-hidden="true"></span><a href="#agent-sebesseg">Mi történik, ha a Build agent-sebességen fut</a></li>
+          <li><span class="perc">3′</span><span class="pont" aria-hidden="true"></span><a href="#vonal-es-loop">A vonal és a loop</a></li>
+          <li><span class="perc">4′</span><span class="pont" aria-hidden="true"></span><a href="#shiftek">A shiftek stage-enként</a></li>
+          <li><span class="perc">5′</span><span class="pont" aria-hidden="true"></span><a href="#artifact">A közös szál: a committed artifact</a></li>
+          <li><span class="perc">6′</span><span class="pont" aria-hidden="true"></span><a href="#playek">Hogyan olvasd a play-eket</a></li>
+          <li><span class="perc">7′</span><span class="pont" aria-hidden="true"></span><a href="#kovetkezik">Mi következik</a></li>
+        </ol>
+      </nav>
+    </details>
 
     <h2 id="hagyomanyos"><span class="perc" aria-hidden="true">1′</span>A hagyományos SDLC és amire optimalizálták</h2>
 
@@ -478,7 +495,7 @@
     <p>A playbook első ábrája ezt mutatja: az agentek előtt minden stage human speeden fut, utána a Build összeesik, a körülötte lévő human-speed stage-ek viszont ugyanolyan hosszúak maradnak. A Build már nem a constraint – a körülötte lévő lépések azok.</p>
 
     <figure>
-      <figcaption><span class="szam">1. ábra</span>A bottleneck elköltözött</figcaption>
+      <figcaption><span class="szam">1. ábra</span>A bottleneck elköltözött<sup class="lj">1</sup></figcaption>
       <table class="tt">
         <thead>
           <tr><th scope="col">Stage</th><th scope="col">Agentek előtt</th><th scope="col">Agentek után</th></tr>
@@ -492,7 +509,7 @@
           <tr><th scope="row">Maintain</th><td><span class="sav"><span class="csik"></span><span class="felirat">human speed</span></span></td><td><span class="sav"><span class="csik"></span><span class="felirat">human speed</span></span></td></tr>
         </tbody>
       </table>
-      <p class="magyarazat">A Build már nem a constraint – a körülötte lévő human-speed lépések azok. A human-speed stage-ek megtartják a hosszukat, a Build órákra zsugorodik. (A playbook 1. ábrája nyomán; a sávok arányai szemléltetők.)</p>
+      <p class="magyarazat"><sup class="lj">1</sup> A Build már nem a constraint – a körülötte lévő human-speed lépések azok. A human-speed stage-ek megtartják a hosszukat, a Build órákra zsugorodik. A playbook 1. ábrája nyomán; a sávok arányai szemléltetők.</p>
     </figure>
 
     <p>Vegyünk egy security példát. A security csapatot emberi outputra méretezték. Amikor az agentek megsokszorozzák a kód mennyiségét, két dolog történhet: vagy feltorlódik a review queue, vagy under-reviewed kód megy ki productionbe. Egy regulált szervezet egyiket sem fogadhatja el – tehát a security és policy checkeknek kell lépést tartaniuk az agentekkel.</p>
@@ -603,7 +620,7 @@
 
     <h2 id="playek"><span class="perc" aria-hidden="true">6′</span>Hogyan olvasd a play-eket</h2>
 
-    <p>A playbook magja a play-ek: a hat, nem lineáris stage-be csoportosított gyakorlatok, amelyek együtt lefedik a teljes lifecycle-t. Minden play ugyanazt a vázat követi, és a sorozat további részei is ezt tartják:</p>
+    <p>A playbook magja a play-ek. A szó a sportból jön: a playbook a csapat bejáratott húzásainak gyűjteménye, egy play pedig egy konkrét, ismételhető húzás. Itt tizenegy ilyen gyakorlat van – például <em>Capture as intent.md</em>, <em>CLAUDE.md</em>, <em>Hooks as approval gates</em>, <em>Closing the loop</em> –, a hat, nem lineáris stage-be csoportosítva, és együtt lefedik a teljes lifecycle-t. Minden play ugyanazt a vázat követi, és a sorozat további részei is ezt tartják:</p>
 
     <ul>
       <li><strong>Mi változik</strong> – traditional vs. AI-native;</li>
@@ -643,8 +660,8 @@
       </div>
       <div>
         <span class="irany">Indul</span>
-        <span class="cel"><span class="sz">2</span>Plan + Design: <code style="background:none;padding:0;font-size:0.85em">intent.md</code> és <code style="background:none;padding:0;font-size:0.85em">spec.md</code></span>
-        <p class="megj">Hamarosan.</p>
+        <span class="cel"><span class="sz">2</span>Plan + Design: <code style="background:none;padding:0;font-size:0.85em">intent.md</code> és <code style="background:none;padding:0;font-size:0.85em">spec.md</code><sup class="lj">*</sup></span>
+        <p class="megj"><sup class="lj">*</sup> Hamarosan.</p>
       </div>
     </div>
     <p class="kolofon">
