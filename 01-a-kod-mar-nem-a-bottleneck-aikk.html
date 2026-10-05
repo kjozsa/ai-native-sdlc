@@ -19,7 +19,7 @@
     --inter: "Inter", Arial, Helvetica, sans-serif;
     --barlow: "Barlow", Arial, Helvetica, sans-serif;
     --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-    --oszlop: 42rem;
+    --oszlop: 38rem;
     --oldal: 15rem;
     --hezag: 4rem;
     --belso: calc(var(--oszlop) + var(--oldal) + var(--hezag));
@@ -85,9 +85,9 @@
     max-width: 22ch;
     text-wrap: balance;
   }
-  .masthead .lead { color: var(--feher); font-size: 1.2rem; line-height: 1.5; margin: 1.5rem 0 0; max-width: 60ch; font-weight: 400; }
+  .cikk .lead { font-size: 1.2rem; line-height: 1.55; font-weight: 400; }
   .pattern-sav {
-    height: 7.5rem;
+    height: 9rem;
     margin-top: 2.5rem;
     background-image: url("assets/aikk-pattern-navy.svg");
     background-repeat: repeat-x;
@@ -97,29 +97,29 @@
 
   /* ===== Sorozat-sáv: 8 modul ===== */
   .modulok { background: var(--feher); border-bottom: 1px solid var(--vilagos2); padding: 1.5rem clamp(1.25rem, 4vw, 3rem); }
-  .modulok ol { list-style: none; margin: 0 auto; padding: 0; display: grid; grid-template-columns: 1.7fr repeat(7, minmax(0, 1fr)); gap: 0.75rem; max-width: var(--belso); }
+  .modulok ol { list-style: none; margin: 0 auto; padding: 0; display: grid; grid-template-columns: 1.7fr repeat(7, minmax(0, 1fr)); gap: 0.5rem; max-width: var(--belso); }
   .modulok li { max-width: none; }
   .modulok .m, .modulok a {
     display: grid;
-    grid-template-columns: 2.75rem 1fr;
-    column-gap: 0.7rem;
+    grid-template-columns: 2.4rem minmax(0, 1fr);
+    column-gap: 0.5rem;
     align-items: center;
     text-decoration: none;
     color: var(--szurke);
     font-family: var(--barlow);
     font-weight: 500;
-    font-size: 0.95rem;
+    font-size: 0.88rem;
     line-height: 1.15;
   }
   .modulok .sz {
-    width: 2.75rem;
-    height: 2.75rem;
+    width: 2.4rem;
+    height: 2.4rem;
     display: grid;
     place-items: center;
     background: var(--vilagos1);
     color: var(--sotetkek);
     font-weight: 700;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-variant-numeric: tabular-nums;
   }
   .modulok [aria-current="page"] .sz { background: var(--kek); color: var(--feher); }
@@ -239,6 +239,7 @@
 
   /* ===== Tartalom (fejezet-TOC) ===== */
   .tartalom { align-self: start; position: sticky; top: 1.5rem; }
+  aside.tartalom::before { content: ""; display: block; width: 60%; aspect-ratio: 613 / 118; margin-bottom: 1rem; background-image: url("assets/aikk-modul-cluster.svg"); background-repeat: no-repeat; background-size: 100% 100%; }
   .tartalom .cim { font-family: var(--barlow); font-weight: 700; font-size: 0.95rem; color: var(--sotetkek); margin: 0 0 0.6rem; max-width: none; padding-bottom: 0.5rem; border-bottom: 2px solid var(--kek); }
   .tartalom ol { list-style: none; margin: 0; padding: 0; }
   .tartalom li { display: grid; grid-template-columns: 2.2rem 0.75rem 1fr; column-gap: 0.6rem; align-items: start; padding: 0.3rem 0; max-width: none; margin: 0; }
@@ -290,7 +291,7 @@
     .sorozat { text-align: left; }
     .sorozat .resz { font-size: 2.2rem; }
     .masthead h1 { margin-top: 1.5rem; }
-    .masthead .lead { font-size: 1.1rem; }
+    .cikk .lead { font-size: 1.1rem; }
     .pattern-sav { height: 5rem; margin-top: 1.75rem; }
     .modulok ol { gap: 0.4rem; }
     .modulok .m, .modulok a { grid-template-columns: 1fr; row-gap: 0.35rem; }
@@ -330,7 +331,6 @@
       <p class="sorozat"><span class="resz">1<small>/8</small></span>AI-native SDLC blogsorozat<br>Olvasási idő <b>7 perc</b></p>
     </div>
     <h1>A kód már nem a bottleneck: mi az AI-native SDLC?</h1>
-    <p class="lead">Egy év alatt megtörtént, ami korábban elképzelhetetlen volt: a szervezetek AI-jal írnak kódot, olyan sebességgel, amire egy évvel ezelőtt senki nem számított. A kód körüli folyamatok viszont nem változtak ugyanebben a tempóban. A legtöbb engineering csapatnál ma is ugyanazok az approval gate-ek, review-k, handoffok és policy-k élnek, mint az agentic coding előtt – és pontosan ezek nyelik el azt a productivity gaint, amit egy Claude Code-hoz hasonló eszköz hozna.</p>
   </div>
   <div class="pattern-sav" aria-hidden="true"></div>
 </header>
@@ -367,6 +367,7 @@
 
   <article class="cikk">
     <p class="forras">AI-native SDLC sorozat, 1. rész · Forrás: <cite>The AI-Native SDLC Playbook</cite> (Louis Claxton, Anthropic)</p>
+    <p class="lead">Egy év alatt megtörtént, ami korábban elképzelhetetlen volt: a szervezetek AI-jal írnak kódot, olyan sebességgel, amire egy évvel ezelőtt senki nem számított. A kód körüli folyamatok viszont nem változtak ugyanebben a tempóban. A legtöbb engineering csapatnál ma is ugyanazok az approval gate-ek, review-k, handoffok és policy-k élnek, mint az agentic coding előtt – és pontosan ezek nyelik el azt a productivity gaint, amit egy Claude Code-hoz hasonló eszköz hozna.</p>
 
     <p>Ez a sorozat arról szól, hogyan néz ki egy olyan software development lifecycle, amelyet újraterveztek arra, amit egy agent ma már meg tud csinálni – úgy, hogy az ember végig a loopban marad. Az első rész a diagnózis és a modell: miért törik el a hagyományos SDLC, és mi lép a helyébe.</p>
 
