@@ -489,7 +489,7 @@
     <h1>Plan + Design: <code>intent.md</code> és <code>spec.md</code> – a pár, ami rögzíti, mit kértek és mit döntöttek</h1>
     <p class="forras">AI-Native SDLC sorozat, 2. rész · Forrás: <cite>The AI-Native SDLC Playbook</cite> (Louis Claxton, Anthropic)</p>
 
-<p>Az első részben az volt a tétel, hogy a loop minden fázisa egy commitolt artifacttal zárul, és a következő fázis ezt olvassa. Ez a rész a lánc első két szeméről szól: az <code>intent.md</code>-ről – az <em>intent</em> itt azt jelenti: mit akar valaki elérni, miért, és milyen korlátok között; ez tágabb az ötletnél, mert ticketből vagy production-alertből is származhat –, amely mindezt a kezdeményező saját szavaival rögzíti, és a <code>spec.md</code>-ről, amely a követelményeket és a designt egyetlen munkamenetben, a szervezet policy-jeivel összevetve állítja elő. Mindkét play-t a product owner viszi, mérnöki tudás nélkül – a mérnökök a 3. résztől lépnek be.</p>
+<p>Az első részben az volt a tétel, hogy a loop minden fázisa egy commitolt artifacttal zárul, és a következő fázis ezt olvassa. Ez a rész a lánc első két szeméről szól: az <code>intent.md</code>-ről – az <em>intent</em> itt azt jelenti: mit akar valaki elérni, miért, és milyen korlátok között; ez tágabb az ötletnél, mert ticketből vagy production-alertből is származhat –, amely mindezt a kezdeményező saját szavaival rögzíti, és a <code>spec.md</code>-ről, amely a követelményeket és a designt egyetlen munkamenetben, a szervezet policy-jeivel összevetve állítja elő. Mindkét fázist a product owner viszi, mérnöki tudás nélkül – a mérnökök a 3. résztől lépnek be.</p>
     <details class="allomaslista allomaslista-mobil">
       <summary><p class="cim">Állomáslista</p></summary>
       <nav aria-label="Fejezetek">
@@ -527,7 +527,7 @@
   </div>
   <p class="magyarazat">Bármi az eredet – ember, esemény vagy agent –, az út vége ugyanaz: emberi review, commit, és csak azután a következő fázis.</p>
 </figure><h3>Getting started</h3>
-<p><strong>Előfeltétel:</strong> nincs. Ez az egyik olyan play, amelybe a függőségi ábrán semmi nem mutat – bárhol elkezdhető.</p>
+<p><strong>Előfeltétel:</strong> nincs. Ebbe a lépésbe a függőségi ábrán semmi nem mutat – bárhol elkezdhető.</p>
 <p><strong>Infrastruktúra:</strong></p>
 <ul>
 <li>Claude-hozzáférés azoknak is, akik nem mérnökök (claude.ai vagy Cowork).</li>
@@ -589,7 +589,7 @@ A külső kárszakértőknek is kell hozzáférés?
     <li class="kimenet elfogadva"><b>Merge = elfogadva</b><span>A merge commit rögzíti, ki hagyta jóvá és mikor. A fájl a main-re kerül, és a merge esemény indítja a Design fázis spec-jobját – amely a <code>spec.md</code>-t ugyanebbe a mappába, új PR-ként nyitja.</span></li>
     <li class="kimenet elutasitva"><b>Lezárás merge nélkül = elutasítva</b><span>A fájl soha nem kerül a main-re, de a PR-történet megőrzi, hogy volt, és miért zárták le.</span></li>
   </ol>
-</figure><p>Ez a mechanika adja a play méréseit is: a „commitolt <code>intent.md</code>” a merge időbélyege, a túlélési arány a merge-ölt és a merge nélkül lezárt PR-ek aránya.</p>
+</figure><p>Ez a mechanika adja a Plan fázis méréseit is: a „commitolt <code>intent.md</code>” a merge időbélyege, a túlélési arány a merge-ölt és a merge nélkül lezárt PR-ek aránya.</p>
 <h3>Governance</h3>
 <p>A bizonyíték maga a commitolt <code>intent.md</code>: szerző, időbélyeg és a teljes módosítási történet az intent-tár git-történetében. A product owner hagyja jóvá; az elfogad/elutasít döntés – amely az intentet a Design fázisba küldi – a merge-ként vagy a lezárt review-ként rögzül.</p>
 <h3>Hogyan mérd</h3>
@@ -608,11 +608,11 @@ A külső kárszakértőknek is kell hozzáférés?
 <h3>Hogyan csináld</h3>
 <ol>
 <li>A product owner megnyit egy munkamenetet, amelyben a szervezet skilljei elérhetők, és csatolja az <code>intent.md</code>-t.</li>
-<li>A prompt az <code>intent.md</code>-re mutat, megnevezi a korlátokat, és kéri az aggályok megjelölését. Először kézzel futtasd; aztán kódold szervezeti szintű slash commandként; végül legyen a kiváltó esemény maga az <code>intent.md</code> elfogadása az intent-tárban – egy nem-interaktív job, amely a merge-re elindul, a szervezet skilljeivel lefuttatja a lépést, és a <code>spec.md</code>-t pull requestként commitolja. (Hogy ezt hogyan kell bekötni a CI-ba, azt a 6. rész CI/CD play-e írja le.) Innentől a product owner először már csak a review-nál találkozik vele.</li>
+<li>A prompt az <code>intent.md</code>-re mutat, megnevezi a korlátokat, és kéri az aggályok megjelölését. Először kézzel futtasd; aztán kódold szervezeti szintű slash commandként; végül legyen a kiváltó esemény maga az <code>intent.md</code> elfogadása az intent-tárban – egy nem-interaktív job, amely a merge-re elindul, a szervezet skilljeivel lefuttatja a lépést, és a <code>spec.md</code>-t pull requestként commitolja. (Hogy ezt hogyan kell bekötni a CI-ba, azt a 6. rész CI/CD-ről szóló szakasza írja le.) Innentől a product owner először már csak a review-nál találkozik vele.</li>
 <li>Ugyanaz a product owner átnézi a specet az ötlet tükrében. Megoldja a spec a kimondott problémát? Az <code>intent.md</code> nyitott kérdéseire van válasz, vagy tovább vannak vive?</li>
 <li>Először az aggályos pontokat dolgozd fel – ezek azok, amiket egy analyst eszkalált volna. A product owner mindegyiket az adott policy ownerrel rendezi, mielőtt az engineering meglátná a specet.</li>
 <li>Commit: <code>spec.md</code> az <code>intent.md</code> mellé. A fájlpár rögzíti, mit kértek és mit döntöttek.</li>
-<li>A product owner dönt, mehet-e a spec és az intent buildbe; amit a szervezet magasabb kockázatúnak sorol, ahhoz technical leadet von be. Ezt a döntést mindig ember hozza, és a spec elfogadása indítja el a plan mode play-t a Build fázisban.</li>
+<li>A product owner dönt, mehet-e a spec és az intent buildbe; amit a szervezet magasabb kockázatúnak sorol, ahhoz technical leadet von be. Ezt a döntést mindig ember hozza, és a spec elfogadása indítja el a plan mode-ot a Build fázisban (3. rész).</li>
 </ol>
 <h3>Mintaartifact: a prompt</h3>
 <pre><code>Read the attached intent.md and produce a requirements and design spec
@@ -631,8 +631,8 @@ where you cannot satisfy contradicting policies.
 <li><strong>Lagging indicator:</strong> követelmény-rework a build megkezdése után. Számold meg az ugyanahhoz a változáshoz tartozó <code>spec.md</code> commitokat, amelyek az első <code>plan.md</code> commit utánra datálódnak. A git log ezt közvetlenül megadja.</li>
 </ul>
 <h2 id="a-par"><span class="perc" aria-hidden="true">8′</span>A pár</h2>
-<p>A két play együtt egy fájlpárt hagy a repóban: <code>intent.md</code> az <code>intent.md</code> mellett <code>spec.md</code>. Az első azt rögzíti, mit kértek, és ki kérte; a második azt, mit döntöttek, és mely policy-k mentén. Mindkettő verziókezelt, mindkettőt ember hagyta jóvá – és a következő fázis mérnöke nem egy ticketből vagy egy meetingemlékből indul, hanem ebből a két fájlból.</p>
-<p>A két play egymástól függ, de nem egyformán: az intent play-nek nincs előfeltétele, bárhol elkezdhető. A design play-hez viszont már kellenek a skillként megírt policy-k – ezek a 4. rész témái. Aki ma indul, az intent-tárral és a template-tel kezd, és addig is kézzel promptolja a design passt, amíg a skillek elkészülnek.</p>
+<p>A két fázis együtt egy fájlpárt hagy a repóban: <code>intent.md</code> az <code>intent.md</code> mellett <code>spec.md</code>. Az első azt rögzíti, mit kértek, és ki kérte; a második azt, mit döntöttek, és mely policy-k mentén. Mindkettő verziókezelt, mindkettőt ember hagyta jóvá – és a következő fázis mérnöke nem egy ticketből vagy egy meetingemlékből indul, hanem ebből a két fájlból.</p>
+<p>A két fázis egymástól függ, de nem egyformán: az <code>intent.md</code> megírásának nincs előfeltétele, bárhol elkezdhető. A spec előállításához viszont már kellenek a skillként megírt policy-k – ezek a 4. rész témái. Aki ma indul, az intent-tárral és a template-tel kezd, és addig is kézzel promptolja a design passt, amíg a skillek elkészülnek.</p>
 <h2 id="kovetkezik"><span class="perc" aria-hidden="true">9′</span>Mi következik</h2>
 <ol class="megallok" start="3" style="counter-reset: m 2" aria-label="A sorozat további részei">
 <li><span><strong>Build I</strong> – plan mode mint alapértelmezett kiindulópont, auto mode, és a <code>CLAUDE.md</code>: a fájl, amit az agent minden session elején elolvas.</span></li>
