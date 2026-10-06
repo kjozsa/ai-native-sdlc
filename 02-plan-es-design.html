@@ -478,7 +478,7 @@
     <h1>Plan + Design: <code>intent.md</code> és <code>spec.md</code> – a pár, ami rögzíti, mit kértek és mit döntöttek</h1>
     <p class="forras">AI-Native SDLC sorozat, 2. rész · Forrás: <cite>The AI-Native SDLC Playbook</cite> (Louis Claxton, Anthropic)</p>
 
-<p>Az első részben az volt a tétel, hogy a loop minden fázisa egy commitolt artifacttal zárul, és a következő fázis ezt olvassa. Ez a rész a lánc első két szeméről szól: az <code>intent.md</code>-ről, amely az ötletet rögzíti az ötletgazda saját szavaival, és a <code>spec.md</code>-ről, amely a követelményeket és a designt egyetlen munkamenetben, a szervezet policy-jeivel összevetve állítja elő. Mindkét play-t a product owner viszi, mérnöki tudás nélkül – a mérnökök a 3. résztől lépnek be.</p>
+<p>Az első részben az volt a tétel, hogy a loop minden fázisa egy commitolt artifacttal zárul, és a következő fázis ezt olvassa. Ez a rész a lánc első két szeméről szól: az <code>intent.md</code>-ről – az <em>intent</em> itt azt jelenti: mit akar valaki elérni, miért, és milyen korlátok között; ez tágabb az ötletnél, mert ticketből vagy production-alertből is származhat –, amely mindezt a kezdeményező saját szavaival rögzíti, és a <code>spec.md</code>-ről, amely a követelményeket és a designt egyetlen munkamenetben, a szervezet policy-jeivel összevetve állítja elő. Mindkét play-t a product owner viszi, mérnöki tudás nélkül – a mérnökök a 3. résztől lépnek be.</p>
     <details class="allomaslista allomaslista-mobil">
       <summary><p class="cim">Állomáslista</p></summary>
       <nav aria-label="Fejezetek">
@@ -510,7 +510,7 @@
     <svg class="nyil" viewBox="0 0 40 24" aria-hidden="true"><path d="M2 12 H34 M26 4 L34 12 L26 20" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>
     <ol class="lepesek" aria-label="Ami minden úton azonos">
       <li><b>Product owner</b><span>átnézi és javítja</span></li>
-      <li><b>Commit</b><span>az intent home-ba, szerzővel és időbélyeggel</span></li>
+      <li><b>Commit</b><span>az intent-tárba, szerzővel és időbélyeggel</span></li>
       <li><b>Design fázis</b><span>az elfogadás indítja</span></li>
     </ol>
   </div>
@@ -521,17 +521,17 @@
 <ul>
 <li>Claude-hozzáférés azoknak is, akik nem mérnökök (claude.ai vagy Cowork).</li>
 <li>Egy közösen elfogadott <code>intent.md</code> template.</li>
-<li>Egy közös, verziókezelt „intent home”, amelyet a product owner figyel. Egyetlen termék esetén a legegyszerűbb egy <code>intent/</code> mappa a termék repójában – így az artifact-lánc a belőle származó kód mellett marad. Külön intent-repo csak akkor éri meg, ha az intent sok repót érint; monorepóban egy könyvtár.</li>
+<li>Egy közös, verziókezelt <strong>intent-tár</strong>, ahová minden <code>intent.md</code> kerül, és amelyet a product owner figyel. Egyetlen termék esetén a legegyszerűbb egy <code>intent/</code> mappa a termék repójában – így az artifact-lánc a belőle származó kód mellett marad. Külön intent-repo csak akkor éri meg, ha az intent sok repót érint; monorepóban egy könyvtár.</li>
 </ul>
-<p>A beállítás egyszeri feladat a platform- vagy engineering csapatnak: valakinek fel kell állítania az intent home-ot, és el kell döntenie, ki írhat bele, mert a hozzájárulók a szervezet minden részéből jönnek majd. Aki nem használt még gitet, annak nem is kell: egy verziókezelő-connector (pl. GitHub) révén Claude commitolja helyette a markdown fájlokat a claude.ai-ból vagy a Coworkból.</p>
-<p>Hogy ez a home hogyan viszonyul egy már létező Jira-hoz vagy követelménykezelő rendszerhez, azt a 4. rész „legacy rendszerek és a source of truth” szakasza tárgyalja.</p>
+<p>A beállítás egyszeri feladat a platform- vagy engineering csapatnak: valakinek fel kell állítania az intent-tárat, és el kell döntenie, ki írhat bele, mert a hozzájárulók a szervezet minden részéből jönnek majd. Aki nem használt még gitet, annak nem is kell: egy verziókezelő-connector (pl. GitHub) révén Claude commitolja helyette a markdown fájlokat a claude.ai-ból vagy a Coworkból.</p>
+<p>Hogy ez a tár hogyan viszonyul egy már létező Jira-hoz vagy követelménykezelő rendszerhez, azt a 4. rész „legacy rendszerek és a source of truth” szakasza tárgyalja.</p>
 <h3>Hogyan csináld</h3>
 <ol>
 <li>Az ötletgazda a saját szavaival leírja Claude-nak a problémát. Leírhatja, mit nem tud ma megcsinálni, kit érint az ötlet, hogyan nézne ki a jobb állapot, mi esik kívül a scope-on. Formális nyelv nem kell.</li>
 <li>Brainstorm addig, amíg az ötlet konkréttá válik. Claude azokat a kérdéseket teszi fel, amiket egy analyst tenne: scope, felhasználók, korlátok, mi számít sikernek.</li>
 <li>Kérd meg Claude-ot, hogy az eredményt a szervezet template-je szerint írja meg <code>intent.md</code>-ként. A template skillként kódolható – egy technikai kolléga állítja össze, egy lead hagyja jóvá –, és lefedheti a problémát, a javasolt kimenetet, az érintett felhasználókat és rendszereket, a korlátokat és a nyitott kérdéseket.</li>
 <li>Az ötletgazda kijavítja, amit Claude félreértett.</li>
-<li>Commit az intent home-ba. A szerző és az időbélyeg bekerül a rekordba, a product owner innen veszi át az ötletet.</li>
+<li>Commit az intent-tárba. A szerző és az időbélyeg bekerül a rekordba, a product owner innen veszi át az ötletet.</li>
 </ol>
 <h3>Mintaartifact: <code>intent.md</code></h3>
 <pre><code># Intent: claims status self-service
@@ -555,7 +555,7 @@ Do third-party loss adjusters need access too?
 </code></pre>
 <p>Öt szekció, fél oldal, az ügyfélszolgálati vezető saját mondatai. Nincs story point, nincs acceptance criteria formátum – és mégis minden benne van, amire a következő fázisnak szüksége lesz.</p>
 <h3>Governance</h3>
-<p>A bizonyíték maga a commitolt <code>intent.md</code>: szerző, időbélyeg és a teljes módosítási történet az intent home git-történetében. A product owner hagyja jóvá; az elfogad/elutasít döntés – amely az intentet a Design fázisba küldi – a merge-ként vagy a lezárt review-ként rögzül.</p>
+<p>A bizonyíték maga a commitolt <code>intent.md</code>: szerző, időbélyeg és a teljes módosítási történet az intent-tár git-történetében. A product owner hagyja jóvá; az elfogad/elutasít döntés – amely az intentet a Design fázisba küldi – a merge-ként vagy a lezárt review-ként rögzül.</p>
 <h3>Hogyan mérd</h3>
 <ul>
 <li><strong>Leading indicator:</strong> az első beszélgetéstől a commitolt <code>intent.md</code>-ig eltelt idő, a git-történetből olvasva (szerző és időbélyeg). Az elvárás: a többhetes elicitation-és-refinement ciklusból órák lesznek.</li>
@@ -572,7 +572,7 @@ Do third-party loss adjusters need access too?
 <h3>Hogyan csináld</h3>
 <ol>
 <li>A product owner megnyit egy munkamenetet, amelyben a szervezet skilljei elérhetők, és csatolja az <code>intent.md</code>-t.</li>
-<li>A prompt az <code>intent.md</code>-re mutat, megnevezi a korlátokat, és kéri az aggályok megjelölését. Először kézzel futtasd; aztán kódold szervezeti szintű slash commandként; végül legyen a trigger maga az <code>intent.md</code> elfogadása az intent home-ban – egy nem-interaktív job, amely a merge-re elindul, a szervezet skilljeivel lefuttatja a passt, és a <code>spec.md</code>-t pull requestként commitolja. (A plumbingot a 6. rész CI/CD play-e írja le.) Innentől a product owner első érintése már a review.</li>
+<li>A prompt az <code>intent.md</code>-re mutat, megnevezi a korlátokat, és kéri az aggályok megjelölését. Először kézzel futtasd; aztán kódold szervezeti szintű slash commandként; végül legyen a trigger maga az <code>intent.md</code> elfogadása az intent-tárban – egy nem-interaktív job, amely a merge-re elindul, a szervezet skilljeivel lefuttatja a passt, és a <code>spec.md</code>-t pull requestként commitolja. (A plumbingot a 6. rész CI/CD play-e írja le.) Innentől a product owner első érintése már a review.</li>
 <li>Ugyanaz a product owner átnézi a specet az ötlet tükrében. Megoldja a spec a kimondott problémát? Az <code>intent.md</code> nyitott kérdéseire van válasz, vagy tovább vannak vive?</li>
 <li>Először az aggályos pontokat dolgozd fel – ezek azok, amiket egy analyst eszkalált volna. A product owner mindegyiket az adott policy ownerrel rendezi, mielőtt az engineering meglátná a specet.</li>
 <li>Commit: <code>spec.md</code> az <code>intent.md</code> mellé. A fájlpár rögzíti, mit kértek és mit döntöttek.</li>
@@ -596,7 +596,7 @@ where you cannot satisfy contradicting policies.
 </ul>
 <h2 id="a-par"><span class="perc" aria-hidden="true">7′</span>A pár</h2>
 <p>A két play együtt egy fájlpárt hagy a repóban: <code>intent.md</code> az <code>intent.md</code> mellett <code>spec.md</code>. Az első azt rögzíti, mit kértek, és ki kérte; a második azt, mit döntöttek, és mely policy-k mentén. Mindkettő verziókezelt, mindkettőt ember hagyta jóvá – és a következő fázis mérnöke nem egy ticketből vagy egy meetingemlékből indul, hanem ebből a két fájlból.</p>
-<p>A két play egymástól függ, de nem egyformán: az intent play-nek nincs előfeltétele, bárhol elkezdhető. A design play-hez viszont már kellenek a skillként megírt policy-k – ezek a 4. rész témái. Aki ma indul, az intent home-mal és a template-tel kezd, és addig is kézzel promptolja a design passt, amíg a skillek elkészülnek.</p>
+<p>A két play egymástól függ, de nem egyformán: az intent play-nek nincs előfeltétele, bárhol elkezdhető. A design play-hez viszont már kellenek a skillként megírt policy-k – ezek a 4. rész témái. Aki ma indul, az intent-tárral és a template-tel kezd, és addig is kézzel promptolja a design passt, amíg a skillek elkészülnek.</p>
 <h2 id="kovetkezik"><span class="perc" aria-hidden="true">8′</span>Mi következik</h2>
 <ol class="megallok" start="3" style="counter-reset: m 2" aria-label="A sorozat további részei">
 <li><span><strong>Build I</strong> – plan mode mint alapértelmezett kiindulópont, auto mode, és a <code>CLAUDE.md</code>: a fájl, amit az agent minden session elején elolvas.</span></li>
