@@ -534,26 +534,29 @@
 <li>Commit az intent-tárba. A szerző és az időbélyeg bekerül a rekordba, a product owner innen veszi át az ötletet.</li>
 </ol>
 <h3>Mintaartifact: <code>intent.md</code></h3>
-<pre><code># Intent: claims status self-service
-Author: J. Ortiz (claims operations). Status: draft.
+<pre><code># Intent: kárstátusz önkiszolgáló lekérdezése
+Szerző: J. Ortiz (kárrendezés). Státusz: vázlat.
 
-## Problem
-Customers phone the contact center to ask where their claim is.
-Handlers spend roughly a third of call time on status-only queries.
+## Probléma
+Az ügyfelek felhívják az ügyfélszolgálatot, hogy megkérdezzék, hol tart a
+kárigényük. Az ügyintézők a hívásidő nagyjából harmadát csak
+státuszkérdésekre fordítják.
 
-## Proposed outcome
-Customers see claim status, next step and expected date in the portal.
+## Javasolt kimenet
+Az ügyfél a portálon látja a kárigény státuszát, a következő lépést és a
+várható dátumot.
 
-## Affected users and systems
-Claims handlers, portal team, claims-core API.
+## Érintett felhasználók és rendszerek
+Kárügyintézők, portálcsapat, claims-core API.
 
-## Constraints
-No new PII in the portal session. Existing authentication only.
+## Korlátok
+Nem kerülhet új személyes adat (PII) a portál-sessionbe. Csak a meglévő
+authentikáció használható.
 
-## Open questions
-Do third-party loss adjusters need access too?
+## Nyitott kérdések
+A külső kárszakértőknek is kell hozzáférés?
 </code></pre>
-<p>Öt szekció, fél oldal, az ügyfélszolgálati vezető saját mondatai. Nincs story point, nincs acceptance criteria formátum – és mégis minden benne van, amire a következő fázisnak szüksége lesz.</p>
+<p>Öt szekció, fél oldal, a kárrendezési vezető saját mondatai. Nincs story point, nincs acceptance criteria formátum – és mégis minden benne van, amire a következő fázisnak szüksége lesz. (A playbook angol példájának fordítása; a valós repóban azon a nyelven íródik, amelyen a csapat dolgozik.)</p>
 <h3>Governance</h3>
 <p>A bizonyíték maga a commitolt <code>intent.md</code>: szerző, időbélyeg és a teljes módosítási történet az intent-tár git-történetében. A product owner hagyja jóvá; az elfogad/elutasít döntés – amely az intentet a Design fázisba küldi – a merge-ként vagy a lezárt review-ként rögzül.</p>
 <h3>Hogyan mérd</h3>
