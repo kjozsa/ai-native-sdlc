@@ -433,6 +433,17 @@
     .utak { grid-template-columns: 1fr; row-gap: 0.4rem; justify-items: stretch; }
     .utak .nyil { transform: rotate(90deg); justify-self: center; }
   }
+  .cikk .prfolyam { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0 1.5rem; counter-reset: pr; max-width: none; border-top: 3px solid var(--tinta); border-bottom: 3px solid var(--tinta); }
+  .cikk .prfolyam li, .cikk .prfolyam li + li { counter-increment: pr; grid-column: 1 / -1; display: grid; grid-template-columns: 2.6rem 1fr; column-gap: 0.6rem; align-items: start; margin: 0; padding: 0.85rem 0; border-top: 1px solid var(--tinta); }
+  .cikk .prfolyam li:first-child { border-top: 0; }
+  .cikk .prfolyam li::before { content: counter(pr); font-family: var(--keret); font-weight: 700; font-size: 1.6rem; line-height: 1; font-variant-numeric: lining-nums tabular-nums; padding-top: 0.1rem; }
+  .cikk .prfolyam li.kimenet { grid-column: auto; }
+  .cikk .prfolyam li.kimenet::before { content: ""; width: 0.95rem; height: 0.95rem; border-radius: 50%; border: 2px solid var(--tinta); background: var(--tinta); margin: 0.3rem 0 0 0.3rem; padding: 0; }
+  .cikk .prfolyam li.elutasitva::before { background: var(--lap); border-color: var(--piros); }
+  .cikk .prfolyam li.elutasitva b { color: var(--piros-mely); }
+  .cikk .prfolyam b { display: block; font-family: var(--keret); font-weight: 600; font-size: 1.15rem; line-height: 1.15; }
+  .cikk .prfolyam li > span { grid-column: 2; display: block; font-size: 0.95rem; line-height: 1.45; margin-top: 0.25rem; }
+  @media (max-width: 720px) { .cikk .prfolyam { grid-template-columns: 1fr; } .cikk .prfolyam li.kimenet { grid-column: 1 / -1; } }
 </style>
 </head>
 <body>
@@ -443,7 +454,7 @@
     <p class="mast-kind"><span class="fo">Indulás · AI-native SDLC</span><span class="al">Blogsorozat engineering vezetőknek: a loop, az artifact-lánc és a play-ek</span></p>
     <p class="mast-no">
       <span class="lap-szam">2<small>/8</small></span>
-      <span class="menetido">Olvasási idő<b>8</b>perc</span>
+      <span class="menetido">Olvasási idő<b>9</b>perc</span>
     </p>
   </div>
   <nav class="vonal" aria-label="A sorozat részei">
@@ -467,9 +478,9 @@
       <ol>
         <li class="aktiv"><span class="perc">0′</span><span class="pont" aria-hidden="true"></span><a href="#top">Bevezető</a></li>
         <li><span class="perc">1′</span><span class="pont" aria-hidden="true"></span><a href="#plan">Stage 1 · Plan: capture as intent.md</a></li>
-        <li><span class="perc">4′</span><span class="pont" aria-hidden="true"></span><a href="#design">Stage 2 · Design: követelmények és design</a></li>
-        <li><span class="perc">7′</span><span class="pont" aria-hidden="true"></span><a href="#a-par">A pár</a></li>
-        <li><span class="perc">8′</span><span class="pont" aria-hidden="true"></span><a href="#kovetkezik">Mi következik</a></li>
+        <li><span class="perc">5′</span><span class="pont" aria-hidden="true"></span><a href="#design">Stage 2 · Design: követelmények és design</a></li>
+        <li><span class="perc">8′</span><span class="pont" aria-hidden="true"></span><a href="#a-par">A pár</a></li>
+        <li><span class="perc">9′</span><span class="pont" aria-hidden="true"></span><a href="#kovetkezik">Mi következik</a></li>
       </ol>
     </nav>
   </aside>
@@ -485,9 +496,9 @@
         <ol>
         <li class="aktiv"><span class="perc">0′</span><span class="pont" aria-hidden="true"></span><a href="#top">Bevezető</a></li>
         <li><span class="perc">1′</span><span class="pont" aria-hidden="true"></span><a href="#plan">Stage 1 · Plan: capture as intent.md</a></li>
-        <li><span class="perc">4′</span><span class="pont" aria-hidden="true"></span><a href="#design">Stage 2 · Design: követelmények és design</a></li>
-        <li><span class="perc">7′</span><span class="pont" aria-hidden="true"></span><a href="#a-par">A pár</a></li>
-        <li><span class="perc">8′</span><span class="pont" aria-hidden="true"></span><a href="#kovetkezik">Mi következik</a></li>
+        <li><span class="perc">5′</span><span class="pont" aria-hidden="true"></span><a href="#design">Stage 2 · Design: követelmények és design</a></li>
+        <li><span class="perc">8′</span><span class="pont" aria-hidden="true"></span><a href="#a-par">A pár</a></li>
+        <li><span class="perc">9′</span><span class="pont" aria-hidden="true"></span><a href="#kovetkezik">Mi következik</a></li>
         </ol>
       </nav>
     </details>
@@ -557,6 +568,28 @@ authentikáció használható.
 A külső kárszakértőknek is kell hozzáférés?
 </code></pre>
 <p>Öt szekció, pár sor, a kárrendezési vezető saját mondatai. Nincs story point, nincs acceptance criteria formátum – és mégis minden benne van, amire a következő fázisnak szüksége lesz.</p>
+<h3>Hogyan néz ez ki a repóban</h3>
+<p>A playbook az <code>intent.md</code>-t az artifact <em>típusaként</em> nevezi, és nem mondja ki, hogyan fér meg egymás mellett sok intent egy repóban, sem azt, mi történik fizikailag a fájllal az elfogadáskor. A lépéseiből viszont egy konvenció egyértelműen következik – ami alább jön, az ebből levezetett ajánlás, nem a playbook szó szerinti szövege.</p>
+<p><strong>Változásonként egy mappa.</strong> A Design fázis a <code>spec.md</code>-t „az <code>intent.md</code> mellé” commitolja, a Build fázis a <code>plan.md</code>-t ugyanoda. Ez csak akkor működik, ha minden változásnak saját mappája van, és a három fájl abban ugyanazzal a névvel él:</p>
+<pre><code>intent/
+  2026-06-02-karstatusz-onkiszolgalo/
+    intent.md
+    spec.md      ← a Design fázisban kerül mellé
+    plan.md      ← a Build fázisban
+  2026-06-09-szamlazas-export/
+    intent.md
+</code></pre>
+<p>A dátum- vagy sorszám-prefix csak a rendezéshez kell; ha a szervezet ticketrendszere a source of truth, a mappa neve a ticket azonosítója lesz (erről a 4. rész).</p>
+<p><strong>Elfogadás = merge.</strong> Az intent nem „commit a main-re”, hanem a szokásos pull-request-folyam. A fájlban lévő <code>Státusz: vázlat</code> sor csak tájékoztat; az igazság a git-állapot.</p>
+<figure class="pr-abra">
+  <figcaption><span class="szam">2. ábra</span>Mi történik a fájllal a repóban</figcaption>
+  <ol class="prfolyam">
+    <li><b>Branch + pull request</b><span>Claude a verziókezelő-connectoron át egy új branchre commitolja a mappát az <code>intent.md</code>-vel, és PR-t nyit. A fájl létezik, de a main-en még nincs.</span></li>
+    <li><b>Review a PR-ben</b><span>A product owner kommentel, javítást kér; az ötletgazda Claude-dal frissít, a javítás új commit ugyanarra a branchre.</span></li>
+    <li class="kimenet elfogadva"><b>Merge = elfogadva</b><span>A merge commit rögzíti, ki hagyta jóvá és mikor. A fájl a main-re kerül, és a merge esemény indítja a Design fázis spec-jobját – amely a <code>spec.md</code>-t ugyanebbe a mappába, új PR-ként nyitja.</span></li>
+    <li class="kimenet elutasitva"><b>Lezárás merge nélkül = elutasítva</b><span>A fájl soha nem kerül a main-re, de a PR-történet megőrzi, hogy volt, és miért zárták le.</span></li>
+  </ol>
+</figure><p>Ez a mechanika adja a play méréseit is: a „commitolt <code>intent.md</code>” a merge időbélyege, a túlélési arány a merge-ölt és a merge nélkül lezárt PR-ek aránya.</p>
 <h3>Governance</h3>
 <p>A bizonyíték maga a commitolt <code>intent.md</code>: szerző, időbélyeg és a teljes módosítási történet az intent-tár git-történetében. A product owner hagyja jóvá; az elfogad/elutasít döntés – amely az intentet a Design fázisba küldi – a merge-ként vagy a lezárt review-ként rögzül.</p>
 <h3>Hogyan mérd</h3>
@@ -564,7 +597,7 @@ A külső kárszakértőknek is kell hozzáférés?
 <li><strong>Leading indicator:</strong> az első beszélgetéstől a commitolt <code>intent.md</code>-ig eltelt idő, a git-történetből olvasva (szerző és időbélyeg). Az elvárás: a többhetes elicitation-és-refinement ciklusból órák lesznek.</li>
 <li><strong>Lagging indicator:</strong> a túlélési arány – az <code>intent.md</code>-k hányadát fogadja be a product owner a Design fázisba, és hányat zár le. Emellett: hány módosítás éri az <code>intent.md</code>-t az ugyanahhoz a változáshoz tartozó első <code>spec.md</code> commit <em>után</em>.</li>
 </ul>
-<h2 id="design"><span class="perc" aria-hidden="true">4′</span>Stage 2 · Design: követelmények és design</h2>
+<h2 id="design"><span class="perc" aria-hidden="true">5′</span>Stage 2 · Design: követelmények és design</h2>
 <h3>Mi változik</h3>
 <p>Hagyományosan a követelmények és a design két külön fázis, két külön csapatnál. Az analystek formalizálják az ötletet követelményekké, a designerek ezt visszafordítják designná. A szétválasztás az elszámoltathatóság miatt létezik, de lassú és veszteséges.</p>
 <p>Az AI-native változatban a kettő egyetlen promptolt munkamenetben történik. Claude az elfogadott <code>intent.md</code>-ből követelmény- és design-specet ír, amelyet a szervezet skilljei – brand, security, compliance, UX – korlátoznak, és amelyben az aggályos pontok meg vannak jelölve. A product owner ezt a specet átnézi, de nem ő írja. A cél egy olyan spec, amely ellen az engineering csapat tervezni tud, és amelyben a kockázatos pontok előre fel vannak címkézve.</p>
@@ -597,10 +630,10 @@ where you cannot satisfy contradicting policies.
 <li><strong>Leading indicator:</strong> az <code>intent.md</code> commit és az ugyanahhoz a változáshoz tartozó <code>spec.md</code> commit közötti idő – két git-időbélyeg –, a régi követelmény-plusz-design ciklussal összevetve.</li>
 <li><strong>Lagging indicator:</strong> követelmény-rework a build megkezdése után. Számold meg az ugyanahhoz a változáshoz tartozó <code>spec.md</code> commitokat, amelyek az első <code>plan.md</code> commit utánra datálódnak. A git log ezt közvetlenül megadja.</li>
 </ul>
-<h2 id="a-par"><span class="perc" aria-hidden="true">7′</span>A pár</h2>
+<h2 id="a-par"><span class="perc" aria-hidden="true">8′</span>A pár</h2>
 <p>A két play együtt egy fájlpárt hagy a repóban: <code>intent.md</code> az <code>intent.md</code> mellett <code>spec.md</code>. Az első azt rögzíti, mit kértek, és ki kérte; a második azt, mit döntöttek, és mely policy-k mentén. Mindkettő verziókezelt, mindkettőt ember hagyta jóvá – és a következő fázis mérnöke nem egy ticketből vagy egy meetingemlékből indul, hanem ebből a két fájlból.</p>
 <p>A két play egymástól függ, de nem egyformán: az intent play-nek nincs előfeltétele, bárhol elkezdhető. A design play-hez viszont már kellenek a skillként megírt policy-k – ezek a 4. rész témái. Aki ma indul, az intent-tárral és a template-tel kezd, és addig is kézzel promptolja a design passt, amíg a skillek elkészülnek.</p>
-<h2 id="kovetkezik"><span class="perc" aria-hidden="true">8′</span>Mi következik</h2>
+<h2 id="kovetkezik"><span class="perc" aria-hidden="true">9′</span>Mi következik</h2>
 <ol class="megallok" start="3" style="counter-reset: m 2" aria-label="A sorozat további részei">
 <li><span><strong>Build I</strong> – plan mode mint alapértelmezett kiindulópont, auto mode, és a <code>CLAUDE.md</code>: a fájl, amit az agent minden session elején elolvas.</span></li>
 </ol>
@@ -616,7 +649,7 @@ where you cannot satisfy contradicting policies.
       <div><span class="irany">Indul</span><span class="cel"><span class="sz">3</span>Build I<sup class="lj">*</sup></span><p class="megj"><sup class="lj">*</sup> Hamarosan.</p></div>
     </div>
     <p class="kolofon">
-      <span>Forrás: <cite>The AI-Native SDLC Playbook</cite> – Louis Claxton, Anthropic</span>
+      <span>Forrás: <a href="https://claude.com/resources/articles/the-ai-native-sdlc-playbook"><cite>The AI-Native SDLC Playbook</cite></a> – Louis Claxton, Anthropic</span>
       <span>Magyar feldolgozás, 2026</span>
     </p>
   </div>
