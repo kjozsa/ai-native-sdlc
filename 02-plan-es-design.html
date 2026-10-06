@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>A kód már nem a bottleneck: mi az AI-native SDLC? · AI-Native SDLC sorozat 1/8</title>
-<meta name="description" content="Miért törik el a hagyományos SDLC agentic coding mellett, és mi lép a helyébe: a loop, a committed artifact és a play dependency graph. Az Anthropic AI-Native SDLC Playbook feldolgozása, 1. rész.">
+<title>Plan + Design: intent.md és spec.md – a pár, ami rögzíti, mit kértek és mit döntöttek · AI-native SDLC sorozat 2/8</title>
+<meta name="description" content="AI-native SDLC sorozat, 2. rész: Plan + Design: intent.md és spec.md – a pár, ami rögzíti, mit kértek és mit döntöttek">
 <link rel="stylesheet" href="fonts/fonts.css">
 <style>
   :root {
@@ -407,22 +407,31 @@
     .allomaslista { display: none !important; }
     .lap { grid-template-columns: var(--margo) minmax(0, var(--oszlop)); }
   }
+
+  .cikk h3 { font-family: var(--keret); font-weight: 600; font-size: 1.3rem; line-height: 1.15; letter-spacing: 0.01em; margin: 1.9rem 0 0.5rem; max-width: none; }
+  .cikk pre { background: var(--lap-arnyek); border-top: 3px solid var(--tinta); border-bottom: 1px solid var(--tinta); padding: 1rem 1.1rem; margin: 1.25rem 0; overflow-x: auto; font-family: var(--mono); font-size: 0.86rem; line-height: 1.5; max-width: none; }
+  .cikk pre code { background: none; padding: 0; font-size: inherit; }
+  .cikk h3 + ul, .cikk h3 + ol { margin-top: 0.6rem; }
+  .cikk h1 code, .cikk h2 code, .cikk h3 code { background: none; padding: 0; font-size: 0.82em; font-weight: 500; }
+  .lablec .cel a { text-decoration: none; }
+  .lablec .cel a:hover { text-decoration: underline; text-decoration-color: var(--piros); }
 </style>
 </head>
 <body>
+
 
 <header class="masthead" id="top">
   <div class="mast-row">
     <p class="mast-kind"><span class="fo">Indulás · AI-native SDLC</span><span class="al">Blogsorozat engineering vezetőknek: a loop, az artifact-lánc és a play-ek</span></p>
     <p class="mast-no">
-      <span class="lap-szam">1<small>/8</small></span>
-      <span class="menetido">Olvasási idő<b>7</b>perc</span>
+      <span class="lap-szam">2<small>/8</small></span>
+      <span class="menetido">Olvasási idő<b>8</b>perc</span>
     </p>
   </div>
   <nav class="vonal" aria-label="A sorozat részei">
     <ol>
-      <li style="--i:0" aria-current="page"><a href="#top"><span class="pont" aria-hidden="true"></span><span class="sorsz">1</span><span class="nev">A kód már nem a bottleneck</span></a></li>
-      <li style="--i:1"><a href="02-plan-es-design.html"><span class="pont" aria-hidden="true"></span><span class="sorsz">2</span><span class="nev">Plan + Design</span></a></li>
+      <li style="--i:0"><a href="01-a-kod-mar-nem-a-bottleneck.html"><span class="pont" aria-hidden="true"></span><span class="sorsz">1</span><span class="nev">A kód már nem a bottleneck</span></a></li>
+      <li style="--i:1" aria-current="page"><a href="#top"><span class="pont" aria-hidden="true"></span><span class="sorsz">2</span><span class="nev">Plan + Design</span></a></li>
       <li style="--i:2"><span class="megallo"><span class="pont" aria-hidden="true"></span><span class="sorsz">3</span><span class="nev">Build I</span></span></li>
       <li style="--i:3"><span class="megallo"><span class="pont" aria-hidden="true"></span><span class="sorsz">4</span><span class="nev">Build II</span></span></li>
       <li style="--i:4"><span class="megallo"><span class="pont" aria-hidden="true"></span><span class="sorsz">5</span><span class="nev">Test</span></span></li>
@@ -439,229 +448,133 @@
     <nav aria-label="Fejezetek">
       <ol>
         <li class="aktiv"><span class="perc">0′</span><span class="pont" aria-hidden="true"></span><a href="#top">Bevezető</a></li>
-        <li><span class="perc">1′</span><span class="pont" aria-hidden="true"></span><a href="#hagyomanyos">A hagyományos SDLC és amire optimalizálták</a></li>
-        <li><span class="perc">2′</span><span class="pont" aria-hidden="true"></span><a href="#agent-sebesseg">Mi történik, ha a Build agent-sebességen fut</a></li>
-        <li><span class="perc">3′</span><span class="pont" aria-hidden="true"></span><a href="#vonal-es-loop">A vonal és a loop</a></li>
-        <li><span class="perc">4′</span><span class="pont" aria-hidden="true"></span><a href="#shiftek">Mi változik fázisonként</a></li>
-        <li><span class="perc">5′</span><span class="pont" aria-hidden="true"></span><a href="#artifact">A közös szál: a committed artifact</a></li>
-        <li><span class="perc">6′</span><span class="pont" aria-hidden="true"></span><a href="#playek">Hogyan olvasd a play-eket</a></li>
-        <li><span class="perc">7′</span><span class="pont" aria-hidden="true"></span><a href="#kovetkezik">Mi következik</a></li>
+        <li><span class="perc">1′</span><span class="pont" aria-hidden="true"></span><a href="#plan">Stage 1 · Plan: capture as intent.md</a></li>
+        <li><span class="perc">4′</span><span class="pont" aria-hidden="true"></span><a href="#design">Stage 2 · Design: követelmények és design</a></li>
+        <li><span class="perc">7′</span><span class="pont" aria-hidden="true"></span><a href="#a-par">A pár</a></li>
+        <li><span class="perc">8′</span><span class="pont" aria-hidden="true"></span><a href="#kovetkezik">Mi következik</a></li>
       </ol>
     </nav>
   </aside>
 
   <article class="cikk">
-    <h1>A kód már nem a bottleneck: mi az AI-native SDLC?</h1>
-    <p class="forras">AI-Native SDLC sorozat, 1. rész · Forrás: <cite>The AI-Native SDLC Playbook</cite> (Louis Claxton, Anthropic)</p>
+    <h1>Plan + Design: <code>intent.md</code> és <code>spec.md</code> – a pár, ami rögzíti, mit kértek és mit döntöttek</h1>
+    <p class="forras">AI-Native SDLC sorozat, 2. rész · Forrás: <cite>The AI-Native SDLC Playbook</cite> (Louis Claxton, Anthropic)</p>
 
-    <p class="lead">Egy év alatt megtörtént, ami korábban elképzelhetetlen volt: a szervezetek AI-jal írnak kódot, olyan sebességgel, amire egy évvel ezelőtt senki nem számított. A kód körüli folyamatok viszont nem változtak ugyanebben a tempóban. A legtöbb engineering csapatnál ma is ugyanazok az approval gate-ek, review-k, handoffok és policy-k élnek, mint az agentic coding előtt – és pontosan ezek nyelik el azt a termelékenységi nyereséget, amit egy Claude Code-hoz hasonló eszköz hozna.</p>
-
-    <p>Ez a sorozat arról szól, hogyan néz ki egy olyan software development lifecycle, amelyet újraterveztek arra, amit egy agent ma már meg tud csinálni – úgy, hogy az ember végig a loopban marad. Az első rész a diagnózis és a modell: miért törik el a hagyományos SDLC, és mi lép a helyébe.</p>
-
+<p>Az első részben az volt a tétel, hogy a loop minden fázisa egy commitolt artifacttal zárul, és a következő fázis ezt olvassa. Ez a rész a lánc első két szeméről szól: az <code>intent.md</code>-ről, amely az ötletet rögzíti az ötletgazda saját szavaival, és a <code>spec.md</code>-ről, amely a követelményeket és a designt egyetlen munkamenetben, a szervezet policy-jeivel összevetve állítja elő. Mindkét play-t a product owner viszi, mérnöki tudás nélkül – a mérnökök a 3. résztől lépnek be.</p>
     <details class="allomaslista allomaslista-mobil">
       <summary><p class="cim">Állomáslista</p></summary>
       <nav aria-label="Fejezetek">
         <ol>
-          <li class="aktiv"><span class="perc">0′</span><span class="pont" aria-hidden="true"></span><a href="#top">Bevezető</a></li>
-          <li><span class="perc">1′</span><span class="pont" aria-hidden="true"></span><a href="#hagyomanyos">A hagyományos SDLC és amire optimalizálták</a></li>
-          <li><span class="perc">2′</span><span class="pont" aria-hidden="true"></span><a href="#agent-sebesseg">Mi történik, ha a Build agent-sebességen fut</a></li>
-          <li><span class="perc">3′</span><span class="pont" aria-hidden="true"></span><a href="#vonal-es-loop">A vonal és a loop</a></li>
-          <li><span class="perc">4′</span><span class="pont" aria-hidden="true"></span><a href="#shiftek">Mi változik fázisonként</a></li>
-          <li><span class="perc">5′</span><span class="pont" aria-hidden="true"></span><a href="#artifact">A közös szál: a committed artifact</a></li>
-          <li><span class="perc">6′</span><span class="pont" aria-hidden="true"></span><a href="#playek">Hogyan olvasd a play-eket</a></li>
-          <li><span class="perc">7′</span><span class="pont" aria-hidden="true"></span><a href="#kovetkezik">Mi következik</a></li>
+        <li class="aktiv"><span class="perc">0′</span><span class="pont" aria-hidden="true"></span><a href="#top">Bevezető</a></li>
+        <li><span class="perc">1′</span><span class="pont" aria-hidden="true"></span><a href="#plan">Stage 1 · Plan: capture as intent.md</a></li>
+        <li><span class="perc">4′</span><span class="pont" aria-hidden="true"></span><a href="#design">Stage 2 · Design: követelmények és design</a></li>
+        <li><span class="perc">7′</span><span class="pont" aria-hidden="true"></span><a href="#a-par">A pár</a></li>
+        <li><span class="perc">8′</span><span class="pont" aria-hidden="true"></span><a href="#kovetkezik">Mi következik</a></li>
         </ol>
       </nav>
     </details>
 
-    <h2 id="hagyomanyos"><span class="perc" aria-hidden="true">1′</span>A hagyományos SDLC és amire optimalizálták</h2>
+<h2 id="plan"><span class="perc" aria-hidden="true">1′</span>Stage 1 · Plan: capture as <code>intent.md</code></h2>
+<h3>Mi változik</h3>
+<p>Egy ötlet a hagyományos SDLC-ben backlog-bejegyzéseken, user storykon, story pointokon és refinement meetingeken megy át, mire bárki cselekedhetne. Minden átadásnál gazdát cserél, így ami a mérnökökhöz ér, több lépéssel távolabb van attól, amit az ötletgazda eredetileg akart. Ha valakinek ötlete van, meg kell győznie a product csapat egy tagját, hogy írja meg vele vagy helyette.</p>
+<p>Az AI-native változatban az ötletgazda Claude-dal brainstormol, és az eredményt <code>intent.md</code>-ként írja le: egy proto-spec a saját fogalmaival, amely tartalmazza, mit akar, miért, és milyen korlátok között. Az artifact ember által olvasható, verziókezelt, és a következő fázis azonnal fel tudja használni. Az ismétlődő folyamatok skillként kódolódnak.</p>
+<p>Az <code>intent.md</code> három úton léphet be: valakinek ötlete van, ticket érkezik, vagy egy alert jelez a productionből (erről a 7. részben, a Maintain fázisnál lesz szó). Bármelyik az eredet – ember, esemény vagy agent –, a lépés ugyanaz: a product owner átnézi és javítja az agent által írt <code>intent.md</code>-t, mielőtt commitolja.</p>
+<h3>Getting started</h3>
+<p><strong>Előfeltétel:</strong> nincs. Ez a dependency graph egyik gyökér play-e.</p>
+<p><strong>Infrastruktúra:</strong></p>
+<ul>
+<li>Claude-hozzáférés azoknak is, akik nem mérnökök (claude.ai vagy Cowork).</li>
+<li>Egy közösen elfogadott <code>intent.md</code> template.</li>
+<li>Egy közös, verziókezelt „intent home”, amelyet a product owner figyel. Egyetlen termék esetén a legegyszerűbb egy <code>intent/</code> mappa a termék repójában – így az artifact-lánc a belőle származó kód mellett marad. Külön intent-repo csak akkor éri meg, ha az intent sok repót érint; monorepóban egy könyvtár.</li>
+</ul>
+<p>A beállítás egyszeri feladat a platform- vagy engineering csapatnak: valakinek fel kell állítania az intent home-ot, és el kell döntenie, ki írhat bele, mert a hozzájárulók a szervezet minden részéből jönnek majd. Aki nem használt még gitet, annak nem is kell: egy verziókezelő-connector (pl. GitHub) révén Claude commitolja helyette a markdown fájlokat a claude.ai-ból vagy a Coworkból.</p>
+<p>Hogy ez a home hogyan viszonyul egy már létező Jira-hoz vagy követelménykezelő rendszerhez, azt a 4. rész „legacy rendszerek és a source of truth” szakasza tárgyalja.</p>
+<h3>Hogyan csináld</h3>
+<ol>
+<li>Az ötletgazda a saját szavaival leírja Claude-nak a problémát. Leírhatja, mit nem tud ma megcsinálni, kit érint az ötlet, hogyan nézne ki a jobb állapot, mi esik kívül a scope-on. Formális nyelv nem kell.</li>
+<li>Brainstorm addig, amíg az ötlet konkréttá válik. Claude azokat a kérdéseket teszi fel, amiket egy analyst tenne: scope, felhasználók, korlátok, mi számít sikernek.</li>
+<li>Kérd meg Claude-ot, hogy az eredményt a szervezet template-je szerint írja meg <code>intent.md</code>-ként. A template skillként kódolható – egy technikai kolléga állítja össze, egy lead hagyja jóvá –, és lefedheti a problémát, a javasolt kimenetet, az érintett felhasználókat és rendszereket, a korlátokat és a nyitott kérdéseket.</li>
+<li>Az ötletgazda kijavítja, amit Claude félreértett.</li>
+<li>Commit az intent home-ba. A szerző és az időbélyeg bekerül a rekordba, a product owner innen veszi át az ötletet.</li>
+</ol>
+<h3>Mintaartifact: <code>intent.md</code></h3>
+<pre><code># Intent: claims status self-service
+Author: J. Ortiz (claims operations). Status: draft.
 
-    <p>Az SDLC az a folyamat, ami az ötlettől a productionig viszi a szoftvert. A legtöbb szervezet ugyanannak a hat fázisnak valamilyen változatát futtatja: <strong>Plan, Design, Build, Test, Deploy, Maintain</strong>. Hagyományosan mindegyik egy diszkrét fázis, más-más szerepkör tulajdonában: a product manager követelményeket ír, a technical architect designt csinál belőle, a mérnökök megépítik, a QA (regulált enterprise-nál külön csapat) ellenőrzi, a release team kiszállítja, az operations figyeli, mi fut. A munka dokumentumokon, ticketeken és jóváhagyásokon keresztül mozog fázisról fázisra.</p>
+## Problem
+Customers phone the contact center to ask where their claim is.
+Handlers spend roughly a third of call time on status-only queries.
 
-    <p>Ez a folyamat szándékosan folyamatnehéz: minden lépésnél elszámoltathatóság és kontroll. Csakhogy olyan korszakra lett optimalizálva, amelyben a legdrágább, legtöbb időt elvivő fázis a kód megírása és implementálása volt. A PRD-k, a becslési rituálék, a product security review-k mind azért léteztek, hogy alignmentet kényszerítsenek ki egy olyan fejlesztés előtt, ami heteket, hónapokat vagy negyedéveket vett igénybe.</p>
+## Proposed outcome
+Customers see claim status, next step and expected date in the portal.
 
-    <p>A hagyományos SDLC másik rejtett feltevése: minden lépést ember hajt végre. A kontrollok erre épültek.</p>
+## Affected users and systems
+Claims handlers, portal team, claims-core API.
 
-    <h2 id="agent-sebesseg"><span class="perc" aria-hidden="true">2′</span>Mi történik, ha a Build agent-sebességen fut</h2>
+## Constraints
+No new PII in the portal session. Existing authentication only.
 
-    <p>Ha a kód már nem a bottleneck, és a Build fázis gyorsabban fut, mint amit a hagyományos SDLC megenged, három dolog válik igazzá:</p>
+## Open questions
+Do third-party loss adjusters need access too?
+</code></pre>
+<p>Öt szekció, fél oldal, az ügyfélszolgálati vezető saját mondatai. Nincs story point, nincs acceptance criteria formátum – és mégis minden benne van, amire a következő fázisnak szüksége lesz.</p>
+<h3>Governance</h3>
+<p>A bizonyíték maga a commitolt <code>intent.md</code>: szerző, időbélyeg és a teljes módosítási történet az intent home git-történetében. A product owner hagyja jóvá; az elfogad/elutasít döntés – amely az intentet a Design fázisba küldi – a merge-ként vagy a lezárt review-ként rögzül.</p>
+<h3>Hogyan mérd</h3>
+<ul>
+<li><strong>Leading indicator:</strong> az első beszélgetéstől a commitolt <code>intent.md</code>-ig eltelt idő, a git-történetből olvasva (szerző és időbélyeg). Az elvárás: a többhetes elicitation-és-refinement ciklusból órák lesznek.</li>
+<li><strong>Lagging indicator:</strong> a túlélési arány – az <code>intent.md</code>-k hányadát fogadja be a product owner a Design fázisba, és hányat zár le. Emellett: hány módosítás éri az <code>intent.md</code>-t az ugyanahhoz a változáshoz tartozó első <code>spec.md</code> commit <em>után</em>.</li>
+</ul>
+<h2 id="design"><span class="perc" aria-hidden="true">4′</span>Stage 2 · Design: követelmények és design</h2>
+<h3>Mi változik</h3>
+<p>Hagyományosan a követelmények és a design két külön fázis, két külön csapatnál. Az analystek formalizálják az ötletet követelményekké, a designerek ezt visszafordítják designná. A szétválasztás az elszámoltathatóság miatt létezik, de lassú és veszteséges.</p>
+<p>Az AI-native változatban a kettő egyetlen promptolt munkamenetben történik. Claude az elfogadott <code>intent.md</code>-ből követelmény- és design-specet ír, amelyet a szervezet skilljei – brand, security, compliance, UX – korlátoznak, és amelyben az aggályos pontok meg vannak jelölve. A product owner ezt a specet átnézi, de nem ő írja. A cél egy olyan spec, amely ellen az engineering csapat tervezni tud, és amelyben a kockázatos pontok előre fel vannak címkézve.</p>
+<p>Front-end munkánál ez a legszemléletesebb: az elfogadott <code>intent.md</code>-ből a product owner a Claude Designban (béta) mockot készít, iterál rajta, majd exportálja Claude Code-ba a buildhez.</p>
+<h3>Getting started</h3>
+<p><strong>Előfeltétel:</strong> egy <code>intent.md</code>, és a brand-, security-, compliance- és UX-policy-k skillként megírva.</p>
+<p><strong>Infrastruktúra:</strong> egy product owner Claude-hozzáféréssel. Mérnöki tudás nem szükséges.</p>
+<h3>Hogyan csináld</h3>
+<ol>
+<li>A product owner megnyit egy munkamenetet, amelyben a szervezet skilljei elérhetők, és csatolja az <code>intent.md</code>-t.</li>
+<li>A prompt az <code>intent.md</code>-re mutat, megnevezi a korlátokat, és kéri az aggályok megjelölését. Először kézzel futtasd; aztán kódold szervezeti szintű slash commandként; végül legyen a trigger maga az <code>intent.md</code> elfogadása az intent home-ban – egy nem-interaktív job, amely a merge-re elindul, a szervezet skilljeivel lefuttatja a passt, és a <code>spec.md</code>-t pull requestként commitolja. (A plumbingot a 6. rész CI/CD play-e írja le.) Innentől a product owner első érintése már a review.</li>
+<li>Ugyanaz a product owner átnézi a specet az ötlet tükrében. Megoldja a spec a kimondott problémát? Az <code>intent.md</code> nyitott kérdéseire van válasz, vagy tovább vannak vive?</li>
+<li>Először az aggályos pontokat dolgozd fel – ezek azok, amiket egy analyst eszkalált volna. A product owner mindegyiket az adott policy ownerrel rendezi, mielőtt az engineering meglátná a specet.</li>
+<li>Commit: <code>spec.md</code> az <code>intent.md</code> mellé. A fájlpár rögzíti, mit kértek és mit döntöttek.</li>
+<li>A product owner dönt, mehet-e a spec és az intent buildbe; amit a szervezet magasabb kockázatúnak sorol, ahhoz technical leadet von be. Ezt a döntést mindig ember hozza, és a spec elfogadása indítja el a plan mode play-t a Build fázisban.</li>
+</ol>
+<h3>Mintaartifact: a prompt</h3>
+<pre><code>Read the attached intent.md and produce a requirements and design spec
+for integrating it into our existing codebase. Apply the skills available
+to you so the plan conforms to our brand guidelines, security policies
+and UX standards. Document the spec fully as spec.md, ready to hand to
+the engineering team. Describe clearly any areas of concern, especially
+where you cannot satisfy contradicting policies.
+</code></pre>
+<p>Ez az egész. A policy-k a skillekben vannak, nem a promptban; a prompt csak annyit mond, hogy alkalmazd őket, és jelezd, ahol ütköznek.</p>
+<h3>Governance</h3>
+<p>A policy nem egy hetekkel későbbi review-ban derül ki, hanem az élő policy olvasódik és alkalmazódik a spec írása közben: a szervezet skilljei a spec korlátaiként működnek. A spec, az azt előállító prompt és a hatályos skill-verziók mind a verziókezelőben vannak. A product owner írja alá a specet, és a megjelölt aggályokat a nevesített policy ownerekhez irányítja.</p>
+<h3>Hogyan mérd</h3>
+<ul>
+<li><strong>Leading indicator:</strong> az <code>intent.md</code> commit és az ugyanahhoz a változáshoz tartozó <code>spec.md</code> commit közötti idő – két git-időbélyeg –, a régi követelmény-plusz-design ciklussal összevetve.</li>
+<li><strong>Lagging indicator:</strong> követelmény-rework a build megkezdése után. Számold meg az ugyanahhoz a változáshoz tartozó <code>spec.md</code> commitokat, amelyek az első <code>plan.md</code> commit utánra datálódnak. A git log ezt közvetlenül megadja.</li>
+</ul>
+<h2 id="a-par"><span class="perc" aria-hidden="true">7′</span>A pár</h2>
+<p>A két play együtt egy fájlpárt hagy a repóban: <code>intent.md</code> az <code>intent.md</code> mellett <code>spec.md</code>. Az első azt rögzíti, mit kértek, és ki kérte; a második azt, mit döntöttek, és mely policy-k mentén. Mindkettő verziókezelt, mindkettőt ember hagyta jóvá – és a következő fázis mérnöke nem egy ticketből vagy egy meetingemlékből indul, hanem ebből a két fájlból.</p>
+<p>A két play egymástól függ, de nem egyformán: az intent play-nek nincs előfeltétele, bárhol elkezdhető. A design play-hez viszont már kellenek a skillként megírt policy-k – ezek a 4. rész témái. Aki ma indul, az intent home-mal és a template-tel kezd, és addig is kézzel promptolja a design passt, amíg a skillek elkészülnek.</p>
+<h2 id="kovetkezik"><span class="perc" aria-hidden="true">8′</span>Mi következik</h2>
+<ol class="megallok" start="3" style="counter-reset: m 2" aria-label="A sorozat további részei">
+<li><span><strong>Build I</strong> – plan mode mint alapértelmezett kiindulópont, auto mode, és a <code>CLAUDE.md</code>: a fájl, amit az agent minden session elején elolvas.</span></li>
+</ol>
 
-    <ol class="kovetkezmeny">
-      <li><span><strong>A bottleneck a Build két oldalára tolódik.</strong> Plan, Review/Test és Deploy továbbra is emberi sebességgel futnak. A Build órákra zsugorodik, a többi fázis megtartja a hosszát.</span></li>
-      <li><span><strong>A kontrollok elválnak a valóságtól.</strong> Minden sort kézzel átnézni akkor volt értelmes, amikor ember írta. Amint agentek írják a diff zömét, ez nem tartható.</span></li>
-      <li><span><strong>A governance költsége nő.</strong> A kivételek továbbra is olyan meetingeken és committee-ken mennek át, amelyek hetente vagy havonta ülnek össze.</span></li>
-    </ol>
 
-    <p>A playbook első ábrája ezt mutatja: az agentek előtt minden fázis emberi sebességgel fut, utána a Build összeesik, a körülötte lévő emberi sebességű fázisok viszont ugyanolyan hosszúak maradnak. A Build már nem a szűk keresztmetszet – a körülötte lévő lépések azok.</p>
-
-    <figure>
-      <figcaption><span class="szam">1. ábra</span>A bottleneck elköltözött<sup class="lj">1</sup></figcaption>
-      <table class="tt">
-        <thead>
-          <tr><th scope="col">Stage</th><th scope="col">Agentek előtt</th><th scope="col">Agentek után</th></tr>
-        </thead>
-        <tbody>
-          <tr><th scope="row">Plan</th><td><span class="sav"><span class="csik"></span><span class="felirat">human speed</span></span></td><td><span class="sav"><span class="csik"></span><span class="felirat">human speed</span></span></td></tr>
-          <tr><th scope="row">Design</th><td><span class="sav"><span class="csik"></span><span class="felirat">human speed</span></span></td><td><span class="sav"><span class="csik"></span><span class="felirat">human speed</span></span></td></tr>
-          <tr class="valtozik"><th scope="row">Build</th><td><span class="sav"><span class="csik"></span><span class="felirat">human speed</span></span></td><td><span class="sav"><span class="csik agent" style="--w:14%"></span><span class="felirat agent">agent speed – órák</span></span></td></tr>
-          <tr><th scope="row">Test</th><td><span class="sav"><span class="csik"></span><span class="felirat">human speed</span></span></td><td><span class="sav"><span class="csik"></span><span class="felirat">human speed</span></span></td></tr>
-          <tr><th scope="row">Deploy</th><td><span class="sav"><span class="csik"></span><span class="felirat">human speed</span></span></td><td><span class="sav"><span class="csik"></span><span class="felirat">human speed</span></span></td></tr>
-          <tr><th scope="row">Maintain</th><td><span class="sav"><span class="csik"></span><span class="felirat">human speed</span></span></td><td><span class="sav"><span class="csik"></span><span class="felirat">human speed</span></span></td></tr>
-        </tbody>
-      </table>
-      <p class="magyarazat"><sup class="lj">1</sup> A Build már nem a szűk keresztmetszet – a körülötte lévő emberi sebességű lépések azok. Az emberi sebességű fázisok megtartják a hosszukat, a Build órákra zsugorodik. A playbook 1. ábrája nyomán; a sávok arányai szemléltetők.</p>
-    </figure>
-
-    <p>Vegyünk egy security példát. A security csapatot emberi outputra méretezték. Amikor az agentek megsokszorozzák a kód mennyiségét, két dolog történhet: vagy feltorlódik a review queue, vagy under-reviewed kód megy ki productionbe. Egy regulált szervezet egyiket sem fogadhatja el – tehát a security és policy ellenőrzéseknek kell lépést tartaniuk az agentekkel.</p>
-
-    <p>A következtetés: ahhoz, hogy az agentic AI termelékenységi nyeresége realizálódjon <em>és</em> secure maradjon, az SDLC többi részének ugyanazon az átalakuláson kell átmennie, amin az implementációs fázis már átment.</p>
-
-    <h2 id="vonal-es-loop"><span class="perc" aria-hidden="true">3′</span>A vonal és a loop</h2>
-
-    <p>Az AI-native SDLC a régi control objective-eket tartja meg új enforcementtel. A lineáris flow helyett a folyamat loop lesz, és az AI minden pontban be van ágyazva. A fázisok közötti handover automatizált: egy fázis lezárása elindítja a következő play-t, ami a hagyományos SDLC manuális, nehézkes handoffjait kezeli.</p>
-
-    <p>A második ábra két rajzot tesz egymás mellé:</p>
-
-    <figure>
-      <figcaption><span class="szam">2. ábra</span>A vonal és a loop</figcaption>
-      <div class="abra2">
-        <div>
-          <h3>Traditional – the line</h3>
-          <svg viewBox="0 0 360 150" role="img" aria-label="Hat állomás egy egyenes vonalon: Plan, Design, Build, Test, Deploy, Maintain; a Maintain végéről egy lassú visszacsatoló nyíl vezet a Plan elejére.">
-            <path d="M30 60 H330" stroke="currentColor" stroke-width="3" fill="none"/>
-            <path d="M330 60 V118 H30 V72" stroke="currentColor" stroke-width="1.5" fill="none" stroke-dasharray="4 4"/>
-            <path d="M24 80 L30 70 L36 80" stroke="currentColor" stroke-width="1.5" fill="none"/>
-            <g fill="#fff" stroke="currentColor" stroke-width="3">
-              <circle cx="30" cy="60" r="6"/><circle cx="90" cy="60" r="6"/><circle cx="150" cy="60" r="6"/><circle cx="210" cy="60" r="6"/><circle cx="270" cy="60" r="6"/><circle cx="330" cy="60" r="6"/>
-            </g>
-            <g class="st" text-anchor="middle">
-              <text x="30" y="42">Plan</text><text x="90" y="42">Design</text><text x="150" y="42">Build</text><text x="210" y="42">Test</text><text x="270" y="42">Deploy</text><text x="330" y="42">Maintain</text>
-            </g>
-            <text class="st halv" x="180" y="140" text-anchor="middle">egy lassú loop = új release cycle</text>
-          </svg>
-          <p>Plan → Design → Build → Test → Deploy → Maintain, egyetlen lassú loop; a visszacsatolás egy új release cycle.</p>
-        </div>
-        <div>
-          <h3>AI-native – the loop</h3>
-          <p class="felett">Emberek a loop felett: indítanak, irányítanak, governálnak</p>
-          <svg viewBox="0 0 360 172" role="img" aria-label="Ugyanaz a hat állomás körben, középen Claude felirattal; a kör felett az emberek: indítanak, irányítanak, governálnak.">
-            <circle cx="180" cy="92" r="56" stroke="currentColor" stroke-width="3" fill="none"/>
-            <path d="M217.4 140.8 L208 140.5 L212.4 132.2" stroke="currentColor" stroke-width="2.5" fill="none"/>
-            <g fill="#fff" stroke="currentColor" stroke-width="3">
-              <circle cx="180" cy="36" r="6"/><circle cx="228.5" cy="64" r="6"/><circle cx="228.5" cy="120" r="6"/><circle cx="180" cy="148" r="6"/><circle cx="131.5" cy="120" r="6"/><circle cx="131.5" cy="64" r="6"/>
-            </g>
-            <g class="st">
-              <text x="180" y="24" text-anchor="middle">Plan</text>
-              <text x="242" y="68">Design</text>
-              <text x="242" y="125">Build</text>
-              <text x="180" y="167" text-anchor="middle">Test</text>
-              <text x="118" y="125" text-anchor="end">Deploy</text>
-              <text x="118" y="68" text-anchor="end">Maintain</text>
-            </g>
-            <text class="st" x="180" y="97" text-anchor="middle" font-size="15">Claude</text>
-          </svg>
-          <p>Ugyanaz a hat fázis körben, középen Claude, és a loop órák alatt fordul, nem hetek alatt. Az emberek a loop <em>felett</em> vannak: indítják, irányítják és governálják.</p>
-        </div>
-      </div>
-    </figure>
-
-    <h2 id="shiftek"><span class="perc" aria-hidden="true">4′</span>Mi változik fázisonként</h2>
-
-    <p>A playbook egy táblázatban mutatja a spektrum két végét. A legtöbb szervezet valahol a két oszlop között van.</p>
-
-    <figure>
-      <figcaption><span class="szam">Táblázat</span>Traditional SDLC · AI-native SDLC</figcaption>
-      <table class="tt shift">
-        <thead>
-          <tr><th scope="col">Stage</th><th scope="col">Traditional SDLC</th><th scope="col">AI-native SDLC</th></tr>
-        </thead>
-        <tbody>
-          <tr><th scope="row">Plan</th><td data-oszlop="Traditional SDLC">Követelményeket committee gyűjti, workshopokon és jóváhagyásokon át desztillálódik, kézzel írják meg</td><td data-oszlop="AI-native SDLC">Claude közvetlenül a forrásokból szintetizálja a problémákat egy <code>intent.md</code>-be, ami ember által olvasható és gép által végrehajtható</td></tr>
-          <tr><th scope="row">Design</th><td data-oszlop="Traditional SDLC">Analystek írják a specet, designerek értelmezik</td><td data-oszlop="AI-native SDLC">Követelmények és design egy working sessionbe sűrűsödik egy agenttel, skillként kódolt szabványok vezetik, gitben verziózva</td></tr>
-          <tr><th scope="row">Build</th><td data-oszlop="Traditional SDLC">Teszt és kód kézzel írva, dokumentáció utólag</td><td data-oszlop="AI-native SDLC">Tesztet és kódot AI generál, az intézményi tudás verziózott, machine-readable <code>CLAUDE.md</code> fájlokban és skillekben él</td></tr>
-          <tr><th scope="row">Test</th><td data-oszlop="Traditional SDLC">QA gate-ek a fázishatárokon</td><td data-oszlop="AI-native SDLC">Continuous evalok az implementációba szőve</td></tr>
-          <tr><th scope="row">Deploy</th><td data-oszlop="Traditional SDLC">Ember review-z minden sort, a governance review ciklusokban történik, gyakran inkonzisztensen</td><td data-oszlop="AI-native SDLC">Agentic review rétegek, emberi review a regulált és kritikus kódra fenntartva; a governance az AI cselekvése közben érvényesül, hookok mint approval gate-ek</td></tr>
-          <tr><th scope="row">Maintain</th><td data-oszlop="Traditional SDLC">Emberek figyelik a productiont bugokért</td><td data-oszlop="AI-native SDLC">Agentek monitorozzák a live deploymenteket; ha egy metrika kilép a tűrési sávból, az agent diagnosztizálja, és új <code>intent.md</code>-ként visszaírja a loopba</td></tr>
-        </tbody>
-      </table>
-    </figure>
-
-    <h2 id="artifact"><span class="perc" aria-hidden="true">5′</span>A közös szál: a committed artifact</h2>
-
-    <p>A jobb oldali oszlopon egy szál fut végig: <strong>minden fázis egy artifact version controlba commitolásával zárul, és a következő fázis ennek az olvasásával kezdődik.</strong> A lánc:</p>
-
-    <ol class="lanc" aria-label="Az artifact-lánc">
-      <li><span class="pont" aria-hidden="true"></span><code>intent.md</code></li>
-      <li><span class="pont" aria-hidden="true"></span><code>spec.md</code></li>
-      <li><span class="pont" aria-hidden="true"></span><code>plan.md</code></li>
-      <li><span class="pont" aria-hidden="true"></span><span class="nem-kod">diff + tests</span></li>
-      <li><span class="pont" aria-hidden="true"></span><span class="nem-kod">PR + review findings</span></li>
-      <li><span class="pont" aria-hidden="true"></span><span class="nem-kod">incident record</span></li>
-    </ol>
-
-    <p>A korai fázisoknál az artifact <code>.md</code> fájl, mert ugyanazt a fájlt egy product owner és egy agent is el tudja olvasni, és dolgozni tud belőle. A Buildtől kezdve az artifact a kód és a hozzá tartozó rekordok.</p>
-
-    <p>A commit-lánc egyben az <strong>audit trail</strong>: ki mit kért, mit produkált az agent, és ki hagyta jóvá. Az ember felel minden olyan döntésért, ami ítélőképességet igényel – az agentic SDLC-ben az emberi figyelem a review-zandó artifactokkal együtt mozog.</p>
-
-    <p>A trigger-lánc, ami a loopot hajtja:</p>
-
-    <figure>
-      <figcaption><span class="szam">Csatlakozások</span>Mi indít mit</figcaption>
-      <table class="tt csatl">
-        <thead><tr><th scope="col">Érkezik</th><th scope="col">Indul</th></tr></thead>
-        <tbody>
-          <tr><td>elfogadott <code>intent.md</code></td><td>a requirements és design pass</td></tr>
-          <tr><td>elfogadott <code>spec.md</code></td><td>a plan mode</td></tr>
-          <tr><td>merged PR</td><td>a pipeline</td></tr>
-          <tr><td>egy production-metrika kilép a tűrési sávból</td><td>megíródik a következő <code>intent.md</code>, és a loop folytatódik</td></tr>
-        </tbody>
-      </table>
-    </figure>
-
-    <h2 id="playek"><span class="perc" aria-hidden="true">6′</span>Hogyan olvasd a play-eket</h2>
-
-    <p>A playbook magja a tizenegy <strong>play</strong>. A szó az amerikai futballból jön: a playbook a csapat begyakorolt játékhúzásainak gyűjteménye, egy play pedig egy konkrét, bármikor elővehető húzás. Itt egy play egy jól körülhatárolt gyakorlat, amit egy csapat önállóan bevezethet – ilyen például a <em>Capture as intent.md</em>, a <em>CLAUDE.md</em>, a <em>Hooks as approval gates</em> vagy a <em>Closing the loop</em>. A tizenegy play a hat fázis között oszlik el, de nem kell sorban bevezetni őket. Minden play ugyanazt a vázat követi, és a sorozat további részei is ezt a vázat használják:</p>
-
-    <ul>
-      <li><strong>Mi változik</strong> – traditional vs. AI-native;</li>
-      <li><strong>Getting started</strong> – előfeltételek és infrastruktúra;</li>
-      <li><strong>Konkrét lépések</strong> az implementációhoz;</li>
-      <li><strong>Governance</strong> – mit kényszerít ki, mi a bizonyíték, hol naplózódik, ki hagy jóvá;</li>
-      <li><strong>Mérés</strong> – leading és lagging indicator.</li>
-    </ul>
-
-    <p>A play-ek modulárisak. Egy szervezet választhatja, hogy különböző fázisokat különböző időben alakít át a saját igényei szerint. Minden play megnevezi a függőségeit a „Prerequisites” alatt, és a playbook harmadik ábrája, a <strong>play dependency graph</strong> rajzolja ki őket. Fontos: az oszlopok fázisonként csoportosítják a play-eket, a nyilak viszont a <em>bevezetési</em> sorrendet adják – a kettő nem ugyanaz. Bármelyik gyökér play-jel kezdhetsz, amibe nem mutat nyíl: ahhoz semmi nem kell előre. Minden más play-nél a bele mutató nyilak mondják meg, mit kell előtte bevezetni.</p>
-
-    <p>A bevezetés íve: először minden lépést kézzel promptolsz. A végállapot egy loop, amelyben minden elfogadott artifact elindítja a következő gate-et, és az emberi figyelem a gate-eknél koncentrálódik – azt review-zod, amit az agent flagelt, nem nulláról indítod a fázist.</p>
-
-    <h2 id="kovetkezik"><span class="perc" aria-hidden="true">7′</span>Mi következik</h2>
-
-    <p>A következő részek fázisonként mennek végig a play-eken:</p>
-
-    <ol class="megallok" aria-label="A sorozat további részei">
-      <li><span><b>Plan + Design</b> – <code>intent.md</code> és <code>spec.md</code>: a pár, ami rögzíti, mit kértek és mit döntöttek.</span></li>
-      <li><span><b>Build I</b> – plan mode, auto mode, <code>CLAUDE.md</code>.</span></li>
-      <li><span><b>Build II</b> – skills, hooks, parallel sessions és subagents; legacy rendszerek és a source of truth.</span></li>
-      <li><span><b>Test</b> – feedback loop és continuous evals.</span></li>
-      <li><span><b>Deploy</b> – AI a PR review loopban, hookok mint approval gate-ek, CI/CD integráció.</span></li>
-      <li><span><b>Maintain</b> – closing the loop control bandekkel, Claude on call.</span></li>
-      <li><span><b>Záró</b> – bevezetési ütemterv és resources.</span></li>
-    </ol>
   </article>
 </div>
 
 <footer class="lablec">
   <div class="belso">
     <div class="lapozo">
-      <div>
-        <span class="irany">Érkezik</span>
-        <span class="cel">Kiindulóállomás</span>
-        <p class="megj">Ez a sorozat első része.</p>
-      </div>
-      <div>
-        <span class="irany">Indul</span>
-        <span class="cel"><a href="02-plan-es-design.html" style="text-decoration:none"><span class="sz">2</span>Plan + Design: <code style="background:none;padding:0;font-size:0.85em">intent.md</code> és <code style="background:none;padding:0;font-size:0.85em">spec.md</code></a></span>
-      </div>
+      <div><span class="irany">Érkezik</span><span class="cel"><a href="01-a-kod-mar-nem-a-bottleneck.html"><span class="sz">1</span>A kód már nem a bottleneck</a></span></div>
+      <div><span class="irany">Indul</span><span class="cel"><span class="sz">3</span>Build I<sup class="lj">*</sup></span><p class="megj"><sup class="lj">*</sup> Hamarosan.</p></div>
     </div>
     <p class="kolofon">
       <span>Forrás: <cite>The AI-Native SDLC Playbook</cite> – Louis Claxton, Anthropic</span>
@@ -669,7 +582,6 @@
     </p>
   </div>
 </footer>
-
 <script>
   (function () {
     var lista = document.querySelectorAll('.allomaslista li');

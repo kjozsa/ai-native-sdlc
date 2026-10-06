@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan + Design: intent.md és spec.md – a pár, ami rögzíti, mit kértek és mit döntöttek · AI-native SDLC sorozat 2/8</title>
+<meta name="description" content="AI-native SDLC sorozat, 2. rész: Plan + Design: intent.md és spec.md – a pár, ami rögzíti, mit kértek és mit döntöttek">
+<link rel="stylesheet" href="fonts/aikk-fonts.css">
+<style>
+  :root {
+    --kek: #1A3AEA;
+    --sotetkek: #112AB4;
+    --vilagos1: #C7F0FF;
+    --vilagos2: #A9E8FF;
+    --vilagos3: #99E4FF;
+    --tinta: #1B1C20;
+    --szurke: #5A5E74;
+    --feher: #FFFFFF;
+    --inter: "Inter", Arial, Helvetica, sans-serif;
+    --barlow: "Barlow", Arial, Helvetica, sans-serif;
+    --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    --oszlop: 38rem;
+    --oldal: 15rem;
+    --hezag: 4rem;
+    --belso: calc(var(--oszlop) + var(--oldal) + var(--hezag));
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0;
+    background: var(--feher);
+    color: var(--tinta);
+    font-family: var(--inter);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+  }
+  ::selection { background: var(--vilagos1); color: var(--tinta); }
+  :focus-visible { outline: 3px solid var(--kek); outline-offset: 3px; }
+  .kekmezo :focus-visible { outline-color: var(--feher); }
+  a { color: var(--sotetkek); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+  a:hover { color: var(--kek); text-decoration-thickness: 2px; }
+  p, li { max-width: var(--oszlop); }
+  strong { font-weight: 700; }
+  code {
+    font-family: var(--mono);
+    font-size: 0.88em;
+    background: var(--vilagos1);
+    color: var(--tinta);
+    padding: 0.08em 0.4em;
+    border-radius: 2px;
+  }
+  .belso { max-width: var(--belso); margin: 0 auto; }
+
+  /* ===== Masthead: kék mező, fehér logó, modul-pattern ===== */
+  .masthead {
+    background: #1A3AEA;
+    color: var(--feher);
+    padding: 1.75rem clamp(1.25rem, 4vw, 3rem) 0;
+    position: relative;
+  }
+  .mast-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem; flex-wrap: wrap; }
+  .logo { display: block; width: clamp(12rem, 22vw, 16rem); height: auto; }
+  .logo img { display: block; width: 100%; height: auto; }
+  .sorozat {
+    font-family: var(--barlow);
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.4;
+    text-align: right;
+    margin: 0;
+    max-width: none;
+    color: var(--vilagos1);
+  }
+  .sorozat b { font-weight: 700; color: var(--feher); }
+  .sorozat .resz { display: block; font-size: 2.6rem; line-height: 1; font-weight: 700; color: var(--feher); letter-spacing: -0.02em; }
+  .sorozat .resz small { font-size: 0.5em; font-weight: 500; color: var(--vilagos1); }
+  .masthead h1 {
+    color: var(--feher);
+    font-weight: 700;
+    font-size: clamp(2rem, 4.4vw, 3.4rem);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    margin: 2.5rem 0 0;
+    max-width: 22ch;
+    text-wrap: balance;
+  }
+  .cikk .lead { font-size: 1.2rem; line-height: 1.55; font-weight: 400; }
+  .pattern-sav {
+    height: 9rem;
+    margin-top: 2.5rem;
+    background-image: url("assets/aikk-pattern-navy.svg");
+    background-repeat: repeat-x;
+    background-size: auto 320%;
+    background-position: left top;
+  }
+
+  /* ===== Sorozat-sáv: 8 modul ===== */
+  .modulok { background: var(--feher); border-bottom: 1px solid var(--vilagos2); padding: 1.5rem clamp(1.25rem, 4vw, 3rem); }
+  .modulok ol { list-style: none; margin: 0 auto; padding: 0; display: grid; grid-template-columns: 1.7fr repeat(7, minmax(0, 1fr)); gap: 0.5rem; max-width: var(--belso); }
+  .modulok li { max-width: none; }
+  .modulok .m, .modulok a {
+    display: grid;
+    grid-template-columns: 2.4rem minmax(0, 1fr);
+    column-gap: 0.5rem;
+    align-items: center;
+    text-decoration: none;
+    color: var(--szurke);
+    font-family: var(--barlow);
+    font-weight: 500;
+    font-size: 0.88rem;
+    line-height: 1.15;
+  }
+  .modulok .sz {
+    width: 2.4rem;
+    height: 2.4rem;
+    display: grid;
+    place-items: center;
+    background: var(--vilagos1);
+    color: var(--sotetkek);
+    font-weight: 700;
+    font-size: 1.1rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .modulok [aria-current="page"] .sz { background: var(--kek); color: var(--feher); }
+  .modulok [aria-current="page"] { color: var(--tinta); font-weight: 700; }
+  .modulok a:hover .sz { background: var(--sotetkek); color: var(--feher); }
+  @media (prefers-reduced-motion: no-preference) {
+    .modulok .sz { animation: bejon 520ms cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: calc(80ms + var(--i) * 70ms); }
+    @keyframes bejon { from { transform: scale(0.55); } to { transform: scale(1); } }
+  }
+
+  /* ===== Lap ===== */
+  .lap {
+    display: grid;
+    grid-template-columns: minmax(0, var(--oszlop)) var(--oldal);
+    column-gap: var(--hezag);
+    justify-content: center;
+    padding: 2.5rem clamp(1.25rem, 4vw, 3rem) 4rem;
+  }
+  .lap > .cikk { grid-column: 1; grid-row: 1; min-width: 0; }
+  .lap > .tartalom { grid-column: 2; grid-row: 1; }
+  .cikk > * + * { margin-top: 1.1rem; }
+  .forras {
+    font-family: var(--barlow);
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--szurke);
+    max-width: none;
+    margin: 0 0 1.75rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--vilagos2);
+  }
+  .cikk h2 {
+    font-weight: 700;
+    font-size: 1.7rem;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    margin: 3rem 0 0.9rem;
+    max-width: none;
+    scroll-margin-top: 1.5rem;
+    color: var(--kek);
+  }
+  .cikk ol, .cikk ul { padding-left: 1.4rem; }
+  .cikk li + li { margin-top: 0.45rem; }
+  .cikk ul li::marker { color: var(--kek); }
+
+  .cikk ol.kovetkezmeny { list-style: none; padding: 0; counter-reset: k; }
+  .cikk ol.kovetkezmeny li, .cikk ol.kovetkezmeny li + li {
+    counter-increment: k;
+    display: grid;
+    grid-template-columns: 2.4rem 1fr;
+    column-gap: 0.9rem;
+    align-items: start;
+    padding: 0.9rem 0;
+    margin: 0;
+    border-top: 1px solid var(--vilagos2);
+  }
+  .cikk ol.kovetkezmeny li:last-child { border-bottom: 1px solid var(--vilagos2); }
+  .cikk ol.kovetkezmeny li::before {
+    content: counter(k);
+    width: 2.4rem; height: 2.4rem;
+    display: grid; place-items: center;
+    background: var(--kek); color: var(--feher);
+    font-family: var(--barlow); font-weight: 700; font-size: 1.2rem;
+  }
+
+  /* ===== Ábrák, táblázatok ===== */
+  figure { margin: 2rem 0; max-width: none; }
+  figcaption {
+    font-family: var(--barlow);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--sotetkek);
+    margin-bottom: 0.6rem;
+  }
+  figcaption .szam { font-weight: 500; color: var(--szurke); margin-right: 0.6rem; padding-right: 0.6rem; border-right: 1px solid var(--vilagos3); }
+  figure .magyarazat { font-size: 0.95rem; color: var(--szurke); margin: 0.7rem 0 0; }
+  sup.lj { font-family: var(--barlow); font-weight: 700; font-size: 0.7em; line-height: 0; vertical-align: super; margin-left: 0.08em; color: var(--kek); }
+  table.tb { border-collapse: collapse; width: 100%; font-size: 0.98rem; line-height: 1.45; }
+  table.tb th, table.tb td { text-align: left; vertical-align: top; padding: 0.65rem 0.8rem; border-bottom: 1px solid var(--vilagos2); }
+  table.tb thead th { background: var(--vilagos1); color: var(--sotetkek); font-family: var(--barlow); font-weight: 700; font-size: 0.95rem; border-bottom: 0; }
+  table.tb tbody th { font-weight: 700; white-space: nowrap; width: 6.5rem; }
+  table.tb tbody tr:last-child th, table.tb tbody tr:last-child td { border-bottom: 2px solid var(--kek); }
+
+  .sav { display: grid; gap: 0.3rem; }
+  .sav .csik { display: block; height: 0.8rem; background: var(--vilagos2); width: var(--w, 100%); }
+  .sav .csik.agent { background: var(--kek); }
+  .sav .felirat { font-family: var(--barlow); font-size: 0.85rem; font-weight: 500; color: var(--szurke); }
+  .sav .felirat.agent { color: var(--kek); font-weight: 700; }
+  tr.valtozik th { position: relative; padding-left: 1.4rem; }
+  tr.valtozik th::before { content: ""; position: absolute; left: 0.3rem; top: 0.95rem; width: 0.6rem; height: 0.6rem; background: var(--kek); }
+
+  .abra2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; padding: 1.25rem 1rem; background: var(--vilagos1); }
+  .abra2 > div { min-width: 0; }
+  .abra2 svg { width: 100%; height: auto; display: block; color: var(--kek); }
+  .abra2 h3 { font-weight: 700; font-size: 1.05rem; margin: 0 0 0.5rem; color: var(--sotetkek); }
+  .abra2 p { font-size: 0.95rem; color: var(--tinta); margin: 0.6rem 0 0; }
+  .abra2 p.felett { font-family: var(--barlow); font-weight: 500; font-size: 0.95rem; color: var(--sotetkek); margin: 0 0 0.25rem; text-align: center; }
+  .abra2 .st { font-family: var(--inter); font-weight: 700; font-size: 13px; fill: var(--tinta); }
+  .abra2 .st.halv { fill: var(--sotetkek); font-weight: 400; }
+  .abra2 .st.kek { fill: var(--kek); }
+
+  .cikk .lanc { list-style: none; margin: 1.5rem 0; padding: 0; display: grid; grid-template-columns: repeat(6, 1fr); position: relative; max-width: none; }
+  .lanc::before { content: ""; position: absolute; left: calc(100% / 12); right: calc(100% / 12); top: 0.55rem; height: 2px; background: var(--vilagos3); }
+  .cikk .lanc li, .cikk .lanc li + li { text-align: center; padding: 0 0.25rem; max-width: none; margin: 0; }
+  .lanc .pont { display: block; width: 1.2rem; height: 1.2rem; margin: 0 auto 0.55rem; background: var(--vilagos1); border: 2px solid var(--kek); position: relative; z-index: 1; }
+  .lanc li:last-child .pont { background: var(--kek); }
+  .lanc code { display: inline-block; font-size: 0.8rem; background: none; padding: 0; line-height: 1.3; }
+  .lanc .nem-kod { display: inline-block; font-family: var(--barlow); font-weight: 700; font-size: 0.95rem; line-height: 1.15; }
+
+  table.tb.csatl td:first-child { width: 48%; }
+
+  ol.megallok { list-style: none; padding: 0; margin: 1.25rem 0 0; counter-reset: m 1; }
+  .cikk ol.megallok li, .cikk ol.megallok li + li { counter-increment: m; display: grid; grid-template-columns: 2.4rem 1fr; column-gap: 0.9rem; align-items: start; padding: 0.6rem 0; border-top: 1px solid var(--vilagos2); margin: 0; }
+  ol.megallok li:last-child { border-bottom: 1px solid var(--vilagos2); }
+  ol.megallok li::before { content: counter(m); width: 2.4rem; height: 2.4rem; display: grid; place-items: center; background: var(--vilagos1); color: var(--sotetkek); font-family: var(--barlow); font-weight: 700; font-size: 1.1rem; }
+  ol.megallok b { font-weight: 700; }
+
+  /* ===== Tartalom (fejezet-TOC) ===== */
+  .tartalom { align-self: start; position: sticky; top: 1.5rem; }
+  aside.tartalom::before { content: ""; display: block; width: 60%; aspect-ratio: 613 / 118; margin-bottom: 1rem; background-image: url("assets/aikk-modul-cluster.svg"); background-repeat: no-repeat; background-size: 100% 100%; }
+  .tartalom .cim { font-family: var(--barlow); font-weight: 700; font-size: 0.95rem; color: var(--sotetkek); margin: 0 0 0.6rem; max-width: none; padding-bottom: 0.5rem; border-bottom: 2px solid var(--kek); }
+  .tartalom ol { list-style: none; margin: 0; padding: 0; }
+  .tartalom li { display: grid; grid-template-columns: 2.2rem 0.75rem 1fr; column-gap: 0.6rem; align-items: start; padding: 0.3rem 0; max-width: none; margin: 0; }
+  .tartalom .perc { font-family: var(--barlow); font-weight: 500; font-size: 0.9rem; color: var(--szurke); padding-top: 0.15rem; font-variant-numeric: tabular-nums; }
+  .tartalom .pont { width: 0.75rem; height: 0.75rem; background: var(--vilagos1); margin-top: 0.45rem; }
+  .tartalom li.aktiv .pont { background: var(--kek); }
+  .tartalom a { text-decoration: none; color: var(--tinta); font-size: 0.95rem; line-height: 1.3; display: block; padding-top: 0.1rem; }
+  .tartalom li.aktiv a { font-weight: 700; color: var(--kek); }
+  .tartalom a:hover { text-decoration: underline; color: var(--kek); }
+  .tartalom-mobil { display: none; position: static; }
+  .tartalom summary { list-style: none; }
+  .tartalom summary::-webkit-details-marker { display: none; }
+
+  /* ===== Lábléc ===== */
+  .lablec { background: #1A3AEA; color: #FFFFFF; }
+  .lablec .pattern-sav { margin: 0; height: 5rem; }
+  .lablec .tartalma { padding: 2rem clamp(1.25rem, 4vw, 3rem) 2.25rem; }
+  .lablec .lapozo { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--sotetkek); }
+  .lablec .lapozo > div { max-width: none; }
+  .lablec .irany { display: block; font-family: var(--barlow); font-weight: 500; font-size: 0.95rem; color: var(--vilagos1); margin-bottom: 0.3rem; }
+  .lablec .cel { font-weight: 700; font-size: 1.25rem; line-height: 1.2; display: block; }
+  .lablec .cel .sz { display: inline-grid; place-items: center; width: 2rem; height: 2rem; background: var(--feher); color: var(--kek); font-family: var(--barlow); margin-right: 0.6rem; vertical-align: middle; }
+  .lablec .megj { font-size: 0.95rem; color: var(--vilagos1); margin: 0.35rem 0 0; max-width: none; }
+  .lablec .kolofon { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem; margin-top: 1.5rem; }
+  .lablec .kolofon .logo { width: 11rem; }
+  .lablec .kolofon p { margin: 0; max-width: none; font-family: var(--barlow); font-weight: 500; font-size: 0.95rem; color: var(--vilagos1); }
+  .lablec .kolofon a { color: var(--feher); }
+
+  /* ===== Töréspontok ===== */
+  @media (max-width: 1100px) { :root { --oldal: 12.5rem; --hezag: 2.5rem; } }
+  @media (max-width: 900px) {
+    .lap { grid-template-columns: minmax(0, var(--oszlop)); }
+    .lap > .cikk { grid-column: 1; }
+    .lap > aside.tartalom { display: none; }
+    .tartalom-mobil { display: block; background: var(--vilagos1); padding: 0.8rem 1rem 0.9rem; margin-top: 1.5rem; }
+    .tartalom-mobil .cim { border-bottom: 0; padding: 0; margin: 0; }
+    .tartalom summary { cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .tartalom summary::after { content: "Megnyit"; font-family: var(--barlow); font-weight: 500; font-size: 0.85rem; color: var(--sotetkek); }
+    .tartalom[open] summary::after { content: "Becsuk"; }
+    .tartalom-mobil ol { margin-top: 0.6rem; }
+    .tartalom-mobil .pont { background: var(--feher); }
+    .tartalom-mobil .perc { color: var(--sotetkek); }
+    .tartalom-mobil li.aktiv .pont { background: var(--kek); }
+  }
+  @media (max-width: 720px) {
+    body { font-size: 1rem; }
+    .masthead { padding-top: 1.25rem; }
+    .mast-row { flex-direction: column; gap: 1rem; }
+    .sorozat { text-align: left; }
+    .sorozat .resz { font-size: 2.2rem; }
+    .masthead h1 { margin-top: 1.5rem; }
+    .cikk .lead { font-size: 1.1rem; }
+    .pattern-sav { height: 5rem; margin-top: 1.75rem; }
+    .modulok ol { gap: 0.4rem; }
+    .modulok .m, .modulok a { grid-template-columns: 1fr; row-gap: 0.35rem; }
+    .modulok .sz { width: 100%; height: 2.4rem; font-size: 1rem; }
+    .modulok .nev { display: none; }
+    .modulok [aria-current="page"] .nev { display: block; position: absolute; left: clamp(1.25rem, 4vw, 3rem); right: clamp(1.25rem, 4vw, 3rem); top: calc(100% - 2rem); }
+    .modulok { position: relative; padding-bottom: 2.6rem; }
+    .abra2 { grid-template-columns: 1fr; }
+    .cikk .lanc { grid-template-columns: 1fr; row-gap: 0.4rem; }
+    .lanc::before { left: 0.55rem; right: auto; top: 0.5rem; bottom: 0.5rem; width: 2px; height: auto; }
+    .cikk .lanc li, .cikk .lanc li + li { display: grid; grid-template-columns: 1.2rem 1fr; column-gap: 0.75rem; align-items: center; text-align: left; padding: 0; }
+    .lanc .pont { margin: 0; }
+    table.tb.shift thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    table.tb.shift tr { display: block; border-bottom: 1px solid var(--vilagos2); padding: 0.5rem 0; }
+    table.tb.shift th, table.tb.shift td { display: block; border: 0; padding: 0.2rem 0; width: auto; white-space: normal; }
+    table.tb.shift td::before { content: attr(data-oszlop); display: block; font-family: var(--barlow); font-weight: 700; font-size: 0.8rem; color: var(--sotetkek); }
+    table.tb tbody tr:last-child th, table.tb tbody tr:last-child td { border-bottom: 0; }
+    table.tb.shift tbody tr:last-child { border-bottom: 2px solid var(--kek); }
+    tr.valtozik th { padding-left: 1.2rem; }
+    tr.valtozik th::before { left: 0; top: 0.55rem; }
+    .lablec .lapozo { grid-template-columns: 1fr; gap: 1.25rem; }
+  }
+  @media print {
+    .masthead, .lablec { background: none; color: var(--tinta); }
+    .pattern-sav { display: none; }
+    .tartalom { display: none !important; }
+    .lap { grid-template-columns: minmax(0, var(--oszlop)); }
+  }
+
+  .cikk h3 { font-weight: 700; font-size: 1.2rem; line-height: 1.25; letter-spacing: -0.01em; margin: 1.9rem 0 0.5rem; max-width: none; color: var(--tinta); }
+  .cikk pre { background: var(--vilagos1); border-left: 0; padding: 1rem 1.1rem; margin: 1.25rem 0; overflow-x: auto; font-family: var(--mono); font-size: 0.86rem; line-height: 1.5; max-width: none; color: var(--tinta); }
+  .cikk pre code { background: none; padding: 0; font-size: inherit; }
+  .cikk h3 + ul, .cikk h3 + ol { margin-top: 0.6rem; }
+  .masthead h1 code, .cikk h2 code, .cikk h3 code { background: none; padding: 0; font-size: 0.82em; font-weight: 500; color: inherit; }
+  .lablec .cel a { color: inherit; text-decoration: none; }
+  .lablec .cel a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+
+<header class="masthead kekmezo" id="top">
+  <div class="belso">
+    <div class="mast-row">
+      <a class="logo" href="https://aikk.hu" aria-label="IVSZ AI Kompetencia Központ"><img src="assets/aikk-logo-white.svg" alt="ivsz AI Kompetencia Központ" width="655" height="183"></a>
+      <p class="sorozat"><span class="resz">2<small>/8</small></span>AI-native SDLC blogsorozat<br>Olvasási idő <b>8 perc</b></p>
+    </div>
+    <h1>Plan + Design: <code>intent.md</code> és <code>spec.md</code> – a pár, ami rögzíti, mit kértek és mit döntöttek</h1>
+  </div>
+  <div class="pattern-sav" aria-hidden="true"></div>
+</header>
+
+<nav class="modulok" aria-label="A sorozat részei">
+  <ol>
+    <li style="--i:0"><a href="01-a-kod-mar-nem-a-bottleneck-aikk.html"><span class="sz">1</span><span class="nev">A kód már nem a bottleneck</span></a></li>
+      <li style="--i:1"><a href="#top" aria-current="page"><span class="sz">2</span><span class="nev">Plan + Design</span></a></li>
+      <li style="--i:2"><span class="m"><span class="sz">3</span><span class="nev">Build I</span></span></li>
+      <li style="--i:3"><span class="m"><span class="sz">4</span><span class="nev">Build II</span></span></li>
+      <li style="--i:4"><span class="m"><span class="sz">5</span><span class="nev">Test</span></span></li>
+      <li style="--i:5"><span class="m"><span class="sz">6</span><span class="nev">Deploy</span></span></li>
+      <li style="--i:6"><span class="m"><span class="sz">7</span><span class="nev">Maintain</span></span></li>
+      <li style="--i:7"><span class="m"><span class="sz">8</span><span class="nev">Záró</span></span></li>
+  </ol>
+</nav>
+
+<div class="lap">
+  <aside class="tartalom">
+    <p class="cim">Tartalom</p>
+    <nav aria-label="Fejezetek">
+      <ol>
+        <li class="aktiv"><span class="perc">0′</span><span class="pont" aria-hidden="true"></span><a href="#top">Bevezető</a></li>
+        <li><span class="perc">1′</span><span class="pont" aria-hidden="true"></span><a href="#plan">Stage 1 · Plan: capture as intent.md</a></li>
+        <li><span class="perc">4′</span><span class="pont" aria-hidden="true"></span><a href="#design">Stage 2 · Design: követelmények és design</a></li>
+        <li><span class="perc">7′</span><span class="pont" aria-hidden="true"></span><a href="#a-par">A pár</a></li>
+        <li><span class="perc">8′</span><span class="pont" aria-hidden="true"></span><a href="#kovetkezik">Mi következik</a></li>
+      </ol>
+    </nav>
+  </aside>
+
+  <article class="cikk">
+    <p class="forras">AI-native SDLC sorozat, 2. rész · Forrás: <cite>The AI-Native SDLC Playbook</cite> (Louis Claxton, Anthropic)</p>
+
+<p>Az első részben az volt a tétel, hogy a loop minden fázisa egy commitolt artifacttal zárul, és a következő fázis ezt olvassa. Ez a rész a lánc első két szeméről szól: az <code>intent.md</code>-ről, amely az ötletet rögzíti az ötletgazda saját szavaival, és a <code>spec.md</code>-ről, amely a követelményeket és a designt egyetlen munkamenetben, a szervezet policy-jeivel összevetve állítja elő. Mindkét play-t a product owner viszi, mérnöki tudás nélkül – a mérnökök a 3. résztől lépnek be.</p>
+    <details class="tartalom tartalom-mobil">
+      <summary><p class="cim">Tartalom</p></summary>
+      <nav aria-label="Fejezetek">
+        <ol>
+        <li class="aktiv"><span class="perc">0′</span><span class="pont" aria-hidden="true"></span><a href="#top">Bevezető</a></li>
+        <li><span class="perc">1′</span><span class="pont" aria-hidden="true"></span><a href="#plan">Stage 1 · Plan: capture as intent.md</a></li>
+        <li><span class="perc">4′</span><span class="pont" aria-hidden="true"></span><a href="#design">Stage 2 · Design: követelmények és design</a></li>
+        <li><span class="perc">7′</span><span class="pont" aria-hidden="true"></span><a href="#a-par">A pár</a></li>
+        <li><span class="perc">8′</span><span class="pont" aria-hidden="true"></span><a href="#kovetkezik">Mi következik</a></li>
+        </ol>
+      </nav>
+    </details>
+
+<h2 id="plan">Stage 1 · Plan: capture as <code>intent.md</code></h2>
+<h3>Mi változik</h3>
+<p>Egy ötlet a hagyományos SDLC-ben backlog-bejegyzéseken, user storykon, story pointokon és refinement meetingeken megy át, mire bárki cselekedhetne. Minden átadásnál gazdát cserél, így ami a mérnökökhöz ér, több lépéssel távolabb van attól, amit az ötletgazda eredetileg akart. Ha valakinek ötlete van, meg kell győznie a product csapat egy tagját, hogy írja meg vele vagy helyette.</p>
+<p>Az AI-native változatban az ötletgazda Claude-dal brainstormol, és az eredményt <code>intent.md</code>-ként írja le: egy proto-spec a saját fogalmaival, amely tartalmazza, mit akar, miért, és milyen korlátok között. Az artifact ember által olvasható, verziókezelt, és a következő fázis azonnal fel tudja használni. Az ismétlődő folyamatok skillként kódolódnak.</p>
+<p>Az <code>intent.md</code> három úton léphet be: valakinek ötlete van, ticket érkezik, vagy egy alert jelez a productionből (erről a 7. részben, a Maintain fázisnál lesz szó). Bármelyik az eredet – ember, esemény vagy agent –, a lépés ugyanaz: a product owner átnézi és javítja az agent által írt <code>intent.md</code>-t, mielőtt commitolja.</p>
+<h3>Getting started</h3>
+<p><strong>Előfeltétel:</strong> nincs. Ez a dependency graph egyik gyökér play-e.</p>
+<p><strong>Infrastruktúra:</strong></p>
+<ul>
+<li>Claude-hozzáférés azoknak is, akik nem mérnökök (claude.ai vagy Cowork).</li>
+<li>Egy közösen elfogadott <code>intent.md</code> template.</li>
+<li>Egy közös, verziókezelt „intent home”, amelyet a product owner figyel. Egyetlen termék esetén a legegyszerűbb egy <code>intent/</code> mappa a termék repójában – így az artifact-lánc a belőle származó kód mellett marad. Külön intent-repo csak akkor éri meg, ha az intent sok repót érint; monorepóban egy könyvtár.</li>
+</ul>
+<p>A beállítás egyszeri feladat a platform- vagy engineering csapatnak: valakinek fel kell állítania az intent home-ot, és el kell döntenie, ki írhat bele, mert a hozzájárulók a szervezet minden részéből jönnek majd. Aki nem használt még gitet, annak nem is kell: egy verziókezelő-connector (pl. GitHub) révén Claude commitolja helyette a markdown fájlokat a claude.ai-ból vagy a Coworkból.</p>
+<p>Hogy ez a home hogyan viszonyul egy már létező Jira-hoz vagy követelménykezelő rendszerhez, azt a 4. rész „legacy rendszerek és a source of truth” szakasza tárgyalja.</p>
+<h3>Hogyan csináld</h3>
+<ol>
+<li>Az ötletgazda a saját szavaival leírja Claude-nak a problémát. Leírhatja, mit nem tud ma megcsinálni, kit érint az ötlet, hogyan nézne ki a jobb állapot, mi esik kívül a scope-on. Formális nyelv nem kell.</li>
+<li>Brainstorm addig, amíg az ötlet konkréttá válik. Claude azokat a kérdéseket teszi fel, amiket egy analyst tenne: scope, felhasználók, korlátok, mi számít sikernek.</li>
+<li>Kérd meg Claude-ot, hogy az eredményt a szervezet template-je szerint írja meg <code>intent.md</code>-ként. A template skillként kódolható – egy technikai kolléga állítja össze, egy lead hagyja jóvá –, és lefedheti a problémát, a javasolt kimenetet, az érintett felhasználókat és rendszereket, a korlátokat és a nyitott kérdéseket.</li>
+<li>Az ötletgazda kijavítja, amit Claude félreértett.</li>
+<li>Commit az intent home-ba. A szerző és az időbélyeg bekerül a rekordba, a product owner innen veszi át az ötletet.</li>
+</ol>
+<h3>Mintaartifact: <code>intent.md</code></h3>
+<pre><code># Intent: claims status self-service
+Author: J. Ortiz (claims operations). Status: draft.
+
+## Problem
+Customers phone the contact center to ask where their claim is.
+Handlers spend roughly a third of call time on status-only queries.
+
+## Proposed outcome
+Customers see claim status, next step and expected date in the portal.
+
+## Affected users and systems
+Claims handlers, portal team, claims-core API.
+
+## Constraints
+No new PII in the portal session. Existing authentication only.
+
+## Open questions
+Do third-party loss adjusters need access too?
+</code></pre>
+<p>Öt szekció, fél oldal, az ügyfélszolgálati vezető saját mondatai. Nincs story point, nincs acceptance criteria formátum – és mégis minden benne van, amire a következő fázisnak szüksége lesz.</p>
+<h3>Governance</h3>
+<p>A bizonyíték maga a commitolt <code>intent.md</code>: szerző, időbélyeg és a teljes módosítási történet az intent home git-történetében. A product owner hagyja jóvá; az elfogad/elutasít döntés – amely az intentet a Design fázisba küldi – a merge-ként vagy a lezárt review-ként rögzül.</p>
+<h3>Hogyan mérd</h3>
+<ul>
+<li><strong>Leading indicator:</strong> az első beszélgetéstől a commitolt <code>intent.md</code>-ig eltelt idő, a git-történetből olvasva (szerző és időbélyeg). Az elvárás: a többhetes elicitation-és-refinement ciklusból órák lesznek.</li>
+<li><strong>Lagging indicator:</strong> a túlélési arány – az <code>intent.md</code>-k hányadát fogadja be a product owner a Design fázisba, és hányat zár le. Emellett: hány módosítás éri az <code>intent.md</code>-t az ugyanahhoz a változáshoz tartozó első <code>spec.md</code> commit <em>után</em>.</li>
+</ul>
+<h2 id="design">Stage 2 · Design: követelmények és design</h2>
+<h3>Mi változik</h3>
+<p>Hagyományosan a követelmények és a design két külön fázis, két külön csapatnál. Az analystek formalizálják az ötletet követelményekké, a designerek ezt visszafordítják designná. A szétválasztás az elszámoltathatóság miatt létezik, de lassú és veszteséges.</p>
+<p>Az AI-native változatban a kettő egyetlen promptolt munkamenetben történik. Claude az elfogadott <code>intent.md</code>-ből követelmény- és design-specet ír, amelyet a szervezet skilljei – brand, security, compliance, UX – korlátoznak, és amelyben az aggályos pontok meg vannak jelölve. A product owner ezt a specet átnézi, de nem ő írja. A cél egy olyan spec, amely ellen az engineering csapat tervezni tud, és amelyben a kockázatos pontok előre fel vannak címkézve.</p>
+<p>Front-end munkánál ez a legszemléletesebb: az elfogadott <code>intent.md</code>-ből a product owner a Claude Designban (béta) mockot készít, iterál rajta, majd exportálja Claude Code-ba a buildhez.</p>
+<h3>Getting started</h3>
+<p><strong>Előfeltétel:</strong> egy <code>intent.md</code>, és a brand-, security-, compliance- és UX-policy-k skillként megírva.</p>
+<p><strong>Infrastruktúra:</strong> egy product owner Claude-hozzáféréssel. Mérnöki tudás nem szükséges.</p>
+<h3>Hogyan csináld</h3>
+<ol>
+<li>A product owner megnyit egy munkamenetet, amelyben a szervezet skilljei elérhetők, és csatolja az <code>intent.md</code>-t.</li>
+<li>A prompt az <code>intent.md</code>-re mutat, megnevezi a korlátokat, és kéri az aggályok megjelölését. Először kézzel futtasd; aztán kódold szervezeti szintű slash commandként; végül legyen a trigger maga az <code>intent.md</code> elfogadása az intent home-ban – egy nem-interaktív job, amely a merge-re elindul, a szervezet skilljeivel lefuttatja a passt, és a <code>spec.md</code>-t pull requestként commitolja. (A plumbingot a 6. rész CI/CD play-e írja le.) Innentől a product owner első érintése már a review.</li>
+<li>Ugyanaz a product owner átnézi a specet az ötlet tükrében. Megoldja a spec a kimondott problémát? Az <code>intent.md</code> nyitott kérdéseire van válasz, vagy tovább vannak vive?</li>
+<li>Először az aggályos pontokat dolgozd fel – ezek azok, amiket egy analyst eszkalált volna. A product owner mindegyiket az adott policy ownerrel rendezi, mielőtt az engineering meglátná a specet.</li>
+<li>Commit: <code>spec.md</code> az <code>intent.md</code> mellé. A fájlpár rögzíti, mit kértek és mit döntöttek.</li>
+<li>A product owner dönt, mehet-e a spec és az intent buildbe; amit a szervezet magasabb kockázatúnak sorol, ahhoz technical leadet von be. Ezt a döntést mindig ember hozza, és a spec elfogadása indítja el a plan mode play-t a Build fázisban.</li>
+</ol>
+<h3>Mintaartifact: a prompt</h3>
+<pre><code>Read the attached intent.md and produce a requirements and design spec
+for integrating it into our existing codebase. Apply the skills available
+to you so the plan conforms to our brand guidelines, security policies
+and UX standards. Document the spec fully as spec.md, ready to hand to
+the engineering team. Describe clearly any areas of concern, especially
+where you cannot satisfy contradicting policies.
+</code></pre>
+<p>Ez az egész. A policy-k a skillekben vannak, nem a promptban; a prompt csak annyit mond, hogy alkalmazd őket, és jelezd, ahol ütköznek.</p>
+<h3>Governance</h3>
+<p>A policy nem egy hetekkel későbbi review-ban derül ki, hanem az élő policy olvasódik és alkalmazódik a spec írása közben: a szervezet skilljei a spec korlátaiként működnek. A spec, az azt előállító prompt és a hatályos skill-verziók mind a verziókezelőben vannak. A product owner írja alá a specet, és a megjelölt aggályokat a nevesített policy ownerekhez irányítja.</p>
+<h3>Hogyan mérd</h3>
+<ul>
+<li><strong>Leading indicator:</strong> az <code>intent.md</code> commit és az ugyanahhoz a változáshoz tartozó <code>spec.md</code> commit közötti idő – két git-időbélyeg –, a régi követelmény-plusz-design ciklussal összevetve.</li>
+<li><strong>Lagging indicator:</strong> követelmény-rework a build megkezdése után. Számold meg az ugyanahhoz a változáshoz tartozó <code>spec.md</code> commitokat, amelyek az első <code>plan.md</code> commit utánra datálódnak. A git log ezt közvetlenül megadja.</li>
+</ul>
+<h2 id="a-par">A pár</h2>
+<p>A két play együtt egy fájlpárt hagy a repóban: <code>intent.md</code> az <code>intent.md</code> mellett <code>spec.md</code>. Az első azt rögzíti, mit kértek, és ki kérte; a második azt, mit döntöttek, és mely policy-k mentén. Mindkettő verziókezelt, mindkettőt ember hagyta jóvá – és a következő fázis mérnöke nem egy ticketből vagy egy meetingemlékből indul, hanem ebből a két fájlból.</p>
+<p>A két play egymástól függ, de nem egyformán: az intent play-nek nincs előfeltétele, bárhol elkezdhető. A design play-hez viszont már kellenek a skillként megírt policy-k – ezek a 4. rész témái. Aki ma indul, az intent home-mal és a template-tel kezd, és addig is kézzel promptolja a design passt, amíg a skillek elkészülnek.</p>
+<h2 id="kovetkezik">Mi következik</h2>
+<ol class="megallok" start="3" style="counter-reset: m 2" aria-label="A sorozat további részei">
+<li><span><strong>Build I</strong> – plan mode mint alapértelmezett kiindulópont, auto mode, és a <code>CLAUDE.md</code>: a fájl, amit az agent minden session elején elolvas.</span></li>
+</ol>
+
+
+  </article>
+</div>
+
+<footer class="lablec kekmezo">
+  <div class="pattern-sav" aria-hidden="true"></div>
+  <div class="tartalma">
+    <div class="belso">
+      <div class="lapozo">
+        <div><span class="irany">Előző rész</span><span class="cel"><a href="01-a-kod-mar-nem-a-bottleneck-aikk.html"><span class="sz">1</span>A kód már nem a bottleneck</a></span></div>
+        <div><span class="irany">Következő rész</span><span class="cel"><span class="sz">3</span>Build I<sup class="lj" style="color:#C7F0FF">*</sup></span><p class="megj">* Hamarosan.</p></div>
+      </div>
+      <div class="kolofon">
+        <a class="logo" href="https://aikk.hu" aria-label="IVSZ AI Kompetencia Központ – aikk.hu"><img src="assets/aikk-logo-white.svg" alt="ivsz AI Kompetencia Központ" width="655" height="183"></a>
+        <p>Forrás: <cite>The AI-Native SDLC Playbook</cite> – Louis Claxton, Anthropic · <a href="https://aikk.hu">aikk.hu</a></p>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  (function () {
+    var lista = document.querySelectorAll('.tartalom li');
+    if (!lista.length) return;
+    var celok = [];
+    lista.forEach(function (li) {
+      var a = li.querySelector('a');
+      var id = a && a.getAttribute('href').slice(1);
+      var el = id && document.getElementById(id);
+      if (el) celok.push({ li: li, el: el });
+    });
+    var aktivId = null, kert = false;
+    function frissit() {
+      kert = false;
+      var y = window.innerHeight * 0.3;
+      var jelolt = celok[0];
+      celok.forEach(function (c) { if (c.el.getBoundingClientRect().top <= y) jelolt = c; });
+      if (jelolt.el.id === aktivId) return;
+      aktivId = jelolt.el.id;
+      celok.forEach(function (c) { c.li.classList.toggle('aktiv', c.el.id === aktivId); });
+    }
+    function kerd() { if (!kert) { kert = true; requestAnimationFrame(frissit); } }
+    window.addEventListener('scroll', kerd, { passive: true });
+    window.addEventListener('resize', kerd);
+    frissit();
+    var doboz = document.querySelector('details.tartalom');
+    var mobil = window.matchMedia('(max-width: 900px)');
+    function allit() { doboz.open = !mobil.matches; }
+    allit();
+    if (mobil.addEventListener) mobil.addEventListener('change', allit);
+  })();
+</script>
+</body>
+</html>
