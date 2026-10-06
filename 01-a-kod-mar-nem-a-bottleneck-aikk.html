@@ -494,7 +494,7 @@
           <tr><th scope="row">Build</th><td data-oszlop="Traditional SDLC">Teszt és kód kézzel írva, dokumentáció utólag</td><td data-oszlop="AI-native SDLC">Tesztet és kódot AI generál, az intézményi tudás verziózott, machine-readable <code>CLAUDE.md</code> fájlokban és skillekben él</td></tr>
           <tr><th scope="row">Test</th><td data-oszlop="Traditional SDLC">QA gate-ek a fázishatárokon</td><td data-oszlop="AI-native SDLC">Continuous evalok az implementációba szőve</td></tr>
           <tr><th scope="row">Deploy</th><td data-oszlop="Traditional SDLC">Ember review-z minden sort, a governance review ciklusokban történik, gyakran inkonzisztensen</td><td data-oszlop="AI-native SDLC">Agentic review rétegek, emberi review a regulált és kritikus kódra fenntartva; a governance az AI cselekvése közben érvényesül, hookok mint approval gate-ek</td></tr>
-          <tr><th scope="row">Maintain</th><td data-oszlop="Traditional SDLC">Emberek figyelik a productiont bugokért</td><td data-oszlop="AI-native SDLC">Agentek monitorozzák a live deploymenteket; minden breached control band diagnosztizálva és új <code>intent.md</code>-ként visszaírva a loopba</td></tr>
+          <tr><th scope="row">Maintain</th><td data-oszlop="Traditional SDLC">Emberek figyelik a productiont bugokért</td><td data-oszlop="AI-native SDLC">Agentek monitorozzák a live deploymenteket; ha egy metrika kilép a tűrési sávból, az agent diagnosztizálja, és új <code>intent.md</code>-ként visszaírja a loopba</td></tr>
         </tbody>
       </table>
     </figure>
@@ -526,7 +526,7 @@
           <tr><td>elfogadott <code>intent.md</code></td><td>a requirements és design pass</td></tr>
           <tr><td>elfogadott <code>spec.md</code></td><td>a plan mode</td></tr>
           <tr><td>merged PR</td><td>a pipeline</td></tr>
-          <tr><td>breached control band productionben</td><td>megíródik a következő <code>intent.md</code>, és a loop folytatódik</td></tr>
+          <tr><td>egy production-metrika kilép a tűrési sávból</td><td>megíródik a következő <code>intent.md</code>, és a loop folytatódik</td></tr>
         </tbody>
       </table>
     </figure>
