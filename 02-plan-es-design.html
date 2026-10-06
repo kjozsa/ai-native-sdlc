@@ -415,6 +415,24 @@
   .cikk h1 code, .cikk h2 code, .cikk h3 code { background: none; padding: 0; font-size: 0.82em; font-weight: 500; }
   .lablec .cel a { text-decoration: none; }
   .lablec .cel a:hover { text-decoration: underline; text-decoration-color: var(--piros); }
+
+  .utak { display: grid; grid-template-columns: 1fr 2.2rem minmax(11rem, 13rem) 2.2rem 1fr; align-items: center; column-gap: 0.5rem; border-top: 3px solid var(--tinta); border-bottom: 3px solid var(--tinta); padding: 1rem 0; font-family: var(--keret); }
+  .utak .nyil { width: 2.2rem; height: auto; color: var(--tinta); }
+  .utak ul, .utak ol { list-style: none; margin: 0; padding: 0; max-width: none; }
+  .utak li { display: grid; grid-template-columns: 1.1rem 1fr; column-gap: 0.6rem; align-items: start; padding: 0.4rem 0; max-width: none; margin: 0; }
+  .utak li + li { border-top: 1px solid var(--tinta); }
+  .utak li::before { content: ""; width: 0.95rem; height: 0.95rem; border-radius: 50%; border: 2px solid var(--tinta); background: var(--lap); margin-top: 0.25rem; }
+  .utak .lepesek li::before { background: var(--tinta); }
+  .utak li > span { grid-column: 2; }
+  .utak b { display: block; font-weight: 600; font-size: 1.05rem; line-height: 1.15; }
+  .utak span { display: block; font-family: var(--cimke); font-weight: 500; font-size: 0.85rem; line-height: 1.3; color: var(--halvany); }
+  .utak .kozep { text-align: center; padding: 0.9rem 1rem; border: 3px solid var(--tinta); background: var(--sarga); }
+  .utak .kozep code { display: block; background: none; padding: 0; font-size: 1.05rem; font-weight: 600; color: var(--tinta); }
+  .utak .kozep span { color: var(--tinta-sargan); margin-top: 0.2rem; }
+  @media (max-width: 720px) {
+    .utak { grid-template-columns: 1fr; row-gap: 0.4rem; justify-items: stretch; }
+    .utak .nyil { transform: rotate(90deg); justify-self: center; }
+  }
 </style>
 </head>
 <body>
@@ -479,8 +497,26 @@
 <p>Egy ötlet a hagyományos SDLC-ben backlog-bejegyzéseken, user storykon, story pointokon és refinement meetingeken megy át, mire bárki cselekedhetne. Minden átadásnál gazdát cserél, így ami a mérnökökhöz ér, több lépéssel távolabb van attól, amit az ötletgazda eredetileg akart. Ha valakinek ötlete van, meg kell győznie a product csapat egy tagját, hogy írja meg vele vagy helyette.</p>
 <p>Az AI-native változatban az ötletgazda Claude-dal brainstormol, és az eredményt <code>intent.md</code>-ként írja le: egy proto-spec a saját fogalmaival, amely tartalmazza, mit akar, miért, és milyen korlátok között. Az artifact ember által olvasható, verziókezelt, és a következő fázis azonnal fel tudja használni. Az ismétlődő folyamatok skillként kódolódnak.</p>
 <p>Az <code>intent.md</code> három úton léphet be: valakinek ötlete van, ticket érkezik, vagy egy alert jelez a productionből (erről a 7. részben, a Maintain fázisnál lesz szó). Bármelyik az eredet – ember, esemény vagy agent –, a lépés ugyanaz: a product owner átnézi és javítja az agent által írt <code>intent.md</code>-t, mielőtt commitolja.</p>
-<h3>Getting started</h3>
-<p><strong>Előfeltétel:</strong> nincs. Ez a dependency graph egyik gyökér play-e.</p>
+<figure class="utak-abra">
+  <figcaption><span class="szam">1. ábra</span>Három út, egy artifact</figcaption>
+  <div class="utak">
+    <ul class="forrasok" aria-label="Belépési pontok">
+      <li><b>Ötlet</b><span>egy kolléga, a saját szavaival</span></li>
+      <li><b>Ticket</b><span>a backlogból vagy egy csatornából</span></li>
+      <li><b>Alert</b><span>a productionből (7. rész)</span></li>
+    </ul>
+    <svg class="nyil" viewBox="0 0 40 24" aria-hidden="true"><path d="M2 12 H34 M26 4 L34 12 L26 20" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>
+    <div class="kozep"><code>intent.md</code><span>proto-spec, Claude-dal brainstormolva</span></div>
+    <svg class="nyil" viewBox="0 0 40 24" aria-hidden="true"><path d="M2 12 H34 M26 4 L34 12 L26 20" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>
+    <ol class="lepesek" aria-label="Ami minden úton azonos">
+      <li><b>Product owner</b><span>átnézi és javítja</span></li>
+      <li><b>Commit</b><span>az intent home-ba, szerzővel és időbélyeggel</span></li>
+      <li><b>Design fázis</b><span>az elfogadás indítja</span></li>
+    </ol>
+  </div>
+  <p class="magyarazat">Bármi az eredet – ember, esemény vagy agent –, az út vége ugyanaz: emberi review, commit, és csak azután a következő fázis.</p>
+</figure><h3>Getting started</h3>
+<p><strong>Előfeltétel:</strong> nincs. Ez az egyik olyan play, amelybe a függőségi ábrán semmi nem mutat – bárhol elkezdhető.</p>
 <p><strong>Infrastruktúra:</strong></p>
 <ul>
 <li>Claude-hozzáférés azoknak is, akik nem mérnökök (claude.ai vagy Cowork).</li>
