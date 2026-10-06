@@ -444,7 +444,7 @@
 <p><strong>Infrastruktúra:</strong></p>
 <ul>
 <li>Claude-hozzáférés azoknak is, akik nem mérnökök (claude.ai vagy Cowork).</li>
-<li>Egy közösen elfogadott <code>intent.md</code> template.</li>
+<li>Egy közösen elfogadott <code>intent.md</code> sablon.</li>
 <li>Egy közös, verziókezelt <strong>intent-tár</strong>, ahová minden <code>intent.md</code> kerül, és amelyet a product owner figyel. Egyetlen termék esetén a legegyszerűbb egy <code>intent/</code> mappa a termék repójában – így az artifact-lánc a belőle származó kód mellett marad. Külön intent-repo csak akkor éri meg, ha az intent sok repót érint; monorepóban egy könyvtár.</li>
 </ul>
 <p>A beállítás egyszeri feladat a platform- vagy engineering csapatnak: valakinek fel kell állítania az intent-tárat, és el kell döntenie, ki írhat bele, mert a hozzájárulók a szervezet minden részéből jönnek majd. Aki nem használt még gitet, annak nem is kell: egy verziókezelő-connector (pl. GitHub) révén Claude commitolja helyette a markdown fájlokat a claude.ai-ból vagy a Coworkból.</p>
@@ -453,7 +453,7 @@
 <ol>
 <li>Az ötletgazda leírja Claude-nak a problémát. Leírhatja, mit nem tud ma megcsinálni, kit érint az ötlet, hogyan nézne ki a jobb állapot, mi esik kívül a scope-on. A leírás lehet teljesen kötetlen, a saját szavaival – nem kell hozzá semmilyen sablon vagy szakzsargon.</li>
 <li>Brainstorm addig, amíg az ötlet konkréttá válik. Claude azokat a kérdéseket teszi fel, amiket egy analyst tenne: scope, felhasználók, korlátok, mi számít sikernek.</li>
-<li>Kérd meg Claude-ot, hogy az eredményt a szervezet template-je szerint írja meg <code>intent.md</code>-ként. A template skillként kódolható – egy technikai kolléga állítja össze, egy lead hagyja jóvá –, és lefedheti a problémát, a javasolt kimenetet, az érintett felhasználókat és rendszereket, a korlátokat és a nyitott kérdéseket.</li>
+<li>Kérd meg Claude-ot, hogy az eredményt a szervezet sablonja szerint írja meg <code>intent.md</code>-ként. A sablon skillként kódolható – egy technikai kolléga állítja össze, egy lead hagyja jóvá –, és lefedheti a problémát, a javasolt kimenetet, az érintett felhasználókat és rendszereket, a korlátokat és a nyitott kérdéseket.</li>
 <li>Az ötletgazda kijavítja, amit Claude félreértett.</li>
 <li>Commit az intent-tárba. A szerző és az időbélyeg bekerül a rekordba, a product owner innen veszi át az ötletet.</li>
 </ol>
@@ -545,7 +545,7 @@ where you cannot satisfy contradicting policies.
 </ul>
 <h2 id="a-par">A pár</h2>
 <p>Az első két fázis után két fájl marad a repóban, egymás mellett: az <code>intent.md</code> és a <code>spec.md</code>. Az első azt rögzíti, mit kértek, és ki kérte; a második azt, mit döntöttek, és mely policy-k mentén. Mindkettő verziókezelt, mindkettőt ember hagyta jóvá – és a következő fázis mérnöke nem egy ticketből vagy egy meetingemlékből indul, hanem ebből a két fájlból.</p>
-<p>A két fázis egymástól függ, de nem egyformán: az <code>intent.md</code> megírásának nincs előfeltétele, bárhol elkezdhető. A spec előállításához viszont már kellenek a skillként megírt policy-k – ezek a 4. rész témái. Aki ma indul, az intent-tárral és a template-tel kezd, és addig is kézzel promptolja a spec előállítását, amíg a skillek elkészülnek.</p>
+<p>A két fázis egymástól függ, de nem egyformán: az <code>intent.md</code> megírásának nincs előfeltétele, bárhol elkezdhető. A spec előállításához viszont már kellenek a skillként megírt policy-k – ezek a 4. rész témái. Aki ma kezd, annak az első lépés az intent-tár és a sablon; a specet addig kézi promptolással állítja elő, amíg a skillek el nem készülnek.</p>
 <h2 id="kovetkezik">Mi következik</h2>
 <ol class="megallok" start="3" style="counter-reset: m 2" aria-label="A sorozat további részei">
 <li><span><strong>Build I</strong> – plan mode mint alapértelmezett kiindulópont, auto mode, és a <code>CLAUDE.md</code>: a fájl, amit az agent minden session elején elolvas.</span></li>
