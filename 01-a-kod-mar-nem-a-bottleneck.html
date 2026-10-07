@@ -331,10 +331,10 @@
   .allomaslista summary::-webkit-details-marker { display: none; }
   .allomaslista .cim { font-weight: 600; font-size: 1rem; letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 0.5rem; max-width: none; }
   .allomaslista ol { list-style: none; margin: 0; padding: 0; position: relative; }
-  .allomaslista ol::before { content: ""; position: absolute; left: 3.05rem; top: 0.6rem; bottom: 0.6rem; width: 2px; background: var(--tinta); }
+  .allomaslista ol::before { content: ""; position: absolute; left: calc(3.05rem - 1px); top: 0.6rem; bottom: 0.6rem; width: 2px; background: var(--tinta); }
   .allomaslista li { display: grid; grid-template-columns: 2.4rem 1.3rem 1fr; align-items: start; padding: 0.3rem 0; max-width: none; margin: 0; }
   .allomaslista .perc { font-weight: 500; font-size: 0.95rem; color: var(--halvany); padding-top: 0.15rem; }
-  .allomaslista .pont { width: 0.85rem; height: 0.85rem; border-radius: 50%; border: 2px solid var(--tinta); background: var(--lap); position: relative; z-index: 1; margin-top: 0.3rem; }
+  .allomaslista .pont { width: 0.85rem; height: 0.85rem; justify-self: center; border-radius: 50%; border: 2px solid var(--tinta); background: var(--lap); position: relative; z-index: 1; margin-top: 0.3rem; }
   .allomaslista li.aktiv .pont { background: var(--tinta); }
   .allomaslista a { text-decoration: none; font-weight: 500; font-size: 1.05rem; line-height: 1.2; display: block; padding-top: 0.1rem; }
   .allomaslista li.aktiv a { font-weight: 600; }
@@ -435,7 +435,7 @@
 
 <div class="lap">
   <aside class="allomaslista">
-    <p class="cim">Állomáslista</p>
+    <p class="cim">Fejezetek</p>
     <nav aria-label="Fejezetek">
       <ol>
         <li class="aktiv"><span class="perc">0′</span><span class="pont" aria-hidden="true"></span><a href="#top">Bevezető</a></li>
@@ -459,7 +459,7 @@
     <p>Ez a sorozat arról szól, hogyan néz ki egy olyan software development lifecycle, amelyet újraterveztek arra, amit egy agent ma már meg tud csinálni – úgy, hogy az ember végig a loopban marad. Az első rész a diagnózis és a modell: miért törik el a hagyományos SDLC, és mi lép a helyébe.</p>
 
     <details class="allomaslista allomaslista-mobil">
-      <summary><p class="cim">Állomáslista</p></summary>
+      <summary><p class="cim">Fejezetek</p></summary>
       <nav aria-label="Fejezetek">
         <ol>
           <li class="aktiv"><span class="perc">0′</span><span class="pont" aria-hidden="true"></span><a href="#top">Bevezető</a></li>
