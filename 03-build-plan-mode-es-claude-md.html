@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Plan + Design: intent.md és spec.md – a pár, ami rögzíti, mit kértek és mit döntöttek · AI-native SDLC sorozat 2/8</title>
-<meta name="description" content="AI-native SDLC sorozat, 2. rész: Plan + Design: intent.md és spec.md – a pár, ami rögzíti, mit kértek és mit döntöttek">
+<title>Build I: plan mode, auto mode és a CLAUDE.md – semmi nem épül elfogadott terv nélkül · AI-native SDLC sorozat 3/8</title>
+<meta name="description" content="AI-native SDLC sorozat, 3. rész: Build I: plan mode, auto mode és a CLAUDE.md – semmi nem épül elfogadott terv nélkül">
 <link rel="stylesheet" href="fonts/fonts.css">
 <style>
   :root {
@@ -453,15 +453,15 @@
   <div class="mast-row">
     <p class="mast-kind"><span class="fo">Indulás · AI-native SDLC</span><span class="al">Blogsorozat engineering vezetőknek: a loop, az artifact-lánc és a play-ek</span></p>
     <p class="mast-no">
-      <span class="lap-szam">2<small>/8</small></span>
-      <span class="menetido">Olvasási idő<b>9</b>perc</span>
+      <span class="lap-szam">3<small>/8</small></span>
+      <span class="menetido">Olvasási idő<b>8</b>perc</span>
     </p>
   </div>
   <nav class="vonal" aria-label="A sorozat részei">
     <ol>
       <li style="--i:0"><a href="01-a-kod-mar-nem-a-bottleneck.html"><span class="pont" aria-hidden="true"></span><span class="sorsz">1</span><span class="nev">A kód már nem a bottleneck</span></a></li>
-      <li style="--i:1" aria-current="page"><a href="#top"><span class="pont" aria-hidden="true"></span><span class="sorsz">2</span><span class="nev">Plan + Design</span></a></li>
-      <li style="--i:2"><a href="03-build-plan-mode-es-claude-md.html"><span class="pont" aria-hidden="true"></span><span class="sorsz">3</span><span class="nev">Build I</span></a></li>
+      <li style="--i:1"><a href="02-plan-es-design.html"><span class="pont" aria-hidden="true"></span><span class="sorsz">2</span><span class="nev">Plan + Design</span></a></li>
+      <li style="--i:2" aria-current="page"><a href="#top"><span class="pont" aria-hidden="true"></span><span class="sorsz">3</span><span class="nev">Build I</span></a></li>
       <li style="--i:3"><span class="megallo"><span class="pont" aria-hidden="true"></span><span class="sorsz">4</span><span class="nev">Build II</span></span></li>
       <li style="--i:4"><span class="megallo"><span class="pont" aria-hidden="true"></span><span class="sorsz">5</span><span class="nev">Test</span></span></li>
       <li style="--i:5"><span class="megallo"><span class="pont" aria-hidden="true"></span><span class="sorsz">6</span><span class="nev">Deploy</span></span></li>
@@ -477,165 +477,153 @@
     <nav aria-label="Fejezetek">
       <ol>
         <li class="aktiv"><span class="perc">0′</span><span class="pont" aria-hidden="true"></span><a href="#top">Bevezető</a></li>
-        <li><span class="perc">1′</span><span class="pont" aria-hidden="true"></span><a href="#plan">Stage 1 · Plan: capture as intent.md</a></li>
-        <li><span class="perc">5′</span><span class="pont" aria-hidden="true"></span><a href="#design">Stage 2 · Design: követelmények és design</a></li>
-        <li><span class="perc">8′</span><span class="pont" aria-hidden="true"></span><a href="#a-par">A pár</a></li>
-        <li><span class="perc">9′</span><span class="pont" aria-hidden="true"></span><a href="#kovetkezik">Mi következik</a></li>
+        <li><span class="perc">1′</span><span class="pont" aria-hidden="true"></span><a href="#plan-mode">Plan mode mint alapértelmezett kiindulópont</a></li>
+        <li><span class="perc">4′</span><span class="pont" aria-hidden="true"></span><a href="#auto-mode">Auto mode</a></li>
+        <li><span class="perc">5′</span><span class="pont" aria-hidden="true"></span><a href="#claude-md">A CLAUDE.md</a></li>
+        <li><span class="perc">7′</span><span class="pont" aria-hidden="true"></span><a href="#egyutt">A három play együtt</a></li>
+        <li><span class="perc">8′</span><span class="pont" aria-hidden="true"></span><a href="#kovetkezik">Mi következik</a></li>
       </ol>
     </nav>
   </aside>
 
   <article class="cikk">
-    <h1>Plan + Design: <code>intent.md</code> és <code>spec.md</code> – a pár, ami rögzíti, mit kértek és mit döntöttek</h1>
-    <p class="forras">AI-Native SDLC sorozat, 2. rész · Forrás: <cite>The AI-Native SDLC Playbook</cite> (Louis Claxton, Anthropic)</p>
+    <h1>Build I: plan mode, auto mode és a <code>CLAUDE.md</code> – semmi nem épül elfogadott terv nélkül</h1>
+    <p class="forras">AI-Native SDLC sorozat, 3. rész · Forrás: <cite>The AI-Native SDLC Playbook</cite> (Louis Claxton, Anthropic)</p>
 
-<p>Az első részben az volt a tétel, hogy a loop minden fázisa egy commitolt artifacttal zárul, és a következő fázis ezt olvassa. Ez a rész a lánc első két szeméről szól: az <code>intent.md</code>-ről – az <em>intent</em> itt azt jelenti: mit akar valaki elérni, miért, és milyen korlátok között; ez tágabb az ötletnél, mert ticketből vagy production-alertből is származhat –, amely mindezt a kezdeményező saját szavaival rögzíti, és a <code>spec.md</code>-ről, amely a követelményeket és a designt egyetlen munkamenetben, a szervezet policy-jeivel összevetve állítja elő. Mindkét fázist a product owner viszi, mérnöki tudás nélkül – a mérnökök a 3. résztől lépnek be.</p>
+<p>A 2. rész végén két fájl maradt a repóban: az <code>intent.md</code> és a <code>spec.md</code>. Ebben a részben lépnek be a mérnökök. A Build fázis a playbookban hat play-t tartalmaz – ez a rész az első hármat tárgyalja, amelyek egy session menetét adják: hogyan indul a munka (plan mode), mikor engedhető el az agent keze (auto mode), és mit olvas az agent minden session elején (<code>CLAUDE.md</code>). A 4. rész a másik hármat hozza: skillek, hookok, párhuzamos sessionök.</p>
+<p>A fázis tétele egy mondat: semmit nem implementálunk elfogadott terv nélkül, és a csapat tudása fájlokba kerül, amiket az agent olvas – a korlátok kódként futnak, nem szokásként.</p>
     <details class="allomaslista allomaslista-mobil">
       <summary><p class="cim">Fejezetek</p></summary>
       <nav aria-label="Fejezetek">
         <ol>
         <li class="aktiv"><span class="perc">0′</span><span class="pont" aria-hidden="true"></span><a href="#top">Bevezető</a></li>
-        <li><span class="perc">1′</span><span class="pont" aria-hidden="true"></span><a href="#plan">Stage 1 · Plan: capture as intent.md</a></li>
-        <li><span class="perc">5′</span><span class="pont" aria-hidden="true"></span><a href="#design">Stage 2 · Design: követelmények és design</a></li>
-        <li><span class="perc">8′</span><span class="pont" aria-hidden="true"></span><a href="#a-par">A pár</a></li>
-        <li><span class="perc">9′</span><span class="pont" aria-hidden="true"></span><a href="#kovetkezik">Mi következik</a></li>
+        <li><span class="perc">1′</span><span class="pont" aria-hidden="true"></span><a href="#plan-mode">Plan mode mint alapértelmezett kiindulópont</a></li>
+        <li><span class="perc">4′</span><span class="pont" aria-hidden="true"></span><a href="#auto-mode">Auto mode</a></li>
+        <li><span class="perc">5′</span><span class="pont" aria-hidden="true"></span><a href="#claude-md">A CLAUDE.md</a></li>
+        <li><span class="perc">7′</span><span class="pont" aria-hidden="true"></span><a href="#egyutt">A három play együtt</a></li>
+        <li><span class="perc">8′</span><span class="pont" aria-hidden="true"></span><a href="#kovetkezik">Mi következik</a></li>
         </ol>
       </nav>
     </details>
 
-<h2 id="plan"><span class="perc" aria-hidden="true">1′</span>Stage 1 · Plan: capture as <code>intent.md</code></h2>
+<h2 id="plan-mode"><span class="perc" aria-hidden="true">1′</span>Plan mode mint alapértelmezett kiindulópont</h2>
 <h3>Mi változik</h3>
-<p>Egy ötlet a hagyományos SDLC-ben backlog-bejegyzéseken, user storykon, story pointokon és refinement meetingeken megy át, mire bárki cselekedhetne. Minden átadásnál gazdát cserél, így ami a mérnökökhöz ér, több lépéssel távolabb van attól, amit az ötletgazda eredetileg akart. Ha valakinek ötlete van, meg kell győznie a product csapat egy tagját, hogy írja meg vele vagy helyette.</p>
-<p>Az AI-native változatban az ötletgazda Claude-dal brainstormol, és az eredményt <code>intent.md</code>-ként írja le: egy proto-spec a saját fogalmaival, amely tartalmazza, mit akar, miért, és milyen korlátok között. Az artifact ember által olvasható, verziókezelt, és a következő fázis azonnal fel tudja használni. Az ismétlődő folyamatok skillként kódolódnak.</p>
-<p>Az <code>intent.md</code> három úton léphet be: valakinek ötlete van, ticket érkezik, vagy egy alert jelez a productionből (erről a 7. részben, a Maintain fázisnál lesz szó). Bármelyik az eredet – ember, esemény vagy agent –, a lépés ugyanaz: a product owner átnézi és javítja az agent által írt <code>intent.md</code>-t, mielőtt commitolja.</p>
+<p>Hagyományosan a mérnök elolvassa a designt, és elkezd kódot írni. Az, hogy a változást <em>hogyan</em> csinálja meg – mely fájlok, milyen sorrendben, milyen tesztekkel –, a fejében marad, legjobb esetben egy ticket-kommentben. Senki más nem tudja átnézni. A reviewer először a kész diffet látja, és akkor már lassú bármit visszacsinálni.</p>
+<p>Az AI-native változatban a munka egy írott tervvel indul, amelyet Claude plan mode-ban állít elő: ebben az üzemmódban olvassa a codebase-t, de semmit nem módosít. A mérnök a tervet javítja, <em>mielőtt</em> kód készülne, és az elfogadott változat <code>plan.md</code>-ként kerül commitra, hogy a későbbi fázisok ez ellen ellenőrizhessenek. A session tehát így indul: plan mode, az elfogadott <code>spec.md</code> csatolva, és Claude interjúztatja a mérnököt, amíg a terv olyan nem lesz, amivel a mérnök elégedett.</p>
 <figure class="utak-abra">
-  <figcaption><span class="szam">1. ábra</span>Három út, egy artifact</figcaption>
+  <figcaption><span class="szam">1. ábra</span>Terv előbb, kód utána</figcaption>
   <div class="utak">
-    <ul class="forrasok" aria-label="Belépési pontok">
-      <li><b>Ötlet</b><span>egy kolléga, a saját szavaival</span></li>
-      <li><b>Ticket</b><span>a backlogból vagy egy csatornából</span></li>
-      <li><b>Alert</b><span>a productionből (7. rész)</span></li>
+    <ul class="forrasok" aria-label="Bemenetek">
+      <li><b><code>spec.md</code></b><span>az elfogadott követelmény- és design-spec</span></li>
+      <li><b><code>intent.md</code></b><span>mit kértek, miért, milyen korlátokkal</span></li>
+      <li><b><code>CLAUDE.md</code></b><span>a repo konvenciói és parancsai</span></li>
     </ul>
     <svg class="nyil" viewBox="0 0 40 24" aria-hidden="true"><path d="M2 12 H34 M26 4 L34 12 L26 20" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>
-    <div class="kozep"><code>intent.md</code><span>proto-spec, Claude-dal brainstormolva</span></div>
+    <div class="kozep"><code>plan mode</code><span>Claude olvas, kérdez, tervez – nem módosít</span></div>
     <svg class="nyil" viewBox="0 0 40 24" aria-hidden="true"><path d="M2 12 H34 M26 4 L34 12 L26 20" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>
-    <ol class="lepesek" aria-label="Ami minden úton azonos">
-      <li><b>Product owner</b><span>átnézi és javítja</span></li>
-      <li><b>Commit</b><span>az intent-tárba, szerzővel és időbélyeggel</span></li>
-      <li><b>Design fázis</b><span>az elfogadás indítja</span></li>
+    <ol class="lepesek" aria-label="Kimenetek">
+      <li><b><code>plan.md</code></b><span>a mérnök által elfogadott terv, commitolva</span></li>
+      <li><b>Implementáció</b><span>jó tervvel gyakran egy menet</span></li>
+      <li><b>PR review</b><span>a diffet a <code>plan.md</code> ellen nézi (6. rész)</span></li>
     </ol>
   </div>
-  <p class="magyarazat">Bármi az eredet – ember, esemény vagy agent –, az út vége ugyanaz: emberi review, commit, és csak azután a következő fázis.</p>
+  <p class="magyarazat">A terv elfogadásáig Claude nem tud fájlt módosítani – a design review ott történik, ahol az irányváltás még egy dokumentum szerkesztése.</p>
 </figure><h3>Getting started</h3>
-<p><strong>Előfeltétel:</strong> nincs. Ebbe a lépésbe a függőségi ábrán semmi nem mutat – bárhol elkezdhető.</p>
-<p><strong>Infrastruktúra:</strong></p>
-<ul>
-<li>Claude-hozzáférés azoknak is, akik nem mérnökök (claude.ai vagy Cowork).</li>
-<li>Egy közösen elfogadott <code>intent.md</code> sablon.</li>
-<li>Egy közös, verziókezelt <strong>intent-tár</strong>, ahová minden <code>intent.md</code> kerül, és amelyet a product owner figyel. Egyetlen termék esetén a legegyszerűbb egy <code>intent/</code> mappa a termék repójában – így az artifact-lánc a belőle származó kód mellett marad. Külön intent-repo csak akkor éri meg, ha az intent sok repót érint; monorepóban egy könyvtár.</li>
-</ul>
-<p>A beállítás egyszeri feladat a platform- vagy engineering csapatnak: valakinek fel kell állítania az intent-tárat, és el kell döntenie, ki írhat bele, mert a hozzájárulók a szervezet minden részéből jönnek majd. Aki nem használt még gitet, annak nem is kell: egy verziókezelő-connector (pl. GitHub) révén Claude commitolja helyette a markdown fájlokat a claude.ai-ból vagy a Coworkból.</p>
-<p>Hogy ez a tár hogyan viszonyul egy már létező Jira-hoz vagy követelménykezelő rendszerhez, azt a 4. rész „legacy rendszerek és a source of truth” szakasza tárgyalja.</p>
+<p><strong>Előfeltétel:</strong> az intent-artifact (<code>intent.md</code> vagy <code>spec.md</code>), ha van; a <code>CLAUDE.md</code> segít, de nem kötelező. A függőségi ábrán a plan mode a <code>spec.md</code> elfogadásától függ – ez indítja el.</p>
+<p><strong>Infrastruktúra:</strong> Claude Code, hozzáféréssel a repóhoz.</p>
 <h3>Hogyan csináld</h3>
 <ol>
-<li>Az ötletgazda leírja Claude-nak a problémát. Leírhatja, mit nem tud ma megcsinálni, kit érint az ötlet, hogyan nézne ki a jobb állapot, mi esik kívül a scope-on. A leírás lehet teljesen kötetlen, a saját szavaival – nem kell hozzá semmilyen sablon vagy szakzsargon.</li>
-<li>Brainstorm addig, amíg az ötlet konkréttá válik. Claude azokat a kérdéseket teszi fel, amiket egy analyst tenne: scope, felhasználók, korlátok, mi számít sikernek.</li>
-<li>Kérd meg Claude-ot, hogy az eredményt a szervezet sablonja szerint írja meg <code>intent.md</code>-ként. A sablon skillként kódolható – egy technikai kolléga állítja össze, egy lead hagyja jóvá –, és lefedheti a problémát, a javasolt kimenetet, az érintett felhasználókat és rendszereket, a korlátokat és a nyitott kérdéseket.</li>
-<li>Az ötletgazda kijavítja, amit Claude félreértett.</li>
-<li>Commit az intent-tárba. A szerző és az időbélyeg bekerül a rekordba, a product owner innen veszi át az ötletet.</li>
+<li>A mérnök plan mode-ban indítja a sessiont.</li>
+<li>Odaadja Claude-nak az <code>intent.md</code>-t és a <code>spec.md</code>-t, és implementációs tervet kér, amely megnevezi a módosuló fájlokat, a munka sorrendjét és a tesztek, amelyek bizonyítják, hogy működik.</li>
+<li>Kérdezd ki a tervet: mit törhet el a változás, melyik lépés a legkockázatosabb, milyen más megoldásokat vetett el Claude és miért.</li>
+<li>Iterálj addig, amíg egy olyan mérnök is implementálni tudná a tervből, aki a beszélgetést nem látta.</li>
+<li>Commitold az elfogadott tervet <code>plan.md</code>-ként. A terv bekerül az audit trailbe, és a PR review play (6. rész) a végső diffet ez ellen ellenőrzi.</li>
+<li>Fogadd el a tervet, és hagyd, hogy Claude implementáljon. Jó tervvel az implementáció gyakran egyetlen menet.</li>
+<li>Ha az implementáció eltér a tervtől, a <code>plan.md</code>-t ugyanabban a commitban frissítsd. Érdemes hookkal kikényszeríteni, hogy a kettő szinkronban maradjon.</li>
 </ol>
-<h3>Mintaartifact: <code>intent.md</code></h3>
-<pre><code># Intent: kárstátusz önkiszolgáló lekérdezése
-Szerző: J. Ortiz (kárrendezés). Státusz: vázlat.
+<h3>Mintaartifact: <code>plan.md</code></h3>
+<p>A 2. rész kárstátusz-példájának folytatása:</p>
+<pre><code># Terv: kárstátusz önkiszolgáló lekérdezése (intent.md, 2026-06-02)
 
-## Probléma
-Az ügyfelek felhívják az ügyfélszolgálatot, hogy megkérdezzék, hol tart a
-kárigényük. Az ügyintézők a hívásidő nagyjából harmadát csak
-státuszkérdésekre fordítják.
+## Módosuló fájlok
+portal/src/claims/StatusPanel.tsx (új), claims-api/routes/status.py,
+claims-api/tests/test_status.py
 
-## Javasolt kimenet
-Az ügyfél a portálon látja a kárigény státuszát, a következő lépést és a
-várható dátumot.
+## A munka sorrendje
+1. A státusz-endpoint hozzáadása a meglévő authentikáció mögé.
+2. A panel az endpointra kötve.
+3. Bekötés a portál navigációjába.
 
-## Érintett felhasználók és rendszerek
-Kárügyintézők, portálcsapat, claims-core API.
+## Kockázatok
+A claims-core API 50 kérés/mp-nél rate-limitel; a panelnek cache-elnie
+kell.
 
-## Korlátok
-Nem kerülhet új személyes adat (PII) a portál-sessionbe. Csak a meglévő
-authentikáció használható.
-
-## Nyitott kérdések
-A külső kárszakértőknek is kell hozzáférés?
+## Bizonyíték
+A test_status.py lefedi a négy kárigény-állapotot; a screenshot egyezik
+a jóváhagyott mockkal.
 </code></pre>
-<p>Öt szekció, pár sor, a kárrendezési vezető saját mondatai. Nincs story point, nincs acceptance criteria formátum – és mégis minden benne van, amire a következő fázisnak szüksége lesz.</p>
-<h3>Hogyan néz ez ki a repóban</h3>
-<p>A playbook az <code>intent.md</code>-t az artifact <em>típusaként</em> nevezi, és nem mondja ki, hogyan fér meg egymás mellett sok intent egy repóban, sem azt, mi történik fizikailag a fájllal az elfogadáskor. A lépéseiből viszont egy konvenció egyértelműen következik – ami alább jön, az ebből levezetett ajánlás, nem a playbook szó szerinti szövege.</p>
-<p><strong>Változásonként egy mappa.</strong> A Design fázis a <code>spec.md</code>-t „az <code>intent.md</code> mellé” commitolja, a Build fázis a <code>plan.md</code>-t ugyanoda. Ez csak akkor működik, ha minden változásnak saját mappája van, és a három fájl abban ugyanazzal a névvel él:</p>
-<pre><code>intent/
-  2026-06-02-karstatusz-onkiszolgalo/
-    intent.md
-    spec.md      ← a Design fázisban kerül mellé
-    plan.md      ← a Build fázisban
-  2026-06-09-szamlazas-export/
-    intent.md
-</code></pre>
-<p>A dátum- vagy sorszám-prefix csak a rendezéshez kell; ha a szervezet ticketrendszere a source of truth, a mappa neve a ticket azonosítója lesz (erről a 4. rész).</p>
-<p><strong>Elfogadás = merge.</strong> Az intent nem „commit a main-re”, hanem a szokásos pull-request-folyam. A fájlban lévő <code>Státusz: vázlat</code> sor csak tájékoztat; az igazság a git-állapot.</p>
-<figure class="pr-abra">
-  <figcaption><span class="szam">2. ábra</span>Mi történik a fájllal a repóban</figcaption>
-  <ol class="prfolyam">
-    <li><b>Branch + pull request</b><span>Claude a verziókezelő-connectoron át egy új branchre commitolja a mappát az <code>intent.md</code>-vel, és PR-t nyit. A fájl létezik, de a main-en még nincs.</span></li>
-    <li><b>Review a PR-ben</b><span>A product owner kommentel, javítást kér; az ötletgazda Claude-dal frissít, a javítás új commit ugyanarra a branchre.</span></li>
-    <li class="kimenet elfogadva"><b>Merge = elfogadva</b><span>A merge commit rögzíti, ki hagyta jóvá és mikor. A fájl a main-re kerül, és a merge esemény indítja a Design fázis spec-jobját – amely a <code>spec.md</code>-t ugyanebbe a mappába, új PR-ként nyitja.</span></li>
-    <li class="kimenet elutasitva"><b>Lezárás merge nélkül = elutasítva</b><span>A fájl soha nem kerül a main-re, de a PR-történet megőrzi, hogy volt, és miért zárták le.</span></li>
-  </ol>
-</figure><p>Ez a mechanika adja a Plan fázis méréseit is: a „commitolt <code>intent.md</code>” a merge időbélyege, a túlélési arány a merge-ölt és a merge nélkül lezárt PR-ek aránya.</p>
+<p>Négy szekció, tíz sor. Ami fontos benne: a fájlnevek konkrétak, a sorrend indokolt (előbb az endpoint, aztán ami rá épül), a kockázat egy mérhető tény (50 rps), és a „kész” definíciója előre rögzített – egy tesztfájl és egy screenshot-egyezés. A PR reviewer ez ellen fogja nézni a diffet.</p>
 <h3>Governance</h3>
-<p>A bizonyíték maga a commitolt <code>intent.md</code>: szerző, időbélyeg és a teljes módosítási történet az intent-tár git-történetében. A product owner hagyja jóvá; az elfogad/elutasít döntés – amely az intentet a Design fázisba küldi – a merge-ként vagy a lezárt review-ként rögzül.</p>
+<p>A design review a kódgenerálás <em>előtt</em> történik, amikor az irányváltás még csak egy dokumentum szerkesztése. Ezt a plan mode technikailag is kikényszeríti: Claude addig nem tud fájlt módosítani, amíg a mérnök el nem fogadja a tervet. A terv és a módosításai naplózva vannak, azzal együtt, ki fogadta el. A rutinváltozásokat a mérnök hagyja jóvá; amit a szervezet magasabb kockázatúnak sorol, az technical leadhez vagy architecthez megy.</p>
 <h3>Hogyan mérd</h3>
 <ul>
-<li><strong>Leading indicator:</strong> az első beszélgetéstől a commitolt <code>intent.md</code>-ig eltelt idő, a git-történetből olvasva (szerző és időbélyeg). Az elvárás: a többhetes elicitation-és-refinement ciklusból órák lesznek.</li>
-<li><strong>Lagging indicator:</strong> a túlélési arány – az <code>intent.md</code>-k hányadát fogadja be a product owner a Design fázisba, és hányat zár le. Emellett: hány módosítás éri az <code>intent.md</code>-t az ugyanahhoz a változáshoz tartozó első <code>spec.md</code> commit <em>után</em>.</li>
+<li><strong>Leading indicator:</strong> a változások hányada merge-ölődik az első implementációs menetből, és mennyi idő telik el a terv elfogadásától a merge-ölt PR-ig – mindkettő a PR metaadataiból.</li>
+<li><strong>Lagging indicator:</strong> rework-ciklusok száma változásonként (szintén a PR-ből), és milyen gyakran egyezik a merge-ölt diff a commitolt <code>plan.md</code>-vel.</li>
 </ul>
-<h2 id="design"><span class="perc" aria-hidden="true">5′</span>Stage 2 · Design: követelmények és design</h2>
+<h2 id="auto-mode"><span class="perc" aria-hidden="true">4′</span>Auto mode</h2>
+<p>Claude Code tud auto mode-ban is futni: a mérnök elfogadja a kiiterált tervet, és Claude minden egyes módosítást jóváhagyás-kérés nélkül alkalmaz. Ez nem a kiindulópont, hanem a cél: ahogy a későbbi play-ek korlátai beérnek – egy behangolt <code>CLAUDE.md</code>, a policy-t kódoló skillek, a veszélyes műveleteket blokkoló hookok, és egy tesztkészlet, amit Claude maga futtathat –, az auto-accept a rutinmunka alapértelmezése lesz. Rutinmunka: feszes <code>spec.md</code>, kis blast radius, és olyan kód, amit a tesztek már lefednek.</p>
+<p>A váltás a mérnök szerepében van. Eddig nézte, ahogy az agent szerkeszt, és műveletenként döntött; innentől hosszabb autonóm sessionök <em>után</em> az artifactokat nézi át. Ez teszi lehetővé a párhuzamosságot is – egy mérnök több worktree-ben több sessiont – és ez az alapja annak, hogy az SDLC autonóm módon fusson és a loop bezáruljon (7. rész, Maintain).</p>
+<p>A sorrend fontos: auto mode guardrailek nélkül nem gyorsítás, hanem felügyelet nélküli kockázat. A playbook ezért teszi a plan mode-ot az alapértelmezésnek, és az auto mode-ot az érettség következményének.</p>
+<h2 id="claude-md"><span class="perc" aria-hidden="true">5′</span>A <code>CLAUDE.md</code></h2>
 <h3>Mi változik</h3>
-<p>Hagyományosan a követelmények és a design két külön fázis, két külön csapatnál. Az analystek formalizálják az ötletet követelményekké, a designerek ezt visszafordítják designná. A szétválasztás az elszámoltathatóság miatt létezik, de lassú és veszteséges.</p>
-<p>Az AI-native változatban a kettő egyetlen promptolt munkamenetben történik. Claude az elfogadott <code>intent.md</code>-ből követelmény- és design-specet ír, amelyet a szervezet skilljei – brand, security, compliance, UX – korlátoznak, és amelyben az aggályos pontok meg vannak jelölve. A product owner ezt a specet átnézi, de nem ő írja. A cél egy olyan spec, amely ellen az engineering csapat tervezni tud, és amelyben a kockázatos pontok előre fel vannak címkézve.</p>
-<p>Front-end munkánál ez a legszemléletesebb: az elfogadott <code>intent.md</code>-ből a product owner a Claude Designban (béta) mockot készít, iterál rajta, majd exportálja Claude Code-ba a buildhez.</p>
+<p>A <code>CLAUDE.md</code> azt a kontextust adja Claude-nak, amire egy új belépőnek lenne szüksége: konvenciók, parancsok, architektúra, és azok a hibák, amiket a csapat a leggyakrabban lát. Az a tudás, ami eddig a fejekben és wikiken ült, egy fájl lesz, amit az agent minden session elején elolvas – az egész csapat tartja karban, és minden hibánál továbbfejlődik.</p>
 <h3>Getting started</h3>
-<p><strong>Előfeltétel:</strong> egy <code>intent.md</code>, és a brand-, security-, compliance- és UX-policy-k skillként megírva.</p>
-<p><strong>Infrastruktúra:</strong> egy product owner Claude-hozzáféréssel. Mérnöki tudás nem szükséges.</p>
+<p><strong>Előfeltétel:</strong> nincs. A függőségi ábrán ez is gyökér-play: bárhol elkezdhető, és a legtöbb másik play-nek ez a bemenete.</p>
+<p><strong>Infrastruktúra:</strong> egy repo, telepített Claude Code, és egy mérnök, aki jól ismeri a codebase-t.</p>
 <h3>Hogyan csináld</h3>
 <ol>
-<li>A product owner megnyit egy munkamenetet, amelyben a szervezet skilljei elérhetők, és csatolja az <code>intent.md</code>-t.</li>
-<li>A prompt az <code>intent.md</code>-re mutat, megnevezi a korlátokat, és kéri az aggályok megjelölését. Először kézzel futtasd; aztán kódold szervezeti szintű slash commandként; végül legyen a kiváltó esemény maga az <code>intent.md</code> elfogadása az intent-tárban – egy nem-interaktív job, amely a merge-re elindul, a szervezet skilljeivel lefuttatja a lépést, és a <code>spec.md</code>-t pull requestként commitolja. (Hogy ezt hogyan kell bekötni a CI-ba, azt a 6. rész CI/CD-ről szóló szakasza írja le.) Innentől a product owner először már csak a review-nál találkozik vele.</li>
-<li>Ugyanaz a product owner átnézi a specet az ötlet tükrében. Megoldja a spec a kimondott problémát? Az <code>intent.md</code> nyitott kérdéseire van válasz, vagy tovább vannak vive?</li>
-<li>Először az aggályos pontokat dolgozd fel – ezek azok, amiket egy analyst eszkalált volna. A product owner mindegyiket az adott policy ownerrel rendezi, mielőtt az engineering meglátná a specet.</li>
-<li>Commit: <code>spec.md</code> az <code>intent.md</code> mellé. A fájlpár rögzíti, mit kértek és mit döntöttek.</li>
-<li>A product owner dönt, mehet-e a spec és az intent buildbe; amit a szervezet magasabb kockázatúnak sorol, ahhoz technical leadet von be. Ezt a döntést mindig ember hozza, és a spec elfogadása indítja el a plan mode-ot a Build fázisban (3. rész).</li>
+<li>Futtasd a <code>/init</code> parancsot a repóban. Claude abból, amit talál, előállít egy kiinduló <code>CLAUDE.md</code>-t.</li>
+<li>Vágd le a generált fájlt arra, amire egy új belépőnek az első napon szüksége van. Maradjon a build-, teszt- és lint-parancs, a konvenciók, amik számítanak, és amit Claude rendre elront.</li>
+<li>Commitold a repo gyökerébe, hogy az egész csapat egy változatot használjon, és a módosítások úgy menjenek review-ra, mint a kód.</li>
+<li>Egy munkaszabály, ami segít: ha Claude kétszer követi el ugyanazt a hibát, a javítás a <code>CLAUDE.md</code>-be kerül.</li>
+<li>Tartsd egy oldal alatt. Claude az egészet beolvassa minden session elején, és minden elavult sor haszon nélkül foglalja a contextet.</li>
 </ol>
-<h3>Mintaartifact: a prompt</h3>
-<pre><code>Read the attached intent.md and produce a requirements and design spec
-for integrating it into our existing codebase. Apply the skills available
-to you so the plan conforms to our brand guidelines, security policies
-and UX standards. Document the spec fully as spec.md, ready to hand to
-the engineering team. Describe clearly any areas of concern, especially
-where you cannot satisfy contradicting policies.
+<h3>Mintaartifact: <code>CLAUDE.md</code></h3>
+<pre><code># Payments service
+
+## Commands
+- Build: make build
+- Test: make test (unit), make itest (integration, needs docker)
+- Lint: make lint (runs in CI; fix before pushing)
+
+## Conventions
+- Java 21, Spring Boot 3. No new Lombok.
+- Money is always BigDecimal, never double.
+- Every endpoint needs an integration test in src/itest.
+
+## Architecture
+- api/ holds REST controllers, core/ holds domain logic,
+  adapters/ talks to external systems.
+- Kafka events are defined in schemas/; never edit generated classes.
+
+## Things Claude gets wrong
+- Do not bump dependency versions; the platform team owns them.
+- The legacy v1/ package is frozen; changes go in v2/.
 </code></pre>
-<p>Ez az egész. A policy-k a skillekben vannak, nem a promptban; a prompt csak annyit mond, hogy alkalmazd őket, és jelezd, ahol ütköznek.</p>
+<p>Négy szekció, és egyik sem általános: nincs benne „írj tiszta kódot”, csak az, ami ebben a repóban más, mint máshol. Az utolsó szekció a legértékesebb – ez a csapat hibatörténete, parancsba fordítva. (A nyelv a csapat döntése; a playbook példája angol, egy magyar csapat írhatja magyarul is.)</p>
 <h3>Governance</h3>
-<p>A policy nem egy hetekkel későbbi review-ban derül ki, hanem az élő policy olvasódik és alkalmazódik a spec írása közben: a szervezet skilljei a spec korlátaiként működnek. A spec, az azt előállító prompt és a hatályos skill-verziók mind a verziókezelőben vannak. A product owner írja alá a specet, és a megjelölt aggályokat a nevesített policy ownerekhez irányítja.</p>
+<p>A <code>CLAUDE.md</code> verziókezelt, tehát az utasítások, amelyek szerint az agent dolgozik, átnézhetők és auditálhatók. A csapat konvenciói ezen a fájlon keresztül érvényesülnek, a módosításai a git-történetben vannak, és a code ownerek hagyják jóvá őket PR review-ban.</p>
 <h3>Hogyan mérd</h3>
 <ul>
-<li><strong>Leading indicator:</strong> az <code>intent.md</code> commit és az ugyanahhoz a változáshoz tartozó <code>spec.md</code> commit közötti idő – két git-időbélyeg –, a régi követelmény-plusz-design ciklussal összevetve.</li>
-<li><strong>Lagging indicator:</strong> követelmény-rework a build megkezdése után. Számold meg az ugyanahhoz a változáshoz tartozó <code>spec.md</code> commitokat, amelyek az első <code>plan.md</code> commit utánra datálódnak. A git log ezt közvetlenül megadja.</li>
+<li><strong>Leading indicator:</strong> milyen gyakran ismétel Claude olyan hibát, amit a <code>CLAUDE.md</code>-nek el kellett volna kapnia. A javítások és a fájl módosításai a git-történetből követhetők.</li>
+<li><strong>Lagging indicator:</strong> egy új csapattag első merge-ölt PR-jéig eltelt idő, a PR-történetből.</li>
 </ul>
-<h2 id="a-par"><span class="perc" aria-hidden="true">8′</span>A pár</h2>
-<p>Az első két fázis után két fájl marad a repóban, egymás mellett: az <code>intent.md</code> és a <code>spec.md</code>. Az első azt rögzíti, mit kértek, és ki kérte; a második azt, mit döntöttek, és mely policy-k mentén. Mindkettő verziókezelt, mindkettőt ember hagyta jóvá – és a következő fázis mérnöke nem egy ticketből vagy egy meetingemlékből indul, hanem ebből a két fájlból.</p>
-<p>A két fázis egymástól függ, de nem egyformán: az <code>intent.md</code> megírásának nincs előfeltétele, bárhol elkezdhető. A spec előállításához viszont már kellenek a skillként megírt policy-k – ezek a 4. rész témái. Aki ma kezd, annak az első lépés az intent-tár és a sablon; a specet addig kézi promptolással állítja elő, amíg a skillek el nem készülnek.</p>
-<h2 id="kovetkezik"><span class="perc" aria-hidden="true">9′</span>Mi következik</h2>
-<ol class="megallok" start="3" style="counter-reset: m 2" aria-label="A sorozat további részei">
-<li><span><strong>Build I</strong> – plan mode mint alapértelmezett kiindulópont, auto mode, és a <code>CLAUDE.md</code>: a fájl, amit az agent minden session elején elolvas.</span></li>
+<h2 id="egyutt"><span class="perc" aria-hidden="true">7′</span>A három play együtt</h2>
+<p>A plan mode a <em>mikor</em>: terv előbb, kód utána. A <code>CLAUDE.md</code> a <em>mit tud az agent a repóról</em>: egy oldal, amit minden session elején elolvas. Az auto mode a <em>mennyire kell figyelni</em>: ahogy a korlátok beérnek, egyre kevésbé műveletenként, egyre inkább artifactonként.</p>
+<p>Aki ma kezd, annak a sorrend adott. A <code>CLAUDE.md</code> előfeltétel nélküli, egy délután alatt megvan, és azonnal javítja minden session minőségét. A plan mode a következő session elején bekapcsolható, és a <code>spec.md</code> nélkül is működik – csak akkor a mérnök fejéből jön a spec. Az auto mode-ot hagyd a végére: a 4. rész skilljei és hookjai, meg az 5. rész feedback loopja nélkül nincs mire ráengedni.</p>
+<h2 id="kovetkezik"><span class="perc" aria-hidden="true">8′</span>Mi következik</h2>
+<ol class="megallok" start="4" style="counter-reset: m 3" aria-label="A sorozat további részei">
+<li><span><strong>Build II</strong> – skillek mint institutional knowledge, hookok mint build-time guardrailek, párhuzamos sessionök és subagentek; és a sidebar a legacy rendszerekről és a source of truth-ról.</span></li>
 </ol>
 
 
@@ -645,8 +633,8 @@ where you cannot satisfy contradicting policies.
 <footer class="lablec">
   <div class="belso">
     <div class="lapozo">
-      <div><span class="irany">Érkezik</span><span class="cel"><a href="01-a-kod-mar-nem-a-bottleneck.html"><span class="sz">1</span>A kód már nem a bottleneck</a></span></div>
-      <div><span class="irany">Indul</span><span class="cel"><a href="03-build-plan-mode-es-claude-md.html"><span class="sz">3</span>Build I</a></span></div>
+      <div><span class="irany">Érkezik</span><span class="cel"><a href="02-plan-es-design.html"><span class="sz">2</span>Plan + Design</a></span></div>
+      <div><span class="irany">Indul</span><span class="cel"><span class="sz">4</span>Build II<sup class="lj">*</sup></span><p class="megj"><sup class="lj">*</sup> Hamarosan.</p></div>
     </div>
     <p class="kolofon">
       <span>Forrás: <a href="https://claude.com/resources/articles/the-ai-native-sdlc-playbook"><cite>The AI-Native SDLC Playbook</cite></a> – Louis Claxton, Anthropic</span>
