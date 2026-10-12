@@ -444,6 +444,28 @@
   .cikk .prfolyam b { display: block; font-family: var(--keret); font-weight: 600; font-size: 1.15rem; line-height: 1.15; }
   .cikk .prfolyam li > span { grid-column: 2; display: block; font-size: 0.95rem; line-height: 1.45; margin-top: 0.25rem; }
   @media (max-width: 720px) { .cikk .prfolyam { grid-template-columns: 1fr; } .cikk .prfolyam li.kimenet { grid-column: 1 / -1; } }
+  .cikk table.skala { border-collapse: collapse; width: 100%; font-size: 0.95rem; line-height: 1.4; border-top: 3px solid var(--tinta); border-bottom: 3px solid var(--tinta); }
+  .cikk table.skala th, .cikk table.skala td { text-align: left; vertical-align: top; padding: 0.6rem 0.75rem 0.6rem 0; border-top: 1px solid var(--tinta); }
+  .cikk table.skala thead th { font-family: var(--keret); font-weight: 600; font-size: 1.1rem; letter-spacing: 0.02em; border-top: 0; padding-top: 0.5rem; }
+  .cikk table.skala thead th code { background: none; padding: 0; font-size: 0.9em; }
+  .cikk table.skala tbody th { font-family: var(--keret); font-weight: 500; font-size: 0.95rem; letter-spacing: 0.04em; color: var(--halvany); white-space: nowrap; width: 7rem; }
+  .cikk table.skala td + td, .cikk table.skala th + th { padding-left: 0.75rem; border-left: 1px solid var(--tinta); }
+  .cikk table.skala td.kenyszer { font-weight: 600; }
+  .sessionok { display: grid; grid-template-columns: 7rem 2.2rem 1fr; align-items: center; column-gap: 0.75rem; border-top: 3px solid var(--tinta); border-bottom: 3px solid var(--tinta); padding: 1rem 0; font-family: var(--keret); }
+  .sessionok .mernok { text-align: center; font-weight: 600; font-size: 1.1rem; }
+  .sessionok .mernok span { display: block; font-family: var(--cimke); font-weight: 500; font-size: 0.85rem; color: var(--halvany); margin-top: 0.2rem; }
+  .sessionok .nyil { width: 2.2rem; height: auto; color: var(--tinta); }
+  .sessionok ul { list-style: none; margin: 0; padding: 0; max-width: none; display: grid; gap: 0; }
+  .sessionok > ul > li { max-width: none; margin: 0; padding: 0.6rem 0; }
+  .sessionok > ul > li + li { border-top: 1px solid var(--tinta); }
+  .sessionok b { display: block; font-weight: 600; font-size: 1.05rem; line-height: 1.15; }
+  .sessionok code { background: none; padding: 0; font-size: 0.9em; }
+  .sessionok .feladat { display: block; font-family: var(--cimke); font-weight: 500; font-size: 0.85rem; color: var(--halvany); }
+  .sessionok ul ul { margin-top: 0.5rem; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+  .sessionok ul ul li { max-width: none; margin: 0; padding: 0.4rem 0.6rem; border: 2px solid var(--tinta); background: var(--sarga); font-size: 0.85rem; }
+  .sessionok ul ul b { font-size: 0.95rem; }
+  .sessionok ul ul span { display: block; font-family: var(--cimke); font-weight: 500; color: var(--tinta-sargan); font-size: 0.8rem; }
+  @media (max-width: 720px) { .sessionok { grid-template-columns: 1fr; row-gap: 0.5rem; } .sessionok .nyil { transform: rotate(90deg); justify-self: center; } .sessionok ul ul { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -462,7 +484,7 @@
       <li style="--i:0"><a href="01-a-kod-mar-nem-a-bottleneck.html"><span class="pont" aria-hidden="true"></span><span class="sorsz">1</span><span class="nev">A kód már nem a bottleneck</span></a></li>
       <li style="--i:1"><a href="02-plan-es-design.html"><span class="pont" aria-hidden="true"></span><span class="sorsz">2</span><span class="nev">Plan + Design</span></a></li>
       <li style="--i:2" aria-current="page"><a href="#top"><span class="pont" aria-hidden="true"></span><span class="sorsz">3</span><span class="nev">Build I</span></a></li>
-      <li style="--i:3"><span class="megallo"><span class="pont" aria-hidden="true"></span><span class="sorsz">4</span><span class="nev">Build II</span></span></li>
+      <li style="--i:3"><a href="04-build-skillek-hookok-parhuzamos-sessionok.html"><span class="pont" aria-hidden="true"></span><span class="sorsz">4</span><span class="nev">Build II</span></a></li>
       <li style="--i:4"><span class="megallo"><span class="pont" aria-hidden="true"></span><span class="sorsz">5</span><span class="nev">Test</span></span></li>
       <li style="--i:5"><span class="megallo"><span class="pont" aria-hidden="true"></span><span class="sorsz">6</span><span class="nev">Deploy</span></span></li>
       <li style="--i:6"><span class="megallo"><span class="pont" aria-hidden="true"></span><span class="sorsz">7</span><span class="nev">Maintain</span></span></li>
@@ -634,7 +656,7 @@ a jóváhagyott mockkal.
   <div class="belso">
     <div class="lapozo">
       <div><span class="irany">Érkezik</span><span class="cel"><a href="02-plan-es-design.html"><span class="sz">2</span>Plan + Design</a></span></div>
-      <div><span class="irany">Indul</span><span class="cel"><span class="sz">4</span>Build II<sup class="lj">*</sup></span><p class="megj"><sup class="lj">*</sup> Hamarosan.</p></div>
+      <div><span class="irany">Indul</span><span class="cel"><a href="04-build-skillek-hookok-parhuzamos-sessionok.html"><span class="sz">4</span>Build II</a></span></div>
     </div>
     <p class="kolofon">
       <span>Forrás: <a href="https://claude.com/resources/articles/the-ai-native-sdlc-playbook"><cite>The AI-Native SDLC Playbook</cite></a> – Louis Claxton, Anthropic</span>

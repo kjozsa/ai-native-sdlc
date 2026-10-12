@@ -356,6 +356,27 @@
   .cikk .prfolyam li > span { grid-column: 2; display: block; font-size: 0.9rem; line-height: 1.4; color: var(--tinta); margin-top: 0.25rem; }
   .cikk .prfolyam span code { background: var(--feher); }
   @media (max-width: 720px) { .cikk .prfolyam { grid-template-columns: 1fr; } .cikk .prfolyam li.kimenet { grid-column: 1 / -1; } }
+  .cikk table.skala { border-collapse: collapse; width: 100%; font-size: 0.95rem; line-height: 1.4; }
+  .cikk table.skala th, .cikk table.skala td { text-align: left; vertical-align: top; padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--vilagos2); }
+  .cikk table.skala thead th { background: var(--vilagos1); color: var(--sotetkek); font-family: var(--barlow); font-weight: 700; font-size: 0.95rem; border-bottom: 0; }
+  .cikk table.skala thead th code { background: var(--feher); }
+  .cikk table.skala tbody th { font-family: var(--barlow); font-weight: 700; color: var(--szurke); white-space: nowrap; width: 7rem; }
+  .cikk table.skala tbody tr:last-child th, .cikk table.skala tbody tr:last-child td { border-bottom: 2px solid var(--kek); }
+  .cikk table.skala td.kenyszer { font-weight: 700; color: var(--kek); }
+  .sessionok { display: grid; grid-template-columns: 7rem 2.2rem 1fr; align-items: center; column-gap: 0.75rem; background: var(--vilagos1); padding: 1.1rem 1rem; font-family: var(--barlow); }
+  .sessionok .mernok { text-align: center; font-weight: 700; font-size: 1rem; color: var(--tinta); }
+  .sessionok .mernok span { display: block; font-weight: 500; font-size: 0.85rem; color: var(--sotetkek); margin-top: 0.2rem; }
+  .sessionok .nyil { width: 2.2rem; height: auto; color: var(--kek); }
+  .sessionok ul { list-style: none; margin: 0; padding: 0; max-width: none; display: grid; gap: 0.5rem; }
+  .sessionok > ul > li { max-width: none; margin: 0; background: var(--feher); border: 2px solid var(--kek); padding: 0.6rem 0.8rem; }
+  .sessionok b { display: block; font-weight: 700; font-size: 1rem; color: var(--tinta); }
+  .sessionok code { background: var(--vilagos1); }
+  .sessionok .feladat { display: block; font-weight: 500; font-size: 0.85rem; color: var(--sotetkek); }
+  .sessionok ul ul { margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--vilagos2); grid-template-columns: repeat(3, 1fr); gap: 0.4rem; }
+  .sessionok ul ul li { max-width: none; margin: 0; background: var(--vilagos1); padding: 0.4rem 0.5rem; font-size: 0.85rem; }
+  .sessionok ul ul b { font-size: 0.9rem; }
+  .sessionok ul ul span { display: block; font-weight: 500; color: var(--sotetkek); font-size: 0.8rem; }
+  @media (max-width: 720px) { .sessionok { grid-template-columns: 1fr; row-gap: 0.5rem; } .sessionok .nyil { transform: rotate(90deg); justify-self: center; } .sessionok ul ul { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -377,7 +398,7 @@
     <li style="--i:0"><a href="01-a-kod-mar-nem-a-bottleneck-aikk.html"><span class="sz">1</span><span class="nev">A kód már nem a bottleneck</span></a></li>
       <li style="--i:1"><a href="#top" aria-current="page"><span class="sz">2</span><span class="nev">Plan + Design</span></a></li>
       <li style="--i:2"><a href="03-build-plan-mode-es-claude-md-aikk.html"><span class="sz">3</span><span class="nev">Build I</span></a></li>
-      <li style="--i:3"><span class="m"><span class="sz">4</span><span class="nev">Build II</span></span></li>
+      <li style="--i:3"><a href="04-build-skillek-hookok-parhuzamos-sessionok-aikk.html"><span class="sz">4</span><span class="nev">Build II</span></a></li>
       <li style="--i:4"><span class="m"><span class="sz">5</span><span class="nev">Test</span></span></li>
       <li style="--i:5"><span class="m"><span class="sz">6</span><span class="nev">Deploy</span></span></li>
       <li style="--i:6"><span class="m"><span class="sz">7</span><span class="nev">Maintain</span></span></li>
