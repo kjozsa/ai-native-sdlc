@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Build II: skillek, hookok és párhuzamos sessionök – a korlátok kódként futnak, nem szokásként · AI-native SDLC sorozat 4/8</title>
-<meta name="description" content="AI-native SDLC sorozat, 4. rész: Build II: skillek, hookok és párhuzamos sessionök – a korlátok kódként futnak, nem szokásként">
+<title>Build II: skillek, hookok és párhuzamos sessionök – a korlátokat a kód érvényesíti, nem a szokás · AI-native SDLC sorozat 4/8</title>
+<meta name="description" content="AI-native SDLC sorozat, 4. rész: Build II: skillek, hookok és párhuzamos sessionök – a korlátokat a kód érvényesíti, nem a szokás">
 <link rel="stylesheet" href="fonts/aikk-fonts.css">
 <style>
   :root {
@@ -405,7 +405,7 @@
       <a class="logo" href="https://aikk.hu" aria-label="IVSZ AI Kompetencia Központ"><img src="assets/aikk-logo-white.svg" alt="ivsz AI Kompetencia Központ" width="655" height="183"></a>
       <p class="sorozat"><span class="resz">4<small>/8</small></span>AI-native SDLC blogsorozat<br>Olvasási idő <b>10 perc</b></p>
     </div>
-    <h1>Build II: skillek, hookok és párhuzamos sessionök – a korlátok kódként futnak, nem szokásként</h1>
+    <h1>Build II: skillek, hookok és párhuzamos sessionök – a korlátokat a kód érvényesíti, nem a szokás</h1>
   </div>
   <div class="pattern-sav" aria-hidden="true"></div>
 </header>
@@ -442,7 +442,7 @@
   <article class="cikk">
     <p class="forras">AI-native SDLC sorozat, 4. rész · Forrás: <cite>The AI-Native SDLC Playbook</cite> (Louis Claxton, Anthropic)</p>
 
-<p>A 3. részben a Build fázis első három play-e egy session menetét adta: terv előbb, kód utána, és egy <code>CLAUDE.md</code>, amit az agent minden session elején elolvas. Ez a rész a másik hármat hozza, és ezek már nem egy sessionről szólnak, hanem arról, hogyan skálázódik a dolog: hogyan lesz a szervezet tudásából olyan fájl, amit <em>minden</em> session alkalmaz (skillek), mi állítja meg az agentet, ha a tudás nem elég (hookok), és mi történik, ha egy mérnök egyszerre nem egy, hanem három sessiont vezet (párhuzamos sessionök és subagentek). A rész végén egy sidebar: hogyan fér meg mindez a Jira, a ServiceNow és a change board mellett.</p>
+<p>A 3. részben a Build fázis első három play-e együtt kijelölte egy session menetét: terv előbb, kód utána, és egy <code>CLAUDE.md</code>, amit az agent minden session elején elolvas. Ez a rész a másik hármat hozza, és ezek már nem egy sessionről szólnak, hanem arról, hogyan skálázódik a dolog: hogyan lesz a szervezet tudásából olyan fájl, amit <em>minden</em> session alkalmaz (skillek), mi állítja meg az agentet, ha a tudás nem elég (hookok), és mi történik, ha egy mérnök egyszerre nem egy, hanem három sessiont vezet (párhuzamos sessionök és subagentek). A rész végén egy sidebar: hogyan illeszkedik mindez a Jira, a ServiceNow és a change board mellé.</p>
 <p>A három play-t egy skála köti össze. A <code>CLAUDE.md</code> és a skill <em>tanácsol</em>: valószínűvé teszi, hogy az agent betartja a szabályt. A hook <em>kikényszerít</em>: a művelet előtt lefut, és determinisztikusan blokkol. A párhuzamosság pedig az, ami miatt ez nem elmélet: három sessiont nem lehet szemmel tartani, a kontrollnak a repo konfigurációjából kell jönnie, nem a mérnök figyelméből.</p>
 <figure>
   <figcaption><span class="szam">1. ábra</span>Három réteg, egyre keményebb</figcaption>
@@ -476,8 +476,8 @@
 <h3>Mi változik</h3>
 <p>A skill az, ahogyan egy szervezet a saját tudását végrehajthatóvá teszi. Ami eddig egy wikioldalon, egy Confluence-sarokban vagy két senior fejében volt – az API security standard, a brand-szabály, az API-tervezési konvenció –, az explicit, verziókezelt utasítás lesz, amit széles körben alkalmaznak, és amit központilag frissítenek, ha a policy változik.</p>
 <p>Az ökölszabály, hogy mi való skillbe és mi nem: skill az olyan institutional knowledge, amit <em>konzisztensen</em> kell alkalmazni, sok repóban, sok csapatnál. Ami egy repo sajátja, az a <code>CLAUDE.md</code>-be való; ami egy feladat sajátja, az a promptba.</p>
-<h3>Getting started</h3>
-<p><strong>Előfeltétel:</strong> nincs kötelező. A <code>CLAUDE.md</code> segít, mert az agent munkatudását a repóban tartja, de a skill nem függ tőle.</p>
+<h3>Első lépések</h3>
+<p><strong>Előfeltétel:</strong> nincs. A <code>CLAUDE.md</code> segít, mert az agent tudását a repóban tartja, de a skill nem függ tőle.</p>
 <p><strong>Infrastruktúra:</strong> egyetlen policy, nevesített ownerrel és írott source of truth-tal. Ha a policy-nak nincs gazdája vagy nincs leírva, előbb az kell, nem a skill.</p>
 <h3>Hogyan csináld</h3>
 <ol>
@@ -529,7 +529,7 @@ Run scripts/check-endpoints.sh and include its output in your summary.
 <li>távol tartja a credentialöket a difftől;</li>
 <li>kikényszeríti bármelyik skill policy-ját, amelynek kivétel nélkül érvényesülnie kell.</li>
 </ul>
-<p>Két tervezési szabály. Az első: a hook <em>minden</em> rá illő műveletnél lefut, ezért a build-fázisú hooknak gyorsnak kell lennie és a módosított fájlra szűkítve. A nehéz ellenőrzések – a teljes tesztkészlet – a commitnál vagy a PR-nél valók, nem a szerkesztésnél. A második: az a hook, amely emberi jóváhagyást <em>kér</em>, nem ide való, hanem a Deploy fázis gate-jei közé (6. rész). Egy jóváhagyás-kérés a build közben visszatesz egy embert az összes párhuzamosan futó session kritikus útjára – és pont ettől szabadulna meg a következő play.</p>
+<p>Két tervezési szabály. Az első: a hook <em>minden</em> rá illő műveletnél lefut, ezért a build-fázisú hooknak gyorsnak kell lennie, és a módosított fájlra kell szűkülnie. A nehéz ellenőrzések – a teljes tesztkészlet – a commitnál vagy a PR-nél valók, nem a szerkesztésnél. A második: az a hook, amely emberi jóváhagyást <em>kér</em>, nem ide való, hanem a Deploy fázis gate-jei közé (6. rész). Egy jóváhagyás-kérés a build közben visszatesz egy embert az összes párhuzamosan futó session kritikus útjára – és pont ettől szabadulna meg a következő play.</p>
 <p>A hook mechanikáját – a <code>.claude/settings.json</code> szerkezetét, az allow / ask / block döntéseket, a managed settings-t, amit a mérnök nem kapcsolhat ki – a 6. rész írja le a release gate példáján, mert ott a legtisztább. Itt annyi a lényeg: a szabály, aminek mindig állnia kell, nem a <code>CLAUDE.md</code>-ben és nem a skillben él, hanem egy scriptben, ami a művelet előtt lefut.</p>
 <h2 id="parhuzamos">Párhuzamos sessionök és subagentek</h2>
 <h3>Mi változik</h3>
@@ -555,7 +555,7 @@ Run scripts/check-endpoints.sh and include its output in your summary.
     </ul>
   </div>
   <p class="magyarazat">A session egy teljes Claude Code példány saját worktree-ben; a subagent egy sessionön belüli, szűkített segítő saját contexttel és eszközlistával. A <code>.claude/agents/</code> definíciói közösek, gitben.</p>
-</figure><h3>Getting started</h3>
+</figure><h3>Első lépések</h3>
 <p><strong>Előfeltétel:</strong> a <code>CLAUDE.md</code>, mert minden session azt olvassa. A feedback loop (5. rész) is sokat segít: kevesebb felügyelet kell egy sessionnek, amely a saját munkáját ellenőrizni tudja.</p>
 <p><strong>Infrastruktúra:</strong> egy git-repo, mert az izoláció a worktree-kből jön; és olyan permission-beállítások, hogy a sessionök ne jóváhagyás-promptokra várjanak azoknál a parancsoknál, amiket a szervezet biztonságosnak tart.</p>
 <h3>Hogyan csináld</h3>
@@ -577,13 +577,13 @@ Start the app with make run. Exercise the changed behavior and the two
 nearest neighboring flows. Report what you ran, what you saw, and any
 behavior that does not match plan.md. Do not fix anything; report only.
 </code></pre>
-<p>Három mező a frontmatterben, négy mondat a törzsben. A <code>tools</code> sor a lényeg: a verifier csak futtatni és olvasni tud, szerkeszteni nem – ezért nem tudja „megjavítani” azt, amit ellenőriznie kéne. Az utolsó mondat ugyanezt mondja ki szövegben is. És a mérce a <code>plan.md</code>: a 3. rész terve itt válik ellenőrzési alappá.</p>
+<p>Három mező a frontmatterben, négy mondat a törzsben. A <code>tools</code> sor a lényeg: a verifier csak futtatni és olvasni tud, szerkeszteni nem – ezért nem tudja „megjavítani” azt, amit ellenőriznie kellene. Az utolsó mondat ugyanezt mondja ki szövegben is. És a mérce a <code>plan.md</code>: a 3. rész terve itt válik ellenőrzési alappá.</p>
 <h3>Governance</h3>
 <p>Több session több outputot jelent, ezért a kontrollnak a repo konfigurációjából kell jönnie. Az ott lévő hookok és permission-beállítások minden sessionre érvényesek, és minden, amit egy session tesz, naplózva van, és ahhoz a mérnökhöz rendelve, aki futtatta.</p>
 <h3>Hogyan mérd</h3>
 <ul>
 <li><strong>Leading indicator:</strong> egyidejű sessionök száma mérnökönként, amíg a review minősége tart – az OpenTelemetry-exportból számolva –, és a nap hányadát tölti a mérnök irányítással, nem várakozással.</li>
-<li><strong>Lagging indicator:</strong> merge-ölt változások mérnökönként hetente, a rework-aránnyal együtt olvasva, a PR-történetből. A kettő együtt számít: a throughput önmagában a review-minőség rovására is nőhet.</li>
+<li><strong>Lagging indicator:</strong> merge-elt változások mérnökönként hetente, a rework-aránnyal együtt olvasva, a PR-történetből. A kettő együtt számít: a throughput önmagában a review-minőség rovására is nőhet.</li>
 </ul>
 <h2 id="sidebar">Sidebar: legacy rendszerek és a source of truth</h2>
 <p>A meglévő SDLC-folyamatok valószínűleg már most is nyomon követik az artifactokat – csak nem markdown fájlokban. A work itemek a Jirában vannak, a követelmények egy olyan eszközben, amelybe be van építve a szabályozói nyomonkövethetőség, a designok a Figmában, a változás-jóváhagyások egy change boardnál. Ezeket a rendszereket nehéz kiváltani, mert az auditorok és a szabályozók már elfogadják őket, és más csapatok függenek tőlük. Az AI-native SDLC-nek tehát a meglévő köré kell illeszkednie.</p>
@@ -595,7 +595,7 @@ behavior that does not match plan.md. Do not fix anything; report only.
 </ul>
 <p>A legacy rendszer és a markdown-first rendszer egymás mellett élhet, amíg van köztük link, vagy az egyik ki van nevezve source of truth-nak. A 2. részben említett mappanév-konvenció – hogy a változás mappája a ticket azonosítóját viselje – a linkelés artifact-oldali fele.</p>
 <h2 id="egyben">A Build fázis egyben</h2>
-<p>Hat play, két részben. Egy sessionre nézve: plan mode indít, a <code>CLAUDE.md</code> ad kontextust, az auto mode engedi el a kezet. A szervezetre nézve: a skill viszi a tudást minden sessionbe, a hook tartja a szabályt, amikor a tudás nem elég, és a párhuzamosság az, ami miatt ez a kettő nem opcionális.</p>
+<p>Hat play, két részben. Egy sessionre nézve: plan mode indít, a <code>CLAUDE.md</code> ad kontextust, az auto mode elengedi a kezünket. A szervezetre nézve: a skill viszi a tudást minden sessionbe, a hook tartja a szabályt, amikor a tudás nem elég, és a párhuzamosság az, ami miatt ez a kettő nem opcionális.</p>
 <p>A bevezetési sorrend ebből következik. A <code>CLAUDE.md</code> és az első skill előfeltétel nélküli – a skillhez csak egy policy kell, aminek van gazdája. A hook akkor jön, amikor az első olyan szabályba ütköztél, aminek <em>nem szabad</em> a skill jóindulatán múlnia. A párhuzamos sessionök pedig akkor, amikor már megvan a <code>CLAUDE.md</code> és a feedback loop: nem a worktree a nehéz, hanem hogy három session outputját review-zni tudd – és ehhez kell, hogy a sessionök a saját munkájukat ellenőrizzék. Ez az 5. rész.</p>
 <h2 id="kovetkezik">Mi következik</h2>
 <ol class="megallok" start="5" style="counter-reset: m 4" aria-label="A sorozat további részei">

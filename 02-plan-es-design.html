@@ -448,7 +448,8 @@
   .cikk table.skala th, .cikk table.skala td { text-align: left; vertical-align: top; padding: 0.6rem 0.75rem 0.6rem 0; border-top: 1px solid var(--tinta); }
   .cikk table.skala thead th { font-family: var(--keret); font-weight: 600; font-size: 1.1rem; letter-spacing: 0.02em; border-top: 0; padding-top: 0.5rem; }
   .cikk table.skala thead th code { background: none; padding: 0; font-size: 0.9em; }
-  .cikk table.skala tbody th { font-family: var(--keret); font-weight: 500; font-size: 0.95rem; letter-spacing: 0.04em; color: var(--halvany); white-space: nowrap; width: 7rem; }
+  .cikk table.skala tbody th { font-family: var(--keret); font-weight: 500; font-size: 0.95rem; letter-spacing: 0.04em; color: var(--halvany); width: 6rem; }
+  .cikk table.skala thead th:not(:first-child), .cikk table.skala tbody td { width: 30%; }
   .cikk table.skala td + td, .cikk table.skala th + th { padding-left: 0.75rem; border-left: 1px solid var(--tinta); }
   .cikk table.skala td.kenyszer { font-weight: 600; }
   .sessionok { display: grid; grid-template-columns: 7rem 2.2rem 1fr; align-items: center; column-gap: 0.75rem; border-top: 3px solid var(--tinta); border-bottom: 3px solid var(--tinta); padding: 1rem 0; font-family: var(--keret); }
@@ -465,6 +466,22 @@
   .sessionok ul ul li { max-width: none; margin: 0; padding: 0.4rem 0.6rem; border: 2px solid var(--tinta); background: var(--sarga); font-size: 0.85rem; }
   .sessionok ul ul b { font-size: 0.95rem; }
   .sessionok ul ul span { display: block; font-family: var(--cimke); font-weight: 500; color: var(--tinta-sargan); font-size: 0.8rem; }
+  @media (max-width: 720px) {
+    .cikk table.skala { border-top: 0; }
+    .cikk table.skala thead, .cikk table.skala tbody, .cikk table.skala tr, .cikk table.skala th, .cikk table.skala td { display: block; width: auto !important; border: 0; padding: 0; }
+    .cikk table.skala thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .cikk table.skala tbody th { display: none; }
+    .cikk table.skala tbody { display: grid; grid-template-columns: 1fr; gap: 0; }
+    .cikk table.skala tbody tr { display: contents; }
+    .cikk table.skala td, .cikk table.skala td + td { padding: 0.45rem 0; border-top: 1px solid var(--tinta); border-left: 0; }
+    .cikk table.skala td::before { content: attr(data-sor); display: block; font-family: var(--keret); font-weight: 500; font-size: 0.85rem; letter-spacing: 0.04em; color: var(--halvany); }
+    .cikk table.skala tbody tr:first-child td:nth-child(2)::before { content: "CLAUDE.md · " attr(data-sor); font-weight: 700; color: var(--tinta); font-size: 1rem; }
+    .cikk table.skala tbody tr:first-child td:nth-child(3)::before { content: "Skill · " attr(data-sor); font-weight: 700; color: var(--tinta); font-size: 1rem; }
+    .cikk table.skala tbody tr:first-child td:nth-child(4)::before { content: "Hook · " attr(data-sor); font-weight: 700; color: var(--tinta); font-size: 1rem; }
+    .cikk table.skala td:nth-child(2) { order: 1; } .cikk table.skala td:nth-child(3) { order: 2; } .cikk table.skala td:nth-child(4) { order: 3; }
+    .cikk table.skala tbody tr:first-child td { border-top: 3px solid var(--tinta); margin-top: 0.75rem; padding-top: 0.6rem; }
+    .cikk table.skala tbody tr:first-child td:nth-child(2) { margin-top: 0; }
+  }
   @media (max-width: 720px) { .sessionok { grid-template-columns: 1fr; row-gap: 0.5rem; } .sessionok .nyil { transform: rotate(90deg); justify-self: center; } .sessionok ul ul { grid-template-columns: 1fr; } }
 </style>
 </head>
@@ -527,7 +544,7 @@
 
 <h2 id="plan"><span class="perc" aria-hidden="true">1′</span>Stage 1 · Plan: capture as <code>intent.md</code></h2>
 <h3>Mi változik</h3>
-<p>Egy ötlet a hagyományos SDLC-ben backlog-bejegyzéseken, user storykon, story pointokon és refinement meetingeken megy át, mire bárki cselekedhetne. Minden átadásnál gazdát cserél, így ami a mérnökökhöz ér, több lépéssel távolabb van attól, amit az ötletgazda eredetileg akart. Ha valakinek ötlete van, meg kell győznie a product csapat egy tagját, hogy írja meg vele vagy helyette.</p>
+<p>Egy ötlet a hagyományos SDLC-ben backlog-bejegyzéseken, user storykon, story pointokon és refinement meetingeken megy át, mire bárki cselekedni tudna. Minden átadásnál gazdát cserél, így ami a mérnökökhöz ér, több lépéssel távolabb van attól, amit az ötletgazda eredetileg akart. Ha valakinek ötlete van, meg kell győznie a product csapat egy tagját, hogy írja meg vele vagy helyette.</p>
 <p>Az AI-native változatban az ötletgazda Claude-dal brainstormol, és az eredményt <code>intent.md</code>-ként írja le: egy proto-spec a saját fogalmaival, amely tartalmazza, mit akar, miért, és milyen korlátok között. Az artifact ember által olvasható, verziókezelt, és a következő fázis azonnal fel tudja használni. Az ismétlődő folyamatok skillként kódolódnak.</p>
 <p>Az <code>intent.md</code> három úton léphet be: valakinek ötlete van, ticket érkezik, vagy egy alert jelez a productionből (erről a 7. részben, a Maintain fázisnál lesz szó). Bármelyik az eredet – ember, esemény vagy agent –, a lépés ugyanaz: a product owner átnézi és javítja az agent által írt <code>intent.md</code>-t, mielőtt commitolja.</p>
 <figure class="utak-abra">
@@ -548,7 +565,7 @@
     </ol>
   </div>
   <p class="magyarazat">Bármi az eredet – ember, esemény vagy agent –, az út vége ugyanaz: emberi review, commit, és csak azután a következő fázis.</p>
-</figure><h3>Getting started</h3>
+</figure><h3>Első lépések</h3>
 <p><strong>Előfeltétel:</strong> nincs. Ebbe a lépésbe a függőségi ábrán semmi nem mutat – bárhol elkezdhető.</p>
 <p><strong>Infrastruktúra:</strong></p>
 <ul>
@@ -561,7 +578,7 @@
 <h3>Hogyan csináld</h3>
 <ol>
 <li>Az ötletgazda leírja Claude-nak a problémát. Leírhatja, mit nem tud ma megcsinálni, kit érint az ötlet, hogyan nézne ki a jobb állapot, mi esik kívül a scope-on. A leírás lehet teljesen kötetlen, a saját szavaival – nem kell hozzá semmilyen sablon vagy szakzsargon.</li>
-<li>Brainstorm addig, amíg az ötlet konkréttá válik. Claude azokat a kérdéseket teszi fel, amiket egy analyst tenne: scope, felhasználók, korlátok, mi számít sikernek.</li>
+<li>Ötletelj addig, amíg az ötlet konkréttá válik. Claude azokat a kérdéseket teszi fel, amiket egy analyst tenne: scope, felhasználók, korlátok, mi számít sikernek.</li>
 <li>Kérd meg Claude-ot, hogy az eredményt a szervezet sablonja szerint írja meg <code>intent.md</code>-ként. A sablon skillként kódolható – egy technikai kolléga állítja össze, egy lead hagyja jóvá –, és lefedheti a problémát, a javasolt kimenetet, az érintett felhasználókat és rendszereket, a korlátokat és a nyitott kérdéseket.</li>
 <li>Az ötletgazda kijavítja, amit Claude félreértett.</li>
 <li>Commit az intent-tárba. A szerző és az időbélyeg bekerül a rekordba, a product owner innen veszi át az ötletet.</li>
@@ -611,7 +628,7 @@ A külső kárszakértőknek is kell hozzáférés?
     <li class="kimenet elfogadva"><b>Merge = elfogadva</b><span>A merge commit rögzíti, ki hagyta jóvá és mikor. A fájl a main-re kerül, és a merge esemény indítja a Design fázis spec-jobját – amely a <code>spec.md</code>-t ugyanebbe a mappába, új PR-ként nyitja.</span></li>
     <li class="kimenet elutasitva"><b>Lezárás merge nélkül = elutasítva</b><span>A fájl soha nem kerül a main-re, de a PR-történet megőrzi, hogy volt, és miért zárták le.</span></li>
   </ol>
-</figure><p>Ez a mechanika adja a Plan fázis méréseit is: a „commitolt <code>intent.md</code>” a merge időbélyege, a túlélési arány a merge-ölt és a merge nélkül lezárt PR-ek aránya.</p>
+</figure><p>Ez a mechanika adja a Plan fázis méréseit is: a „commitolt <code>intent.md</code>” a merge időbélyege, a túlélési arány a merge-elt és a merge nélkül lezárt PR-ek aránya.</p>
 <h3>Governance</h3>
 <p>A bizonyíték maga a commitolt <code>intent.md</code>: szerző, időbélyeg és a teljes módosítási történet az intent-tár git-történetében. A product owner hagyja jóvá; az elfogad/elutasít döntés – amely az intentet a Design fázisba küldi – a merge-ként vagy a lezárt review-ként rögzül.</p>
 <h3>Hogyan mérd</h3>
@@ -622,16 +639,16 @@ A külső kárszakértőknek is kell hozzáférés?
 <h2 id="design"><span class="perc" aria-hidden="true">5′</span>Stage 2 · Design: követelmények és design</h2>
 <h3>Mi változik</h3>
 <p>Hagyományosan a követelmények és a design két külön fázis, két külön csapatnál. Az analystek formalizálják az ötletet követelményekké, a designerek ezt visszafordítják designná. A szétválasztás az elszámoltathatóság miatt létezik, de lassú és veszteséges.</p>
-<p>Az AI-native változatban a kettő egyetlen promptolt munkamenetben történik. Claude az elfogadott <code>intent.md</code>-ből követelmény- és design-specet ír, amelyet a szervezet skilljei – brand, security, compliance, UX – korlátoznak, és amelyben az aggályos pontok meg vannak jelölve. A product owner ezt a specet átnézi, de nem ő írja. A cél egy olyan spec, amely ellen az engineering csapat tervezni tud, és amelyben a kockázatos pontok előre fel vannak címkézve.</p>
+<p>Az AI-native változatban a kettő egyetlen promptolt munkamenetben történik. Claude az elfogadott <code>intent.md</code>-ből követelmény- és design-specet ír, amelyet a szervezet skilljei – brand, security, compliance, UX – korlátoznak, és amelyben az aggályos pontok meg vannak jelölve. A product owner ezt a specet átnézi, de nem ő írja. A cél egy olyan spec, amely alapján az engineering csapat tervezni tud, és amelyben a kockázatos pontok előre fel vannak címkézve.</p>
 <p>Front-end munkánál ez a legszemléletesebb: az elfogadott <code>intent.md</code>-ből a product owner a Claude Designban (béta) mockot készít, iterál rajta, majd exportálja Claude Code-ba a buildhez.</p>
-<h3>Getting started</h3>
+<h3>Első lépések</h3>
 <p><strong>Előfeltétel:</strong> egy <code>intent.md</code>, és a brand-, security-, compliance- és UX-policy-k skillként megírva.</p>
 <p><strong>Infrastruktúra:</strong> egy product owner Claude-hozzáféréssel. Mérnöki tudás nem szükséges.</p>
 <h3>Hogyan csináld</h3>
 <ol>
 <li>A product owner megnyit egy munkamenetet, amelyben a szervezet skilljei elérhetők, és csatolja az <code>intent.md</code>-t.</li>
-<li>A prompt az <code>intent.md</code>-re mutat, megnevezi a korlátokat, és kéri az aggályok megjelölését. Először kézzel futtasd; aztán kódold szervezeti szintű slash commandként; végül legyen a kiváltó esemény maga az <code>intent.md</code> elfogadása az intent-tárban – egy nem-interaktív job, amely a merge-re elindul, a szervezet skilljeivel lefuttatja a lépést, és a <code>spec.md</code>-t pull requestként commitolja. (Hogy ezt hogyan kell bekötni a CI-ba, azt a 6. rész CI/CD-ről szóló szakasza írja le.) Innentől a product owner először már csak a review-nál találkozik vele.</li>
-<li>Ugyanaz a product owner átnézi a specet az ötlet tükrében. Megoldja a spec a kimondott problémát? Az <code>intent.md</code> nyitott kérdéseire van válasz, vagy tovább vannak vive?</li>
+<li>A prompt az <code>intent.md</code>-re mutat, megnevezi a korlátokat, és kéri az aggályok megjelölését. Először kézzel futtasd; aztán kódold szervezeti szintű slash commandként; végül legyen a kiváltó esemény maga az <code>intent.md</code> elfogadása az intent-tárban – egy nem-interaktív job, amely a merge-re elindul, a szervezet skilljeivel lefuttatja a lépést, és a <code>spec.md</code>-t pull requestként commitolja. (Hogy ezt hogyan kell bekötni a CI-ba, azt a 6. rész CI/CD-ről szóló szakasza írja le.) Innentől a product owner először a review-nál találkozik vele.</li>
+<li>Ugyanaz a product owner átnézi a specet az ötlet tükrében. Megoldja a spec a megfogalmazott problémát? Az <code>intent.md</code> nyitott kérdéseire van válasz, vagy továbbra is nyitva maradtak?</li>
 <li>Először az aggályos pontokat dolgozd fel – ezek azok, amiket egy analyst eszkalált volna. A product owner mindegyiket az adott policy ownerrel rendezi, mielőtt az engineering meglátná a specet.</li>
 <li>Commit: <code>spec.md</code> az <code>intent.md</code> mellé. A fájlpár rögzíti, mit kértek és mit döntöttek.</li>
 <li>A product owner dönt, mehet-e a spec és az intent buildbe; amit a szervezet magasabb kockázatúnak sorol, ahhoz technical leadet von be. Ezt a döntést mindig ember hozza, és a spec elfogadása indítja el a plan mode-ot a Build fázisban (3. rész).</li>
@@ -646,14 +663,14 @@ where you cannot satisfy contradicting policies.
 </code></pre>
 <p>Ez az egész. A policy-k a skillekben vannak, nem a promptban; a prompt csak annyit mond, hogy alkalmazd őket, és jelezd, ahol ütköznek.</p>
 <h3>Governance</h3>
-<p>A policy nem egy hetekkel későbbi review-ban derül ki, hanem az élő policy olvasódik és alkalmazódik a spec írása közben: a szervezet skilljei a spec korlátaiként működnek. A spec, az azt előállító prompt és a hatályos skill-verziók mind a verziókezelőben vannak. A product owner írja alá a specet, és a megjelölt aggályokat a nevesített policy ownerekhez irányítja.</p>
+<p>A policy nem egy hetekkel későbbi review-ban derül ki, hanem a policy élő, és a spec írása közben olvassák és alkalmazzák: a szervezet skilljei a spec korlátaiként működnek. A spec, az azt előállító prompt és a hatályos skill-verziók mind a verziókezelőben vannak. A product owner írja alá a specet, és a megjelölt aggályokat a nevesített policy ownerekhez irányítja.</p>
 <h3>Hogyan mérd</h3>
 <ul>
 <li><strong>Leading indicator:</strong> az <code>intent.md</code> commit és az ugyanahhoz a változáshoz tartozó <code>spec.md</code> commit közötti idő – két git-időbélyeg –, a régi követelmény-plusz-design ciklussal összevetve.</li>
-<li><strong>Lagging indicator:</strong> követelmény-rework a build megkezdése után. Számold meg az ugyanahhoz a változáshoz tartozó <code>spec.md</code> commitokat, amelyek az első <code>plan.md</code> commit utánra datálódnak. A git log ezt közvetlenül megadja.</li>
+<li><strong>Lagging indicator:</strong> követelmény-rework a build megkezdése után. Számold meg az ugyanahhoz a változáshoz tartozó <code>spec.md</code> commitokat, amelyek az első <code>plan.md</code> commit után keletkeztek. A git log ezt közvetlenül megadja.</li>
 </ul>
 <h2 id="a-par"><span class="perc" aria-hidden="true">8′</span>A pár</h2>
-<p>Az első két fázis után két fájl marad a repóban, egymás mellett: az <code>intent.md</code> és a <code>spec.md</code>. Az első azt rögzíti, mit kértek, és ki kérte; a második azt, mit döntöttek, és mely policy-k mentén. Mindkettő verziókezelt, mindkettőt ember hagyta jóvá – és a következő fázis mérnöke nem egy ticketből vagy egy meetingemlékből indul, hanem ebből a két fájlból.</p>
+<p>Az első két fázis után két fájl marad a repóban, egymás mellett: az <code>intent.md</code> és a <code>spec.md</code>. Az első azt rögzíti, mit kértek, és ki kérte; a második azt, mit döntöttek, és mely policy-k mentén. Mindkettő verziókezelt, mindkettőt ember hagyta jóvá – és a következő fázis mérnöke nem egy ticketből vagy egy meeting emlékéből indul, hanem ebből a két fájlból.</p>
 <p>A két fázis egymástól függ, de nem egyformán: az <code>intent.md</code> megírásának nincs előfeltétele, bárhol elkezdhető. A spec előállításához viszont már kellenek a skillként megírt policy-k – ezek a 4. rész témái. Aki ma kezd, annak az első lépés az intent-tár és a sablon; a specet addig kézi promptolással állítja elő, amíg a skillek el nem készülnek.</p>
 <h2 id="kovetkezik"><span class="perc" aria-hidden="true">9′</span>Mi következik</h2>
 <ol class="megallok" start="3" style="counter-reset: m 2" aria-label="A sorozat további részei">

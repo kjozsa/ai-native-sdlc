@@ -456,7 +456,7 @@
 
     <p class="lead">Egy év alatt megtörtént, ami korábban elképzelhetetlen volt: a szervezetek AI-jal írnak kódot, olyan sebességgel, amire egy évvel ezelőtt senki nem számított. A kód körüli folyamatok viszont nem változtak ugyanebben a tempóban. A legtöbb engineering csapatnál ma is ugyanazok az approval gate-ek, review-k, handoffok és policy-k élnek, mint az agentic coding előtt – és pontosan ezek nyelik el azt a termelékenységi nyereséget, amit egy Claude Code-hoz hasonló eszköz hozna.</p>
 
-    <p>Ez a sorozat arról szól, hogyan néz ki egy olyan software development lifecycle, amelyet újraterveztek arra, amit egy agent ma már meg tud csinálni – úgy, hogy az ember végig a loopban marad. Az első rész a diagnózis és a modell: miért törik el a hagyományos SDLC, és mi lép a helyébe.</p>
+    <p>Ez a sorozat arról szól, hogyan néz ki egy olyan software development lifecycle, amelyet arra terveztek újra, amire egy agent ma már képes – úgy, hogy az ember végig a loopban marad. Az első rész a diagnózis és a modell: miért törik el a hagyományos SDLC, és mi lép a helyébe.</p>
 
     <details class="allomaslista allomaslista-mobil">
       <summary><p class="cim">Fejezetek</p></summary>
@@ -476,11 +476,11 @@
 
     <h2 id="hagyomanyos"><span class="perc" aria-hidden="true">1′</span>A hagyományos SDLC és amire optimalizálták</h2>
 
-    <p>Az SDLC az a folyamat, ami az ötlettől a productionig viszi a szoftvert. A legtöbb szervezet ugyanannak a hat fázisnak valamilyen változatát futtatja: <strong>Plan, Design, Build, Test, Deploy, Maintain</strong>. Hagyományosan mindegyik egy diszkrét fázis, más-más szerepkör tulajdonában: a product manager követelményeket ír, a technical architect designt csinál belőle, a mérnökök megépítik, a QA (regulált enterprise-nál külön csapat) ellenőrzi, a release team kiszállítja, az operations figyeli, mi fut. A munka dokumentumokon, ticketeken és jóváhagyásokon keresztül mozog fázisról fázisra.</p>
+    <p>Az SDLC az a folyamat, ami az ötlettől a productionig viszi a szoftvert. A legtöbb szervezet ugyanannak a hat fázisnak valamilyen változatát futtatja: <strong>Plan, Design, Build, Test, Deploy, Maintain</strong>. Hagyományosan mindegyik egy diszkrét fázis, más-más szerepkör felel érte: a product manager követelményeket ír, a technical architect designt csinál belőle, a mérnökök megépítik, a QA (regulált enterprise-nál külön csapat) ellenőrzi, a release team kiszállítja, az operations figyeli, mi fut. A munka dokumentumokon, ticketeken és jóváhagyásokon keresztül mozog fázisról fázisra.</p>
 
-    <p>Ha a tankönyvi hetes listát ismered (Planning → Requirements analysis → Design → Implementation → Testing → Deployment → Maintenance), feltűnhet, hogy a <strong>Requirements analysis</strong> nem szerepel önálló fázisként. Nem felejtették ki: ez a playbook egyik alapállítása. A hagyományos SDLC-ben az analysis és a design azért két külön lépés, mert két külön szerepkör csinálja: az analyst formalizálja az ötletet követelményekké, aztán a designer ezeket visszafordítja egy designná – és a határ a kettő között nem szakmai, hanem szervezeti: ki felel miért. Tartalmilag ugyanazt a kérdést válaszolja meg mindkettő: mit kell a rendszernek tudnia, milyen constraint-ek mellett, és ez hogyan illeszkedik a meglévőhöz. Ha egy agent egy sessionben végigcsinálja mindkettőt, és egyetlen ember review-zza az eredményt, a két fázis közötti handoff megszűnik, és nincs értelme két néven hívni. Így a playbookban a „mit és miért” a Plan kimenete (<code>intent.md</code>), a „mit pontosan és hogyan” pedig a Design kimenete (<code>spec.md</code>) – a 2. rész ezt bontja ki.</p>
+    <p>Ha a tankönyvi hetes listát ismered (Planning → Requirements analysis → Design → Implementation → Testing → Deployment → Maintenance), feltűnhet, hogy a <strong>Requirements analysis</strong> nem szerepel önálló fázisként. Nem felejtették ki: ez a playbook egyik alapállítása. A hagyományos SDLC-ben az analysis és a design azért két külön lépés, mert két külön szerepkör csinálja: az analyst formalizálja az ötletet követelményekké, a designer pedig ezekből designt készít – és a határ a kettő között nem szakmai, hanem szervezeti: ki felel miért. Tartalmilag ugyanazt a kérdést válaszolja meg mindkettő: mit kell a rendszernek tudnia, milyen constraint-ek mellett, és ez hogyan illeszkedik a meglévőhöz. Ha egy agent egy sessionben végigcsinálja mindkettőt, és egyetlen ember review-zza az eredményt, a két fázis közötti handoff megszűnik, és nincs értelme két néven hívni. Így a playbookban a „mit és miért” a Plan kimenete (<code>intent.md</code>), a „mit pontosan és hogyan” pedig a Design kimenete (<code>spec.md</code>) – a 2. rész ezt bontja ki.</p>
 
-    <p>Ez a folyamat szándékosan folyamatnehéz: minden lépésnél elszámoltathatóság és kontroll. Csakhogy olyan korszakra lett optimalizálva, amelyben a legdrágább, legtöbb időt elvivő fázis a kód megírása és implementálása volt. A PRD-k, a becslési rituálék, a product security review-k mind azért léteztek, hogy alignmentet kényszerítsenek ki egy olyan fejlesztés előtt, ami heteket, hónapokat vagy negyedéveket vett igénybe.</p>
+    <p>Ez a folyamat szándékosan nehézkes: minden lépésnél elszámoltathatóság és kontroll. Csakhogy olyan korszakra lett optimalizálva, amelyben a legdrágább, legtöbb időt elvivő fázis a kód megírása és implementálása volt. A PRD-k, a becslési rituálék, a product security review-k mind azért léteztek, hogy összehangolják a fejlesztést egy olyan munka előtt, ami heteket, hónapokat vagy negyedéveket vett igénybe.</p>
 
     <p>A hagyományos SDLC másik rejtett feltevése: minden lépést ember hajt végre. A kontrollok erre épültek.</p>
 
@@ -490,7 +490,7 @@
 
     <ol class="kovetkezmeny">
       <li><span><strong>A bottleneck a Build két oldalára tolódik.</strong> Plan, Review/Test és Deploy továbbra is emberi sebességgel futnak. A Build órákra zsugorodik, a többi fázis megtartja a hosszát.</span></li>
-      <li><span><strong>A kontrollok elválnak a valóságtól.</strong> Minden sort kézzel átnézni akkor volt értelmes, amikor ember írta. Amint agentek írják a diff zömét, ez nem tartható.</span></li>
+      <li><span><strong>A kontrollok elszakadnak a valóságtól.</strong> Minden sort kézzel átnézni akkor volt értelmes, amikor ember írta. Amint agentek írják a diff zömét, ez nem tartható.</span></li>
       <li><span><strong>A governance költsége nő.</strong> A kivételek továbbra is olyan meetingeken és committee-ken mennek át, amelyek hetente vagy havonta ülnek össze.</span></li>
     </ol>
 
@@ -516,7 +516,7 @@
 
     <p>Vegyünk egy security példát. A security csapatot emberi outputra méretezték. Amikor az agentek megsokszorozzák a kód mennyiségét, két dolog történhet: vagy feltorlódik a review queue, vagy under-reviewed kód megy ki productionbe. Egy regulált szervezet egyiket sem fogadhatja el – tehát a security és policy ellenőrzéseknek kell lépést tartaniuk az agentekkel.</p>
 
-    <p>A következtetés: ahhoz, hogy az agentic AI termelékenységi nyeresége realizálódjon <em>és</em> secure maradjon, az SDLC többi részének ugyanazon az átalakuláson kell átmennie, amin az implementációs fázis már átment.</p>
+    <p>A következtetés: ahhoz, hogy az agentic AI termelékenységi nyeresége megvalósuljon <em>és</em> secure maradjon, az SDLC többi részének ugyanazon az átalakuláson kell átmennie, amin az implementációs fázis már átment.</p>
 
     <h2 id="vonal-es-loop"><span class="perc" aria-hidden="true">3′</span>Lineáris flow vs. loop</h2>
 
@@ -545,8 +545,8 @@
         </div>
         <div>
           <h3>AI-native – the loop</h3>
-          <p class="felett">Emberek a loop felett: indítanak, irányítanak, governálnak</p>
-          <svg viewBox="0 0 360 172" role="img" aria-label="Ugyanaz a hat állomás körben, középen Claude felirattal; a kör felett az emberek: indítanak, irányítanak, governálnak.">
+          <p class="felett">Emberek a loop felett: indítanak, irányítanak, felügyelnek</p>
+          <svg viewBox="0 0 360 172" role="img" aria-label="Ugyanaz a hat állomás körben, középen Claude felirattal; a kör felett az emberek: indítanak, irányítanak, felügyelnek.">
             <circle cx="180" cy="92" r="56" stroke="currentColor" stroke-width="3" fill="none"/>
             <path d="M217.4 140.8 L208 140.5 L212.4 132.2" stroke="currentColor" stroke-width="2.5" fill="none"/>
             <g fill="#fff" stroke="currentColor" stroke-width="3">
@@ -562,7 +562,7 @@
             </g>
             <text class="st" x="180" y="97" text-anchor="middle" font-size="15">Claude</text>
           </svg>
-          <p>Ugyanaz a hat fázis körben, középen Claude, és a loop órák alatt fordul, nem hetek alatt. Az emberek a loop <em>felett</em> vannak: indítják, irányítják és governálják.</p>
+          <p>Ugyanaz a hat fázis körben, középen Claude, és a loop órák alatt fordul, nem hetek alatt. Az emberek a loop <em>felett</em> vannak: indítják, irányítják és felügyelik.</p>
         </div>
       </div>
     </figure>
@@ -578,12 +578,12 @@
           <tr><th scope="col">Stage</th><th scope="col">Traditional SDLC</th><th scope="col">AI-native SDLC</th></tr>
         </thead>
         <tbody>
-          <tr><th scope="row">Plan</th><td data-oszlop="Traditional SDLC">Követelményeket committee gyűjti, workshopokon és jóváhagyásokon át desztillálódik, kézzel írják meg</td><td data-oszlop="AI-native SDLC">Claude közvetlenül a forrásokból szintetizálja a problémákat egy <code>intent.md</code>-be, ami ember által olvasható és gép által végrehajtható</td></tr>
+          <tr><th scope="row">Plan</th><td data-oszlop="Traditional SDLC">A követelményeket committee gyűjti, workshopokon és jóváhagyásokon szűri át, kézzel írja meg</td><td data-oszlop="AI-native SDLC">Claude közvetlenül a forrásokból szintetizálja a problémát egy <code>intent.md</code>-be, ami ember által olvasható és gép által végrehajtható</td></tr>
           <tr><th scope="row">Design</th><td data-oszlop="Traditional SDLC">Analystek írják a specet, designerek értelmezik</td><td data-oszlop="AI-native SDLC">Követelmények és design egy working sessionbe sűrűsödik egy agenttel, skillként kódolt szabványok vezetik, gitben verziózva</td></tr>
           <tr><th scope="row">Build</th><td data-oszlop="Traditional SDLC">Teszt és kód kézzel írva, dokumentáció utólag</td><td data-oszlop="AI-native SDLC">Tesztet és kódot AI generál, az intézményi tudás verziózott, machine-readable <code>CLAUDE.md</code> fájlokban és skillekben él</td></tr>
           <tr><th scope="row">Test</th><td data-oszlop="Traditional SDLC">QA gate-ek a fázishatárokon</td><td data-oszlop="AI-native SDLC">Continuous evalok az implementációba szőve</td></tr>
-          <tr><th scope="row">Deploy</th><td data-oszlop="Traditional SDLC">Ember review-z minden sort, a governance review ciklusokban történik, gyakran inkonzisztensen</td><td data-oszlop="AI-native SDLC">Agentic review rétegek, emberi review a regulált és kritikus kódra fenntartva; a governance az AI cselekvése közben érvényesül, hookok mint approval gate-ek</td></tr>
-          <tr><th scope="row">Maintain</th><td data-oszlop="Traditional SDLC">Emberek figyelik a productiont bugokért</td><td data-oszlop="AI-native SDLC">Agentek monitorozzák a live deploymenteket; ha egy metrika kilép a tűrési sávból, az agent diagnosztizálja, és új <code>intent.md</code>-ként visszaírja a loopba</td></tr>
+          <tr><th scope="row">Deploy</th><td data-oszlop="Traditional SDLC">Emberek review-znak minden sort, a governance review ciklusokban történik, gyakran inkonzisztensen</td><td data-oszlop="AI-native SDLC">Agentic review rétegek, emberi review a regulált és kritikus kódra fenntartva; a governance az AI cselekvése közben érvényesül, hookok mint approval gate-ek</td></tr>
+          <tr><th scope="row">Maintain</th><td data-oszlop="Traditional SDLC">Emberek figyelik a productiont, és hibákat keresnek</td><td data-oszlop="AI-native SDLC">Agentek monitorozzák a live deploymenteket; ha egy metrika kilép a tűrési sávból, az agent diagnosztizálja, és új <code>intent.md</code>-ként visszaírja a loopba</td></tr>
         </tbody>
       </table>
     </figure>
@@ -626,13 +626,13 @@
 
     <ul>
       <li><strong>Mi változik</strong> – traditional vs. AI-native;</li>
-      <li><strong>Getting started</strong> – előfeltételek és infrastruktúra;</li>
-      <li><strong>Konkrét lépések</strong> az implementációhoz;</li>
+      <li><strong>Első lépések</strong> – előfeltételek és infrastruktúra;</li>
+      <li><strong>Hogyan csináld</strong> – az implementációhoz;</li>
       <li><strong>Governance</strong> – mit kényszerít ki, mi a bizonyíték, hol naplózódik, ki hagy jóvá;</li>
-      <li><strong>Mérés</strong> – leading és lagging indicator.</li>
+      <li><strong>Hogyan mérd</strong> – leading és lagging indicator.</li>
     </ul>
 
-    <p>A play-ek modulárisak. Egy szervezet választhatja, hogy különböző fázisokat különböző időben alakít át a saját igényei szerint. Minden play megnevezi a függőségeit a „Prerequisites” alatt, és a playbook harmadik ábrája, a <strong>play dependency graph</strong> rajzolja ki őket. Fontos: az oszlopok fázisonként csoportosítják a play-eket, a nyilak viszont a <em>bevezetési</em> sorrendet adják – a kettő nem ugyanaz. Bármelyik gyökér play-jel kezdhetsz, amibe nem mutat nyíl: ahhoz semmi nem kell előre. Minden más play-nél a bele mutató nyilak mondják meg, mit kell előtte bevezetni.</p>
+    <p>A play-ek modulárisak. Egy szervezet választhatja, hogy különböző fázisokat különböző időben alakít át a saját igényei szerint. Minden play megnevezi a függőségeit az előfeltételeknél, és a playbook harmadik ábrája, a <strong>play dependency graph</strong> rajzolja ki őket. Fontos: az oszlopok fázisonként csoportosítják a play-eket, a nyilak viszont a <em>bevezetési</em> sorrendet adják – a kettő nem ugyanaz. Bármelyik gyökér play-jel kezdhetsz, amibe nem mutat nyíl: ahhoz semmi nem kell előre. Minden más play-nél a rá mutató nyilak mondják meg, mit kell előtte bevezetni.</p>
 
     <p>A bevezetés íve: először minden lépést kézzel promptolsz. A végállapot egy loop, amelyben minden elfogadott artifact elindítja a következő gate-et, és az emberi figyelem a gate-eknél koncentrálódik – azt review-zod, amit az agent flagelt, nem nulláról indítod a fázist.</p>
 

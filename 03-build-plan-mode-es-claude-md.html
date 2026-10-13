@@ -448,7 +448,8 @@
   .cikk table.skala th, .cikk table.skala td { text-align: left; vertical-align: top; padding: 0.6rem 0.75rem 0.6rem 0; border-top: 1px solid var(--tinta); }
   .cikk table.skala thead th { font-family: var(--keret); font-weight: 600; font-size: 1.1rem; letter-spacing: 0.02em; border-top: 0; padding-top: 0.5rem; }
   .cikk table.skala thead th code { background: none; padding: 0; font-size: 0.9em; }
-  .cikk table.skala tbody th { font-family: var(--keret); font-weight: 500; font-size: 0.95rem; letter-spacing: 0.04em; color: var(--halvany); white-space: nowrap; width: 7rem; }
+  .cikk table.skala tbody th { font-family: var(--keret); font-weight: 500; font-size: 0.95rem; letter-spacing: 0.04em; color: var(--halvany); width: 6rem; }
+  .cikk table.skala thead th:not(:first-child), .cikk table.skala tbody td { width: 30%; }
   .cikk table.skala td + td, .cikk table.skala th + th { padding-left: 0.75rem; border-left: 1px solid var(--tinta); }
   .cikk table.skala td.kenyszer { font-weight: 600; }
   .sessionok { display: grid; grid-template-columns: 7rem 2.2rem 1fr; align-items: center; column-gap: 0.75rem; border-top: 3px solid var(--tinta); border-bottom: 3px solid var(--tinta); padding: 1rem 0; font-family: var(--keret); }
@@ -465,6 +466,22 @@
   .sessionok ul ul li { max-width: none; margin: 0; padding: 0.4rem 0.6rem; border: 2px solid var(--tinta); background: var(--sarga); font-size: 0.85rem; }
   .sessionok ul ul b { font-size: 0.95rem; }
   .sessionok ul ul span { display: block; font-family: var(--cimke); font-weight: 500; color: var(--tinta-sargan); font-size: 0.8rem; }
+  @media (max-width: 720px) {
+    .cikk table.skala { border-top: 0; }
+    .cikk table.skala thead, .cikk table.skala tbody, .cikk table.skala tr, .cikk table.skala th, .cikk table.skala td { display: block; width: auto !important; border: 0; padding: 0; }
+    .cikk table.skala thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .cikk table.skala tbody th { display: none; }
+    .cikk table.skala tbody { display: grid; grid-template-columns: 1fr; gap: 0; }
+    .cikk table.skala tbody tr { display: contents; }
+    .cikk table.skala td, .cikk table.skala td + td { padding: 0.45rem 0; border-top: 1px solid var(--tinta); border-left: 0; }
+    .cikk table.skala td::before { content: attr(data-sor); display: block; font-family: var(--keret); font-weight: 500; font-size: 0.85rem; letter-spacing: 0.04em; color: var(--halvany); }
+    .cikk table.skala tbody tr:first-child td:nth-child(2)::before { content: "CLAUDE.md · " attr(data-sor); font-weight: 700; color: var(--tinta); font-size: 1rem; }
+    .cikk table.skala tbody tr:first-child td:nth-child(3)::before { content: "Skill · " attr(data-sor); font-weight: 700; color: var(--tinta); font-size: 1rem; }
+    .cikk table.skala tbody tr:first-child td:nth-child(4)::before { content: "Hook · " attr(data-sor); font-weight: 700; color: var(--tinta); font-size: 1rem; }
+    .cikk table.skala td:nth-child(2) { order: 1; } .cikk table.skala td:nth-child(3) { order: 2; } .cikk table.skala td:nth-child(4) { order: 3; }
+    .cikk table.skala tbody tr:first-child td { border-top: 3px solid var(--tinta); margin-top: 0.75rem; padding-top: 0.6rem; }
+    .cikk table.skala tbody tr:first-child td:nth-child(2) { margin-top: 0; }
+  }
   @media (max-width: 720px) { .sessionok { grid-template-columns: 1fr; row-gap: 0.5rem; } .sessionok .nyil { transform: rotate(90deg); justify-self: center; } .sessionok ul ul { grid-template-columns: 1fr; } }
 </style>
 </head>
@@ -512,8 +529,8 @@
     <h1>Build I: plan mode, auto mode és a <code>CLAUDE.md</code> – semmi nem épül elfogadott terv nélkül</h1>
     <p class="forras">AI-Native SDLC sorozat, 3. rész · Forrás: <cite>The AI-Native SDLC Playbook</cite> (Louis Claxton, Anthropic)</p>
 
-<p>A 2. rész végén két fájl maradt a repóban: az <code>intent.md</code> és a <code>spec.md</code>. Ebben a részben lépnek be a mérnökök. A Build fázis a playbookban hat play-t tartalmaz – ez a rész az első hármat tárgyalja, amelyek egy session menetét adják: hogyan indul a munka (plan mode), mikor engedhető el az agent keze (auto mode), és mit olvas az agent minden session elején (<code>CLAUDE.md</code>). A 4. rész a másik hármat hozza: skillek, hookok, párhuzamos sessionök.</p>
-<p>A fázis tétele egy mondat: semmit nem implementálunk elfogadott terv nélkül, és a csapat tudása fájlokba kerül, amiket az agent olvas – a korlátok kódként futnak, nem szokásként.</p>
+<p>A 2. rész végén két fájl maradt a repóban: az <code>intent.md</code> és a <code>spec.md</code>. Ebben a részben lépnek be a mérnökök. A Build fázis a playbookban hat play-t tartalmaz – ez a rész az első hármat tárgyalja, amelyek együtt kijelölik egy session menetét: hogyan indul a munka (plan mode), mikor engedhetjük el az agent kezét (auto mode), és mit olvas az agent minden session elején (<code>CLAUDE.md</code>). A 4. rész a másik hármat hozza: skillek, hookok, párhuzamos sessionök.</p>
+<p>A fázis tétele egy mondat: semmit nem implementálunk elfogadott terv nélkül, és a csapat tudása fájlokba kerül, amiket az agent olvas – a korlátokat a kód érvényesíti, nem a szokás.</p>
     <details class="allomaslista allomaslista-mobil">
       <summary><p class="cim">Fejezetek</p></summary>
       <nav aria-label="Fejezetek">
@@ -531,7 +548,7 @@
 <h2 id="plan-mode"><span class="perc" aria-hidden="true">1′</span>Plan mode mint alapértelmezett kiindulópont</h2>
 <h3>Mi változik</h3>
 <p>Hagyományosan a mérnök elolvassa a designt, és elkezd kódot írni. Az, hogy a változást <em>hogyan</em> csinálja meg – mely fájlok, milyen sorrendben, milyen tesztekkel –, a fejében marad, legjobb esetben egy ticket-kommentben. Senki más nem tudja átnézni. A reviewer először a kész diffet látja, és akkor már lassú bármit visszacsinálni.</p>
-<p>Az AI-native változatban a munka egy írott tervvel indul, amelyet Claude plan mode-ban állít elő: ebben az üzemmódban olvassa a codebase-t, de semmit nem módosít. A mérnök a tervet javítja, <em>mielőtt</em> kód készülne, és az elfogadott változat <code>plan.md</code>-ként kerül commitra, hogy a későbbi fázisok ez ellen ellenőrizhessenek. A session tehát így indul: plan mode, az elfogadott <code>spec.md</code> csatolva, és Claude interjúztatja a mérnököt, amíg a terv olyan nem lesz, amivel a mérnök elégedett.</p>
+<p>Az AI-native változatban a munka egy írott tervvel indul, amelyet Claude plan mode-ban állít elő: ebben az üzemmódban olvassa a codebase-t, de semmit nem módosít. A mérnök a tervet javítja, <em>mielőtt</em> kód készülne, és az elfogadott változat <code>plan.md</code>-ként kerül commitra, hogy a későbbi fázisok ez ellen ellenőrizhessenek. A session tehát így indul: plan mode, az elfogadott <code>spec.md</code> csatolva, és Claude interjúztatja a mérnököt, amíg a terv nem lesz olyan, amivel a mérnök elégedett.</p>
 <figure class="utak-abra">
   <figcaption><span class="szam">1. ábra</span>Terv előbb, kód utána</figcaption>
   <div class="utak">
@@ -550,15 +567,15 @@
     </ol>
   </div>
   <p class="magyarazat">A terv elfogadásáig Claude nem tud fájlt módosítani – a design review ott történik, ahol az irányváltás még egy dokumentum szerkesztése.</p>
-</figure><h3>Getting started</h3>
+</figure><h3>Első lépések</h3>
 <p><strong>Előfeltétel:</strong> az intent-artifact (<code>intent.md</code> vagy <code>spec.md</code>), ha van; a <code>CLAUDE.md</code> segít, de nem kötelező. A függőségi ábrán a plan mode a <code>spec.md</code> elfogadásától függ – ez indítja el.</p>
 <p><strong>Infrastruktúra:</strong> Claude Code, hozzáféréssel a repóhoz.</p>
 <h3>Hogyan csináld</h3>
 <ol>
 <li>A mérnök plan mode-ban indítja a sessiont.</li>
-<li>Odaadja Claude-nak az <code>intent.md</code>-t és a <code>spec.md</code>-t, és implementációs tervet kér, amely megnevezi a módosuló fájlokat, a munka sorrendjét és a tesztek, amelyek bizonyítják, hogy működik.</li>
+<li>Odaadja Claude-nak az <code>intent.md</code>-t és a <code>spec.md</code>-t, és implementációs tervet kér, amely megnevezi a módosuló fájlokat, a munka sorrendjét és a teszteket, amelyek bizonyítják, hogy működik.</li>
 <li>Kérdezd ki a tervet: mit törhet el a változás, melyik lépés a legkockázatosabb, milyen más megoldásokat vetett el Claude és miért.</li>
-<li>Iterálj addig, amíg egy olyan mérnök is implementálni tudná a tervből, aki a beszélgetést nem látta.</li>
+<li>Iterálj addig, amíg egy olyan mérnök is implementálni tudná a terv alapján, aki a beszélgetést nem látta.</li>
 <li>Commitold az elfogadott tervet <code>plan.md</code>-ként. A terv bekerül az audit trailbe, és a PR review play (6. rész) a végső diffet ez ellen ellenőrzi.</li>
 <li>Fogadd el a tervet, és hagyd, hogy Claude implementáljon. Jó tervvel az implementáció gyakran egyetlen menet.</li>
 <li>Ha az implementáció eltér a tervtől, a <code>plan.md</code>-t ugyanabban a commitban frissítsd. Érdemes hookkal kikényszeríteni, hogy a kettő szinkronban maradjon.</li>
@@ -584,22 +601,22 @@ kell.
 A test_status.py lefedi a négy kárigény-állapotot; a screenshot egyezik
 a jóváhagyott mockkal.
 </code></pre>
-<p>Négy szekció, tíz sor. Ami fontos benne: a fájlnevek konkrétak, a sorrend indokolt (előbb az endpoint, aztán ami rá épül), a kockázat egy mérhető tény (50 rps), és a „kész” definíciója előre rögzített – egy tesztfájl és egy screenshot-egyezés. A PR reviewer ez ellen fogja nézni a diffet.</p>
+<p>Négy szekció, tíz sor. Ami fontos benne: a fájlnevek konkrétak, a sorrend indokolt (előbb az endpoint, aztán ami rá épül), a kockázat egy mérhető tény (50 rps), és a „kész” definíciója előre rögzített – egy tesztfájl és egy screenshot, ami egyezik a jóváhagyott mockkal. A PR reviewer ez ellen fogja nézni a diffet.</p>
 <h3>Governance</h3>
-<p>A design review a kódgenerálás <em>előtt</em> történik, amikor az irányváltás még csak egy dokumentum szerkesztése. Ezt a plan mode technikailag is kikényszeríti: Claude addig nem tud fájlt módosítani, amíg a mérnök el nem fogadja a tervet. A terv és a módosításai naplózva vannak, azzal együtt, ki fogadta el. A rutinváltozásokat a mérnök hagyja jóvá; amit a szervezet magasabb kockázatúnak sorol, az technical leadhez vagy architecthez megy.</p>
+<p>A design review a kódgenerálás <em>előtt</em> történik, amikor az irányváltás még csak egy dokumentum szerkesztése. Ezt a plan mode technikailag is kikényszeríti: Claude addig nem tud fájlt módosítani, amíg a mérnök el nem fogadja a tervet. A terv és a módosításai naplózva vannak, azzal együtt, ki fogadta el. A rutinváltozásokat a mérnök hagyja jóvá; amit a szervezet magasabb kockázatúnak sorol, az a technical leadhez vagy az architecthez megy.</p>
 <h3>Hogyan mérd</h3>
 <ul>
-<li><strong>Leading indicator:</strong> a változások hányada merge-ölődik az első implementációs menetből, és mennyi idő telik el a terv elfogadásától a merge-ölt PR-ig – mindkettő a PR metaadataiból.</li>
-<li><strong>Lagging indicator:</strong> rework-ciklusok száma változásonként (szintén a PR-ből), és milyen gyakran egyezik a merge-ölt diff a commitolt <code>plan.md</code>-vel.</li>
+<li><strong>Leading indicator:</strong> a változások hányada merge-elődik az első implementációs menetből, és mennyi idő telik el a terv elfogadásától a merge-elt PR-ig – mindkettő a PR metaadataiból.</li>
+<li><strong>Lagging indicator:</strong> rework-ciklusok száma változásonként (szintén a PR-ből), és milyen gyakran egyezik a merge-elt diff a commitolt <code>plan.md</code>-vel.</li>
 </ul>
 <h2 id="auto-mode"><span class="perc" aria-hidden="true">4′</span>Auto mode</h2>
-<p>Claude Code tud auto mode-ban is futni: a mérnök elfogadja a kiiterált tervet, és Claude minden egyes módosítást jóváhagyás-kérés nélkül alkalmaz. Ez nem a kiindulópont, hanem a cél: ahogy a későbbi play-ek korlátai beérnek – egy behangolt <code>CLAUDE.md</code>, a policy-t kódoló skillek, a veszélyes műveleteket blokkoló hookok, és egy tesztkészlet, amit Claude maga futtathat –, az auto-accept a rutinmunka alapértelmezése lesz. Rutinmunka: feszes <code>spec.md</code>, kis blast radius, és olyan kód, amit a tesztek már lefednek.</p>
+<p>Claude Code tud auto mode-ban is futni: a mérnök elfogadja a kialakított tervet, és Claude minden egyes módosítást jóváhagyás-kérés nélkül alkalmaz. Ez nem a kiindulópont, hanem a cél: ahogy a későbbi play-ek korlátai megérnek – egy behangolt <code>CLAUDE.md</code>, a policy-t kódoló skillek, a veszélyes műveleteket blokkoló hookok, és egy tesztkészlet, amit Claude maga futtathat –, az auto-accept a rutinmunka alapértelmezése lesz. Rutinmunka: feszes <code>spec.md</code>, kis blast radius, és olyan kód, amit a tesztek már lefednek.</p>
 <p>A váltás a mérnök szerepében van. Eddig nézte, ahogy az agent szerkeszt, és műveletenként döntött; innentől hosszabb autonóm sessionök <em>után</em> az artifactokat nézi át. Ez teszi lehetővé a párhuzamosságot is – egy mérnök több worktree-ben több sessiont – és ez az alapja annak, hogy az SDLC autonóm módon fusson és a loop bezáruljon (7. rész, Maintain).</p>
 <p>A sorrend fontos: auto mode guardrailek nélkül nem gyorsítás, hanem felügyelet nélküli kockázat. A playbook ezért teszi a plan mode-ot az alapértelmezésnek, és az auto mode-ot az érettség következményének.</p>
 <h2 id="claude-md"><span class="perc" aria-hidden="true">5′</span>A <code>CLAUDE.md</code></h2>
 <h3>Mi változik</h3>
 <p>A <code>CLAUDE.md</code> azt a kontextust adja Claude-nak, amire egy új belépőnek lenne szüksége: konvenciók, parancsok, architektúra, és azok a hibák, amiket a csapat a leggyakrabban lát. Az a tudás, ami eddig a fejekben és wikiken ült, egy fájl lesz, amit az agent minden session elején elolvas – az egész csapat tartja karban, és minden hibánál továbbfejlődik.</p>
-<h3>Getting started</h3>
+<h3>Első lépések</h3>
 <p><strong>Előfeltétel:</strong> nincs. A függőségi ábrán ez is gyökér-play: bárhol elkezdhető, és a legtöbb másik play-nek ez a bemenete.</p>
 <p><strong>Infrastruktúra:</strong> egy repo, telepített Claude Code, és egy mérnök, aki jól ismeri a codebase-t.</p>
 <h3>Hogyan csináld</h3>
@@ -608,7 +625,7 @@ a jóváhagyott mockkal.
 <li>Vágd le a generált fájlt arra, amire egy új belépőnek az első napon szüksége van. Maradjon a build-, teszt- és lint-parancs, a konvenciók, amik számítanak, és amit Claude rendre elront.</li>
 <li>Commitold a repo gyökerébe, hogy az egész csapat egy változatot használjon, és a módosítások úgy menjenek review-ra, mint a kód.</li>
 <li>Egy munkaszabály, ami segít: ha Claude kétszer követi el ugyanazt a hibát, a javítás a <code>CLAUDE.md</code>-be kerül.</li>
-<li>Tartsd egy oldal alatt. Claude az egészet beolvassa minden session elején, és minden elavult sor haszon nélkül foglalja a contextet.</li>
+<li>Tartsd egy oldal alatt. Claude az egészet beolvassa minden session elején, és minden elavult sor feleslegesen foglal helyet a kontextusban.</li>
 </ol>
 <h3>Mintaartifact: <code>CLAUDE.md</code></h3>
 <pre><code># Payments service
@@ -638,11 +655,11 @@ a jóváhagyott mockkal.
 <h3>Hogyan mérd</h3>
 <ul>
 <li><strong>Leading indicator:</strong> milyen gyakran ismétel Claude olyan hibát, amit a <code>CLAUDE.md</code>-nek el kellett volna kapnia. A javítások és a fájl módosításai a git-történetből követhetők.</li>
-<li><strong>Lagging indicator:</strong> egy új csapattag első merge-ölt PR-jéig eltelt idő, a PR-történetből.</li>
+<li><strong>Lagging indicator:</strong> egy új csapattag első merge-elt PR-jéig eltelt idő, a PR-történetből.</li>
 </ul>
 <h2 id="egyutt"><span class="perc" aria-hidden="true">7′</span>A három play együtt</h2>
-<p>A plan mode a <em>mikor</em>: terv előbb, kód utána. A <code>CLAUDE.md</code> a <em>mit tud az agent a repóról</em>: egy oldal, amit minden session elején elolvas. Az auto mode a <em>mennyire kell figyelni</em>: ahogy a korlátok beérnek, egyre kevésbé műveletenként, egyre inkább artifactonként.</p>
-<p>Aki ma kezd, annak a sorrend adott. A <code>CLAUDE.md</code> előfeltétel nélküli, egy délután alatt megvan, és azonnal javítja minden session minőségét. A plan mode a következő session elején bekapcsolható, és a <code>spec.md</code> nélkül is működik – csak akkor a mérnök fejéből jön a spec. Az auto mode-ot hagyd a végére: a 4. rész skilljei és hookjai, meg az 5. rész feedback loopja nélkül nincs mire ráengedni.</p>
+<p>A plan mode a <em>mikor</em>: terv előbb, kód utána. A <code>CLAUDE.md</code> a <em>mit tud az agent a repóról</em>: egy oldal, amit minden session elején elolvas. Az auto mode a <em>mennyire kell figyelni</em>: ahogy a korlátok megérnek, egyre kevésbé műveletenként, egyre inkább artifactonként.</p>
+<p>Aki ma kezd, annak adott a sorrend. A <code>CLAUDE.md</code> előfeltétel nélküli, egy délután alatt megvan, és azonnal javítja minden session minőségét. A plan mode a következő session elején bekapcsolható, és a <code>spec.md</code> nélkül is működik – csak akkor a mérnök fejéből jön a spec. Az auto mode-ot hagyd a végére: a 4. rész skilljei és hookjai, meg az 5. rész feedback loopja nélkül nincs mire ráengedni.</p>
 <h2 id="kovetkezik"><span class="perc" aria-hidden="true">8′</span>Mi következik</h2>
 <ol class="megallok" start="4" style="counter-reset: m 3" aria-label="A sorozat további részei">
 <li><span><strong>Build II</strong> – skillek mint institutional knowledge, hookok mint build-time guardrailek, párhuzamos sessionök és subagentek; és a sidebar a legacy rendszerekről és a source of truth-ról.</span></li>
